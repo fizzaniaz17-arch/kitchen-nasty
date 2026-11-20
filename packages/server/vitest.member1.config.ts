@@ -10,7 +10,7 @@ export default defineConfig({
     hookTimeout: 10000,
     coverage: {
       provider: 'v8',
-      reporter: ['text', 'json-summary', 'lcov'],
+      reporter: ['text', 'json-summary', 'lcov', 'html'],
       reportsDirectory: 'coverage/member-1',
       include: [
         'src/controllers/reservation.controller.ts',
