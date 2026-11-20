@@ -17,11 +17,17 @@
     "test": "npm run test:unit && npm run test:integration",
     "test:unit": "npm run test -w packages/shared && npm run test:unit -w packages/server",
     "test:integration": "npm run test:integration -w packages/server",
+    "test:member1": "npm run test:member1 -w packages/server",
+    "coverage:member1": "npm run coverage:member1 -w packages/server",
+    "mutation:member1": "stryker run stryker.member1.config.json",
     "test:e2e": "npx playwright test"
   },
   "devDependencies": {
     "@playwright/test": "^1.58.2",
+    "@stryker-mutator/core": "9.1.1",
+    "@stryker-mutator/vitest-runner": "9.1.1",
     "@types/node": "^22.0.0",
+    "@vitest/coverage-v8": "4.0.18",
     "playwright": "^1.58.2",
     "prisma": "^5.22.0",
     "typescript": "^5.7.0"

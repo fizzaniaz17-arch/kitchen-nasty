@@ -13,7 +13,9 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:unit": "vitest run src/__tests__/unit",
-    "test:integration": "vitest run src/__tests__/integration"
+    "test:integration": "vitest run src/__tests__/integration",
+    "test:member1": "vitest run --config vitest.member1.config.ts",
+    "coverage:member1": "vitest run --config vitest.member1.config.ts --coverage"
   },
   "prisma": {
     "schema": "../../prisma/schema.prisma",
