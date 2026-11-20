@@ -83,6 +83,7 @@ describe('reservation controller completeness', () => {
     const res = response();
     await getReservation(request({ params: { id: 'missing' }, user: { id: 'staff-1', type: 'staff' } }), res);
     expect(res.status).toHaveBeenCalledWith(404);
+    expect(res.json).toHaveBeenCalledWith({ success: false, error: 'Reservation not found' });
   });
 
   it.each([
@@ -93,6 +94,7 @@ describe('reservation controller completeness', () => {
     const res = response();
     await getReservation(request({ params: { id: 'r-1' }, user }), res);
     expect(res.status).toHaveBeenCalledWith(403);
+    expect(res.json).toHaveBeenCalledWith({ success: false, error: 'Access denied' });
   });
 
   it.each([
@@ -111,6 +113,7 @@ describe('reservation controller completeness', () => {
     const res = response();
     await deleteReservation(request({ params: { id: 'missing' } }), res);
     expect(res.status).toHaveBeenCalledWith(404);
+    expect(res.json).toHaveBeenCalledWith({ success: false, error: 'Reservation not found' });
     expect(db.reservation.delete).not.toHaveBeenCalled();
   });
 
@@ -135,6 +138,7 @@ describe('reservation controller completeness', () => {
     const res = response();
     await listCustomerReservations(request({ query: {} }), res);
     expect(res.status).toHaveBeenCalledWith(401);
+    expect(res.json).toHaveBeenCalledWith({ success: false, error: 'Authentication required' });
     expect(db.reservation.findMany).not.toHaveBeenCalled();
   });
 
@@ -199,6 +203,7 @@ describe('table controller completeness', () => {
     const res = response();
     await listTables(request({ params: { locationId: 'missing' } }), res);
     expect(res.status).toHaveBeenCalledWith(404);
+    expect(res.json).toHaveBeenCalledWith({ success: false, error: 'Location not found' });
   });
 
   it('lists tables for an existing location', async () => {
@@ -214,7 +219,10 @@ describe('table controller completeness', () => {
     db.table.findFirst.mockResolvedValue(table);
     const res = response();
     await getTable(request({ params: { locationId: 'loc-1', tableId: 't-1' } }), res);
-    if (status === 404) expect(res.status).toHaveBeenCalledWith(404);
+    if (status === 404) {
+      expect(res.status).toHaveBeenCalledWith(404);
+      expect(res.json).toHaveBeenCalledWith({ success: false, error: 'Table not found' });
+    }
     else expect(res.json).toHaveBeenCalledWith({ success: true, data: table });
   });
 
@@ -223,6 +231,7 @@ describe('table controller completeness', () => {
     const res = response();
     await createTable(request({ params: { locationId: 'missing' }, body: { name: 'T1', capacity: 2 } }), res);
     expect(res.status).toHaveBeenCalledWith(404);
+    expect(res.json).toHaveBeenCalledWith({ success: false, error: 'Location not found' });
   });
 
   it('creates a unique table and applies active default', async () => {
@@ -247,6 +256,7 @@ describe('table controller completeness', () => {
     const res = response();
     await updateTable(request({ params: { locationId: 'loc-1', tableId: 'missing' }, body: { capacity: 2 } }), res);
     expect(res.status).toHaveBeenCalledWith(404);
+    expect(res.json).toHaveBeenCalledWith({ success: false, error: 'Table not found' });
   });
 
   it.each([
@@ -259,6 +269,7 @@ describe('table controller completeness', () => {
     await updateTable(request({ params: { locationId: 'loc-1', tableId: 't-1' }, body: { name: 'New' } }), res);
     if (status === 409) {
       expect(res.status).toHaveBeenCalledWith(409);
+      expect(res.json).toHaveBeenCalledWith({ success: false, error: 'A table with this name already exists at this location' });
       expect(db.table.update).not.toHaveBeenCalled();
     } else {
       expect(db.table.update).toHaveBeenCalledWith({ where: { id: 't-1' }, data: { name: 'New' } });
@@ -271,6 +282,7 @@ describe('table controller completeness', () => {
     const res = response();
     await deleteTable(request({ params: { locationId: 'loc-1', tableId: 'missing' } }), res);
     expect(res.status).toHaveBeenCalledWith(404);
+    expect(res.json).toHaveBeenCalledWith({ success: false, error: 'Table not found' });
     expect(db.reservation.count).not.toHaveBeenCalled();
   });
 });

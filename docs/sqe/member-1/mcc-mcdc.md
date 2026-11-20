@@ -6,13 +6,15 @@ Decision: `D = N ∧ I ∧ L ∧ U`, where N = numeric, I = integer, L = `partyS
 
 | Row | N | I | L | U | D | Representative case |
 |---|---:|---:|---:|---:|---:|---|
-| R1 | F | — | — | — | F | string `"2"` |
-| R2 | T | F | T | T | F | `2.5` |
-| R3 | T | T | F | T | F | `0` |
-| R4 | T | T | T | T | T | `1`, `50` |
-| R5 | T | T | T | F | F | `51` |
+| P1 | F | — | — | — | F | string `"2"` |
+| P2 | T | F | F | T | F | `0.5` |
+| P3 | T | F | T | T | F | `2.5` |
+| P4 | T | F | T | F | F | `50.5` |
+| P5 | T | T | F | T | F | `0` |
+| P6 | T | T | T | T | T | `1`, `2`, `49`, `50` |
+| P7 | T | T | T | F | F | `51` |
 
-MC/DC pairs: N uses R1/R4; I uses R2/R4; L uses R3/R4; U uses R4/R5. Non-meaningful combinations are infeasible due to type/control constraints, not omitted test choices.
+MC/DC pairs: I uses P3/P6, L uses P5/P6, and U uses P6/P7. P1/P6 demonstrates type gating, but unique-cause independence for N is infeasible because I/L/U are undefined for a nonnumeric input. L and U cannot both be false for a numeric value because no number is simultaneously below 1 and above 50. This semantic model evaluates numeric bounds for fractional values independently of Zod's internal issue/evaluation order.
 
 ## M1-BR-02 Authorized creation at active location
 

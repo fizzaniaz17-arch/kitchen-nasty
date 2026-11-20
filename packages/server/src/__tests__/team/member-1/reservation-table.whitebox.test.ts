@@ -58,6 +58,26 @@ function request(value: Partial<Request>): Request {
 beforeEach(() => vi.clearAllMocks());
 
 describe('M1-BR-01 reservation party-size boundary', () => {
+  it.each([
+    ['P1', '2'],
+    ['P2', 0.5],
+    ['P3', 2.5],
+    ['P4', 50.5],
+  ])('rejects semantic MCC case %s with party size %s before database access', async (_caseId, partySize) => {
+    const res = response();
+    await createReservation(request({
+      body: { locationId: 'loc-1', date: '2027-01-10', time: '19:00', partySize },
+      user: { id: 'customer-1', type: 'customer' },
+    }), res);
+    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.json).toHaveBeenCalledWith(expect.objectContaining({
+      success: false,
+      error: expect.arrayContaining([expect.objectContaining({ path: ['partySize'] })]),
+    }));
+    expect(db.location.findUnique).not.toHaveBeenCalled();
+    expect(db.reservation.create).not.toHaveBeenCalled();
+  });
+
   it.each([0, 51])('rejects invalid party size %i without writes', async (partySize) => {
     const res = response();
     await createReservation(request({
@@ -68,7 +88,7 @@ describe('M1-BR-01 reservation party-size boundary', () => {
     expect(db.reservation.create).not.toHaveBeenCalled();
   });
 
-  it.each([1, 50])('accepts boundary party size %i', async (partySize) => {
+  it.each([1, 2, 49, 50])('accepts boundary or adjacent party size %i', async (partySize) => {
     const created = { id: `reservation-${partySize}`, partySize };
     db.location.findUnique.mockResolvedValue({ id: 'loc-1', isActive: true });
     db.reservation.create.mockResolvedValue(created);
@@ -91,6 +111,7 @@ describe('M1-BR-02 customer and active-location decision', () => {
       body: { locationId: 'loc-1', date: '2027-01-10', time: '19:00', partySize: 2 },
     }), res);
     expect(res.status).toHaveBeenCalledWith(401);
+    expect(res.json).toHaveBeenCalledWith({ success: false, error: 'Authentication required for reservations' });
     expect(db.location.findUnique).not.toHaveBeenCalled();
     expect(db.reservation.create).not.toHaveBeenCalled();
   });
@@ -102,6 +123,7 @@ describe('M1-BR-02 customer and active-location decision', () => {
       user: { id: 'staff-1', type: 'staff' },
     }), res);
     expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.json).toHaveBeenCalledWith({ success: false, error: 'Reservations can only be created by a customer account' });
     expect(db.reservation.create).not.toHaveBeenCalled();
   });
 
@@ -113,6 +135,8 @@ describe('M1-BR-02 customer and active-location decision', () => {
       user: { id: 'customer-1', type: 'customer' },
     }), res);
     expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.json).toHaveBeenCalledWith({ success: false, error: 'Location not found or inactive' });
+    expect(db.location.findUnique).toHaveBeenCalledWith({ where: { id: 'loc-1' } });
     expect(db.reservation.create).not.toHaveBeenCalled();
   });
 });
@@ -130,6 +154,7 @@ describe('M1-BR-03 partial reservation update', () => {
     const res = response();
     await updateReservation(request({ params: { id: 'missing' }, body: {} }), res);
     expect(res.status).toHaveBeenCalledWith(404);
+    expect(res.json).toHaveBeenCalledWith({ success: false, error: 'Reservation not found' });
     expect(db.reservation.update).not.toHaveBeenCalled();
   });
 
@@ -169,6 +194,7 @@ describe('M1-BR-04 availability requires active capacity and no conflict', () =>
     const res = response();
     await checkAvailability(request({ query: {} }), res);
     expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.json).toHaveBeenCalledWith({ success: false, error: 'locationId and date are required' });
     expect(db.table.findMany).not.toHaveBeenCalled();
   });
 
@@ -205,6 +231,8 @@ describe('table management rules', () => {
     const res = response();
     await createTable(request({ params: { locationId: 'loc-1' }, body: { name: 'T1', capacity: 4 } }), res);
     expect(res.status).toHaveBeenCalledWith(409);
+    expect(res.json).toHaveBeenCalledWith({ success: false, error: 'A table with this name already exists at this location' });
+    expect(db.table.findFirst).toHaveBeenCalledWith({ where: { locationId: 'loc-1', name: 'T1' } });
     expect(db.table.create).not.toHaveBeenCalled();
   });
 
@@ -226,6 +254,11 @@ describe('table management rules', () => {
     const res = response();
     await deleteTable(request({ params: { locationId: 'loc-1', tableId: 't-1' } }), res);
     expect(res.status).toHaveBeenCalledWith(409);
+    expect(db.reservation.count).toHaveBeenCalledWith({ where: { tableId: 't-1' } });
+    expect(res.json).toHaveBeenCalledWith({
+      success: false,
+      error: 'Cannot delete table with existing reservations. Deactivate it instead.',
+    });
     expect(db.table.delete).not.toHaveBeenCalled();
   });
 

@@ -10,8 +10,8 @@
     "packages/server/src/controllers/table.controller.ts"
   ],
   "reporters": ["clear-text", "progress", "html", "json"],
-  "jsonReporter": { "fileName": "reports/mutation/member-1/mutation.json" },
-  "htmlReporter": { "fileName": "reports/mutation/member-1/index.html" },
+  "jsonReporter": { "fileName": "reports/mutation/final-56-tests/mutation.json" },
+  "htmlReporter": { "fileName": "reports/mutation/final-56-tests/index.html" },
   "thresholds": { "high": 80, "low": 60, "break": 60 },
   "concurrency": 2,
   "tempDirName": ".stryker-tmp/member-1",
