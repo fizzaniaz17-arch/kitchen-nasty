@@ -41,11 +41,12 @@
   <table>
     <tr><th>Criterion</th><th>Actual evidence</th><th>Status</th></tr>
     <tr><td>Reproducible tooling</td><td>Vitest 4.0.18, coverage-v8 4.0.18, Stryker 9.1.1, pinned SonarQube 25.11.0.114957 image</td><td>Partial pass</td></tr>
-    <tr><td>White-box suite</td><td>50/50 tests passed across all reservation/table controller functions</td><td>Pass</td></tr>
+    <tr><td>White-box suite</td><td>56/56 tests passed across all reservation/table controller functions</td><td>Pass</td></tr>
     <tr><td>Coverage target</td><td>100% statements and 100% branches; 100% functions and lines</td><td>Pass</td></tr>
-    <tr><td>Mutation baseline</td><td>556 mutants; 152 killed; 117 survived; 286 no coverage; 1 timeout; score 27.52%</td><td>Fail</td></tr>
+    <tr><td>Mutation final</td><td>556 mutants; 351 killed; 204 survived; 0 no coverage; 1 timeout; score 63.31%</td><td>Pass (60%)</td></tr>
     <tr><td>SonarQube metrics</td><td>Service reached UP, but Docker's internal store became read-only before scanning</td><td>Blocked</td></tr>
-    <tr><td>CI and PR evidence</td><td>Existing CI inspected; Member 1 required gates and passing/failing PR demonstration not complete</td><td>Pending</td></tr>
+    <tr><td>Browser use cases</td><td>10/10 Playwright flows passed across two Member 1 use cases</td><td>Pass</td></tr>
+    <tr><td>CI and PR evidence</td><td>Required workflow added; remote runs, fix PR and blocked PR remain pending</td><td>Partial</td></tr>
   </table>
 
   <h2>Business rules and white-box scope</h2>
@@ -115,7 +116,11 @@
     <tr><td>Missing test</td><td><code>isActive</code> default true changed to false</td><td>No successful create-table test omits <code>isActive</code></td><td>Assert persisted default</td></tr>
     <tr><td>Equivalent candidate</td><td>Mutation in output field not observable under current mocked return</td><td>Production behavior may be determined by mocked Prisma response</td><td>Confirm invariant before classifying equivalent</td></tr>
   </table>
-  <p>The raw report contains 117 genuine survivors, exceeding the required 15 available for detailed classification. Final per-mutant IDs and rerun outcomes remain incomplete and must not be claimed as finished.</p>
+  <p>Fifteen genuine current-run survivors are classified in <code>mutation-analysis.md</code>; 13 were killed by stronger response/query assertions and two remain explicitly identified. Two application-specific custom mutants were both killed in an isolated worktree. The final score is 63.31%, passing the retained 60% breaking threshold.</p>
+
+  <h2>Browser and CI evidence</h2>
+  <p>Two Member 1 use cases define and automate a main flow, two alternatives and two exceptions each. <code>npm run test:e2e:member1</code> passed all 10 flows in 24.6 seconds using installed Chrome and deterministic synthetic route state.</p>
+  <p><code>member1-quality.yml</code> adds stable coverage, mutation, custom mutation, Sonar and aggregate required checks. Remote execution remains pending. The Sonar job intentionally fails when a reachable host/token is absent; it does not treat missing analysis as success.</p>
 
   <h2>SonarQube configuration and blocker</h2>
   <ul>
@@ -139,12 +144,12 @@
   <table>
     <tr><th>ID</th><th>Target</th><th>Actual</th><th>Status</th></tr>
     <tr><td>EC-01</td><td>100% statements and branches</td><td>100% / 100% across both selected controllers</td><td>Pass</td></tr>
-    <tr><td>EC-02</td><td>Threshold met; no unclassified critical survivors</td><td>27.52%; 117 survivors</td><td>Fail</td></tr>
+    <tr><td>EC-02</td><td>Mutation score at least 60%; 15 survivors classified</td><td>63.31%; 15 classified, two custom operators killed</td><td>Pass</td></tr>
     <tr><td>EC-03</td><td>Sonar quality gate with imported LCOV</td><td>Docker blocker</td><td>Pending</td></tr>
     <tr><td>EC-04</td><td>Required GitHub checks and blocked regression PR</td><td>Not demonstrated</td><td>Pending</td></tr>
   </table>
 
   <h2>Conclusion</h2>
-  <p>The white-box coverage requirement is satisfied with 50 passing tests and 100% statement/branch coverage across the selected server-side module. Complete MCC and MC/DC evidence covers all four rules. Mutation readiness, Sonar metrics/screenshots, and CI passing/failing PR proof remain blocked or pending, so the overall Member 1 release criteria are not yet all satisfied.</p>
+  <p>White-box coverage, MCC/MC/DC, mutation threshold/custom operators, and both browser use cases now pass. Sonar metrics/screenshots and real CI passing/failing PR proof remain blocked or pending, so the overall Member 1 release decision remains hold.</p>
 </body>
 </html>

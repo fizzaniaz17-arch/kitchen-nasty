@@ -62,7 +62,9 @@ Command: `npm run mutation:member1`; duration 43 seconds; targets were exactly t
 
 The overall denominator includes no-coverage mutants; the covered score excludes them. The run failed the configured 60% breaking threshold. Raw machine-readable results are in `reports/mutation/member-1/mutation.json`; the HTML report is `reports/mutation/member-1/index.html`.
 
-At least 15 genuine survivors are present for later classification. Examples include response payload removal/boolean flips, omitted Prisma `where` clauses, forced conditions, and the table `isActive` default flip. Classification and survivor-driven tests are pending; preserving this report maintains baseline chronology.
+The baseline report is preserved unchanged to maintain chronology; later runs use distinct output directories.
+
+The expanded 56-test run first scored 53.78% (298 killed, 257 survived, no no-coverage mutants, one timeout). Exact response and dependency-call assertions raised the final result to 63.31% (351 killed, 204 survived, no no-coverage mutants, one timeout), passing the unchanged 60% break threshold. Fifteen genuine survivors and their matched final outcomes are documented in `mutation-analysis.md`; both deterministic custom operators were killed as recorded in `custom-mutations.md`.
 
 ## SonarQube blocker
 

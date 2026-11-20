@@ -20,6 +20,7 @@
     "test:member1": "npm run test:member1 -w packages/server",
     "coverage:member1": "npm run coverage:member1 -w packages/server",
     "mutation:member1": "stryker run stryker.member1.config.json",
+    "test:e2e:member1": "playwright test --config playwright.member1.config.ts",
     "test:e2e": "npx playwright test"
   },
   "devDependencies": {

@@ -30,9 +30,9 @@ Likelihood and impact use 1 (lowest) through 5 (highest). Score is `L × I`: Low
 | ID | Target and reason | Evidence | Actual | Status/release effect |
 |---|---|---|---|---|
 | EC-01 | 100% statement and branch coverage for selected server business logic; controls R-P01/R-P03 | Vitest LCOV | 100% statements, 100% branches | Pass |
-| EC-02 | Mutation score at or above justified CI threshold and no unclassified critical-rule survivors | Stryker JSON/HTML | 27.52%; 117 survivors unclassified | Fail; blocks release |
+| EC-02 | Mutation score at or above justified CI threshold and at least 15 survivors classified | Stryker JSON/HTML | 63.31%; 15 current-run survivors classified; two custom operators killed | Pass |
 | EC-03 | Sonar quality gate passes with imported LCOV and no blocker/critical issue in module | Sonar task/gate API | Not run: Docker engine unavailable | Pending; blocks release |
-| EC-04 | Required PR checks pass and branch rules block bypass | GitHub checks/ruleset evidence | Not yet created or verified | Pending; blocks release |
+| EC-04 | Required PR checks pass and branch rules block bypass | GitHub checks/ruleset evidence | Workflow implemented locally; remote runs and ruleset proof not yet verified | Pending; blocks release |
 
 ## AI and viva record
 
