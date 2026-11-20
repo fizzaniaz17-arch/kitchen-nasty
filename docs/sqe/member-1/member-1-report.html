@@ -41,8 +41,8 @@
   <table>
     <tr><th>Criterion</th><th>Actual evidence</th><th>Status</th></tr>
     <tr><td>Reproducible tooling</td><td>Vitest 4.0.18, coverage-v8 4.0.18, Stryker 9.1.1, pinned SonarQube 25.11.0.114957 image</td><td>Partial pass</td></tr>
-    <tr><td>White-box suite</td><td>20/20 tests passed</td><td>Pass</td></tr>
-    <tr><td>Coverage target</td><td>50.78% statements; 46.46% branches; assignment target 100%</td><td>Fail</td></tr>
+    <tr><td>White-box suite</td><td>50/50 tests passed across all reservation/table controller functions</td><td>Pass</td></tr>
+    <tr><td>Coverage target</td><td>100% statements and 100% branches; 100% functions and lines</td><td>Pass</td></tr>
     <tr><td>Mutation baseline</td><td>556 mutants; 152 killed; 117 survived; 286 no coverage; 1 timeout; score 27.52%</td><td>Fail</td></tr>
     <tr><td>SonarQube metrics</td><td>Service reached UP, but Docker's internal store became read-only before scanning</td><td>Blocked</td></tr>
     <tr><td>CI and PR evidence</td><td>Existing CI inspected; Member 1 required gates and passing/failing PR demonstration not complete</td><td>Pending</td></tr>
@@ -86,11 +86,20 @@
     <tr><td>MCC-03</td><td>T</td><td>T</td><td>Yes</td><td>F</td><td>Accepted boundary cases</td></tr>
   </table>
   <p><strong>MC/DC pairs:</strong> A uses MCC-01 versus MCC-03, acknowledging B is structurally unavailable when A is false. B uses MCC-02 versus MCC-03. B is masked in MCC-01 by JavaScript short-circuiting.</p>
+  <h3>All four rule decisions</h3>
+  <table>
+    <tr><th>Rule</th><th>Complete MCC rows</th><th>MC/DC independence pairs</th></tr>
+    <tr><td>M1-BR-01</td><td>Non-number; non-integer; below 1; valid 1–50; above 50</td><td>Number: non-number/valid. Integer: decimal/valid. Lower: 0/1. Upper: 50/51.</td></tr>
+    <tr><td>M1-BR-02</td><td>Not customer; customer+missing location; customer+inactive; customer+active</td><td>Customer: reject/accept. Exists: missing/active. Active: inactive/active.</td></tr>
+    <tr><td>M1-BR-03</td><td>Two rows (omitted/supplied) for each of six independent unary field decisions</td><td>Each field's omitted/supplied rows form its pair; null is proven supplied.</td></tr>
+    <tr><td>M1-BR-04</td><td>Time mismatch/no ID; mismatch/ID; match/no ID; match/ID</td><td>Time: mismatch+ID/match+ID. ID: match+no ID/match+ID. Final slot: zero/one remaining table.</td></tr>
+  </table>
+  <p>The complete feasibility tables, masking notes, and test mapping are provided in <code>mcc-mcdc.md</code>.</p>
 
   <div class="page"></div>
   <h2>Coverage evidence</h2>
-  <div class="pass">Command <code>npm run coverage:member1</code> executed 20 tests: 20 passed, 0 failed.</div>
-  <div class="fail">The full selected-controller coverage gate failed: 50.78% statements, 46.46% branches, 39.13% functions, and 50.00% lines. This remains below both the interim 80% gate and the assignment's 100% target.</div>
+  <div class="pass">Command <code>npm run coverage:member1</code> executed 50 tests: 50 passed, 0 failed. Both selected controllers achieved 100% statements, 100% branches, 100% functions, and 100% lines.</div>
+  <div class="note"><strong>Uncovered code justification:</strong> none. The declared denominator contains every statement and branch in <code>reservation.controller.ts</code> and <code>table.controller.ts</code>, and the generated V8 report lists no uncovered lines.</div>
   <img src="screenshots/coverage-overview.png" alt="Vitest coverage overview">
   <p class="caption">Figure 1. Browser-rendered Vitest HTML coverage report generated from the Member 1 suite.</p>
 
@@ -129,13 +138,13 @@
   </table>
   <table>
     <tr><th>ID</th><th>Target</th><th>Actual</th><th>Status</th></tr>
-    <tr><td>EC-01</td><td>100% statements and branches</td><td>50.78% / 46.46%</td><td>Fail</td></tr>
+    <tr><td>EC-01</td><td>100% statements and branches</td><td>100% / 100% across both selected controllers</td><td>Pass</td></tr>
     <tr><td>EC-02</td><td>Threshold met; no unclassified critical survivors</td><td>27.52%; 117 survivors</td><td>Fail</td></tr>
     <tr><td>EC-03</td><td>Sonar quality gate with imported LCOV</td><td>Docker blocker</td><td>Pending</td></tr>
     <tr><td>EC-04</td><td>Required GitHub checks and blocked regression PR</td><td>Not demonstrated</td><td>Pending</td></tr>
   </table>
 
   <h2>Conclusion</h2>
-  <p>The Member 1 foundation is reproducible and the evidence is genuine, but the rubric statement is not yet fully satisfied. White-box tests and baseline mutation evidence exist; measured coverage and mutation readiness fail; Sonar metrics/screenshots and CI passing/failing PR proof remain blocked or pending. Release must remain blocked until the exit criteria pass.</p>
+  <p>The white-box coverage requirement is satisfied with 50 passing tests and 100% statement/branch coverage across the selected server-side module. Complete MCC and MC/DC evidence covers all four rules. Mutation readiness, Sonar metrics/screenshots, and CI passing/failing PR proof remain blocked or pending, so the overall Member 1 release criteria are not yet all satisfied.</p>
 </body>
 </html>

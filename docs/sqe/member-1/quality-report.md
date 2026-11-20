@@ -38,11 +38,11 @@ No function-level analyzer value is available yet. A whole-file Sonar complexity
 
 Command: `npm run coverage:member1`
 
-- Test result: 20 passed, 0 failed.
-- Full selected-controller denominator: 50.78% statements, 46.46% branches, 39.13% functions, 50.00% lines.
-- Gate: failed against the configured 80% interim threshold. The assignment target remains 100% statements and branches.
-- Main uncovered areas: reservation listing/get/delete/customer-list/analytics and table list/get plus several create/update/delete exception branches.
-- Release effect: not ready. The report is deliberately not narrowed to already-tested lines.
+- Test result: 50 passed, 0 failed.
+- Full selected-controller denominator: 100% statements, 100% branches, 100% functions, 100% lines.
+- Gate: passed. The assignment target of 100% statements and branches is met.
+- Uncovered code: none in the declared reservation/table controller denominator.
+- Release effect: the white-box coverage criterion passes; mutation, Sonar, and CI criteria remain independent blockers.
 - LCOV: `packages/server/coverage/member-1/lcov.info`.
 
 ## Mutation baseline
