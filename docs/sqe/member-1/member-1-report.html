@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>KitchenAsty — Member 1 SQE Report</title>
+  <style>
+    @page { size: A4; margin: 16mm; }
+    body { font-family: Arial, sans-serif; color: #172033; font-size: 10.5pt; line-height: 1.4; }
+    h1 { color: #173b67; font-size: 24pt; margin-bottom: 4px; }
+    h2 { color: #245b91; border-bottom: 2px solid #b9d3ea; padding-bottom: 4px; break-after: avoid; }
+    h3 { color: #315f82; break-after: avoid; }
+    table { width: 100%; border-collapse: collapse; margin: 8px 0 14px; font-size: 9pt; }
+    th, td { border: 1px solid #9cb1c4; padding: 5px; vertical-align: top; }
+    th { background: #e9f2fa; }
+    code { font-family: Consolas, monospace; font-size: 9pt; }
+    .meta, .note { background: #eef5fb; border-left: 4px solid #3884c5; padding: 9px; }
+    .fail { background: #fff0f0; border-left: 4px solid #c93636; padding: 9px; }
+    .pass { background: #eef9f0; border-left: 4px solid #2f8a46; padding: 9px; }
+    .page { break-before: page; }
+    img { max-width: 100%; border: 1px solid #788c9d; }
+    .caption { color: #526477; font-size: 8.5pt; margin-top: 3px; }
+    .cfg { display: grid; justify-items: center; gap: 5px; margin: 10px auto; }
+    .node { border: 1.5px solid #245b91; border-radius: 6px; padding: 5px 12px; background: #f6fbff; }
+    .decision { border: 1.5px solid #9b6b13; transform: rotate(0deg); background: #fff9e8; }
+    .arrow { color: #516879; line-height: 1; }
+    ul { margin-top: 4px; }
+  </style>
+</head>
+<body>
+  <h1>KitchenAsty SQE Report</h1>
+  <p><strong>Member 1:</strong> Static analysis, white-box testing, mutation testing, CI quality gates, risks and exit criteria</p>
+  <div class="meta">
+    <strong>Repository:</strong> fizzaniaz17-arch/kitchen-nasty<br>
+    <strong>Branch:</strong> sqe/member-1-static-analysis<br>
+    <strong>Verified baseline:</strong> d6af7237e9569ebeab19ccab375362f9d144e25e<br>
+    <strong>Baseline evidence commit:</strong> 1976b6ccc3967910016d50b682f6f737521208fa<br>
+    <strong>Sonar analysis SHA:</strong> f51b0c7c63ead6740d6de8b47024093df4f5b86f (PR #1)<br>
+    <strong>Report date:</strong> 21 November 2026 (Asia/Karachi)
+  </div>
+
+  <h2>Executive status</h2>
+  <table>
+    <tr><th>Criterion</th><th>Actual evidence</th><th>Status</th></tr>
+    <tr><td>Reproducible tooling</td><td>Vitest 4.0.18, coverage-v8 4.0.18, Stryker 9.1.1, SonarQube Cloud scan action v7</td><td>Pass</td></tr>
+    <tr><td>White-box suite</td><td>56/56 tests passed across all reservation/table controller functions</td><td>Pass</td></tr>
+    <tr><td>Coverage target</td><td>100% statements and 100% branches; 100% functions and lines</td><td>Pass</td></tr>
+    <tr><td>Mutation final</td><td>556 mutants; 351 killed; 204 survived; 0 no coverage; 1 timeout; score 63.31%</td><td>Pass (60%)</td></tr>
+    <tr><td>SonarQube Cloud</td><td>PR analysis uploaded at SHA f51b0c7; quality gate failed on reliability, security, coverage, and duplication</td><td>Fail (analysis completed)</td></tr>
+    <tr><td>Browser use cases</td><td>10/10 Playwright flows passed across two Member 1 use cases</td><td>Pass</td></tr>
+    <tr><td>CI and PR evidence</td><td>PR #1 open; Member 1 coverage, mutation, and custom jobs pass; Sonar/aggregate fail. Separate CI E2E job fails on Playwright/Ubuntu 26.04 support.</td><td>Fail</td></tr>
+  </table>
+
+  <h2>Business rules and white-box scope</h2>
+  <table>
+    <tr><th>ID</th><th>Rule</th><th>Technique</th><th>Evidence</th></tr>
+    <tr><td>M1-BR-01</td><td>Party size is an integer from 1 through 50.</td><td>Equivalence partitions and boundaries 0, 1, 50, 51</td><td>Rejected cases assert no write; accepted boundaries assert Prisma payload.</td></tr>
+    <tr><td>M1-BR-02</td><td>Creation requires a customer principal and active location.</td><td>MCC and MC/DC</td><td>Unauthenticated, staff, missing location, inactive location, and valid customer rows.</td></tr>
+    <tr><td>M1-BR-03</td><td>Partial update changes supplied fields only and supports explicit null.</td><td>Data-flow and branch testing</td><td>Invalid, missing record, omitted fields, null fields, and all supplied fields.</td></tr>
+    <tr><td>M1-BR-04</td><td>Availability needs an active sufficiently large unreserved table.</td><td>Compound condition and conflict partitions</td><td>Required query, default party size, fully occupied and available slots.</td></tr>
+  </table>
+  <div class="fail"><strong>Verified requirement mismatch:</strong> documentation promises past-date rejection, conflict rejection during creation, table assignment capacity/location validation, and lifecycle enforcement. The controller currently does not enforce those rules.</div>
+
+  <div class="page"></div>
+  <h2>Control-flow graph and complexity</h2>
+  <p>The graph models <code>updateReservation</code>. Assignment nodes on each true optional-field edge are counted even though the compact visual groups the branch labels.</p>
+  <div class="cfg">
+    <div class="node">Entry → parse body</div><div class="arrow">↓</div>
+    <div class="node decision">Parse success?</div><div class="arrow">no → 400 → shared exit &nbsp; | &nbsp; yes ↓</div>
+    <div class="node">Find reservation</div><div class="arrow">↓</div>
+    <div class="node decision">Reservation exists?</div><div class="arrow">no → 404 → shared exit &nbsp; | &nbsp; yes ↓</div>
+    <div class="node">Initialize update data</div><div class="arrow">↓</div>
+    <div class="node decision">status supplied?</div><div class="arrow">↓</div>
+    <div class="node decision">tableId supplied?</div><div class="arrow">↓</div>
+    <div class="node decision">date supplied?</div><div class="arrow">↓</div>
+    <div class="node decision">time supplied?</div><div class="arrow">↓</div>
+    <div class="node decision">partySize supplied?</div><div class="arrow">↓</div>
+    <div class="node decision">comment supplied?</div><div class="arrow">↓</div>
+    <div class="node">Prisma update → 200 response → shared exit</div>
+  </div>
+  <div class="note"><strong>Manual result:</strong> N = 19, E = 26, P = 1. Therefore V(G) = E − N + 2P = 26 − 19 + 2 = <strong>9</strong>. Implicit Promise, Prisma, Date, Express, and Zod exceptions are outside the graph.</div>
+
+  <h2>MCC and MC/DC</h2>
+  <p>Location rejection is <code>!location || !location.isActive</code>. Let A = location exists and B = active.</p>
+  <table>
+    <tr><th>Case</th><th>A exists</th><th>B active</th><th>B executes?</th><th>Reject</th><th>Test</th></tr>
+    <tr><td>MCC-01</td><td>F</td><td>N/A</td><td>No (short-circuit)</td><td>T</td><td>Missing location</td></tr>
+    <tr><td>MCC-02</td><td>T</td><td>F</td><td>Yes</td><td>T</td><td>Inactive location</td></tr>
+    <tr><td>MCC-03</td><td>T</td><td>T</td><td>Yes</td><td>F</td><td>Accepted boundary cases</td></tr>
+  </table>
+  <p><strong>MC/DC pairs:</strong> A uses MCC-01 versus MCC-03, acknowledging B is structurally unavailable when A is false. B uses MCC-02 versus MCC-03. B is masked in MCC-01 by JavaScript short-circuiting.</p>
+  <h3>All four rule decisions</h3>
+  <table>
+    <tr><th>Rule</th><th>Complete MCC rows</th><th>MC/DC independence pairs</th></tr>
+    <tr><td>M1-BR-01</td><td>Non-number; non-integer; below 1; valid 1–50; above 50</td><td>Number: non-number/valid. Integer: decimal/valid. Lower: 0/1. Upper: 50/51.</td></tr>
+    <tr><td>M1-BR-02</td><td>Not customer; customer+missing location; customer+inactive; customer+active</td><td>Customer: reject/accept. Exists: missing/active. Active: inactive/active.</td></tr>
+    <tr><td>M1-BR-03</td><td>Two rows (omitted/supplied) for each of six independent unary field decisions</td><td>Each field's omitted/supplied rows form its pair; null is proven supplied.</td></tr>
+    <tr><td>M1-BR-04</td><td>Time mismatch/no ID; mismatch/ID; match/no ID; match/ID</td><td>Time: mismatch+ID/match+ID. ID: match+no ID/match+ID. Final slot: zero/one remaining table.</td></tr>
+  </table>
+  <p>The complete feasibility tables, masking notes, and test mapping are provided in <code>mcc-mcdc.md</code>.</p>
+
+  <div class="page"></div>
+  <h2>Coverage evidence</h2>
+  <div class="pass">Command <code>npm run coverage:member1</code> executed 50 tests: 50 passed, 0 failed. Both selected controllers achieved 100% statements, 100% branches, 100% functions, and 100% lines.</div>
+  <div class="note"><strong>Uncovered code justification:</strong> none. The declared denominator contains every statement and branch in <code>reservation.controller.ts</code> and <code>table.controller.ts</code>, and the generated V8 report lists no uncovered lines.</div>
+  <img src="screenshots/coverage-overview.png" alt="Vitest coverage overview">
+  <p class="caption">Figure 1. Browser-rendered Vitest HTML coverage report generated from the Member 1 suite.</p>
+  <img src="screenshots/sonar-coverage.png" alt="SonarQube Cloud coverage on new code for PR 1">
+  <p class="caption">Figure 2. SonarQube Cloud reports 0.0% coverage on 94 new lines to cover for PR #1, analyzed at SHA f51b0c7c63ead6740d6de8b47024093df4f5b86f. This new-code measure is distinct from the 100% Member 1 controller coverage above.</p>
+
+  <div class="page"></div>
+  <h2>Mutation testing and survivor classification</h2>
+  <img src="screenshots/mutation-overview.png" alt="Stryker mutation overview">
+  <p class="caption">Figure 3. Browser-rendered Stryker HTML report from the genuine pre-strengthening baseline.</p>
+  <table>
+    <tr><th>Class</th><th>Representative surviving behavior</th><th>Reason</th><th>Required action</th></tr>
+    <tr><td>Weak assertion</td><td>Response object removed or success boolean flipped</td><td>Some rejection tests assert status/write prevention but not the entire body</td><td>Add exact response assertions</td></tr>
+    <tr><td>Missing test</td><td>Prisma <code>where</code> object removed</td><td>Several tests do not assert lookup/update query identity</td><td>Assert exact Prisma call payload</td></tr>
+    <tr><td>Missing test</td><td>Rename condition forced false</td><td>Changed-name unique and duplicate rows are not both implemented</td><td>Add both feasible MCC rows</td></tr>
+    <tr><td>Missing test</td><td><code>isActive</code> default true changed to false</td><td>No successful create-table test omits <code>isActive</code></td><td>Assert persisted default</td></tr>
+    <tr><td>Equivalent candidate</td><td>Mutation in output field not observable under current mocked return</td><td>Production behavior may be determined by mocked Prisma response</td><td>Confirm invariant before classifying equivalent</td></tr>
+  </table>
+  <p>Fifteen genuine current-run survivors are classified in <code>mutation-analysis.md</code>; 13 were killed by stronger response/query assertions and two remain explicitly identified. Two application-specific custom mutants were both killed in an isolated worktree. The final score is 63.31%, passing the retained 60% breaking threshold.</p>
+
+  <h2>Browser and CI evidence</h2>
+  <p>Two Member 1 use cases define and automate a main flow, two alternatives and two exceptions each. <code>npm run test:e2e:member1</code> passed all 10 flows in 24.6 seconds using installed Chrome and deterministic synthetic route state.</p>
+  <p>The remote Member 1 run passed coverage, mutation, and custom mutations. Sonar and the aggregate required job failed because the Sonar quality gate failed. The separate repository E2E check failed before tests with <code>Playwright does not support chromium on ubuntu26.04-x64</code>; this runner/toolchain compatibility failure is not presented as a passing test.</p>
+
+  <h2>SonarQube Cloud analysis and quality gate</h2>
+  <p>PR #1 was analyzed at <code>f51b0c7c63ead6740d6de8b47024093df4f5b86f</code> (base <code>d6af7237e9569ebeab19ccab375362f9d144e25e</code>). The Member 1 LCOV artifact was downloaded and verified before the scan; Sonar processed the report and uploaded the analysis. The action exited with code 3 only after checking the failed quality gate.</p>
+  <img src="screenshots/sonar-overview.png" alt="SonarQube Cloud project overview">
+  <p class="caption">Figure 4. SonarQube Cloud project Overview warns that the <code>main</code> branch has not been analyzed yet. The workflow adds a main-branch push trigger so the baseline runs after the team's PR review and merge.</p>
+  <img src="screenshots/sonar-quality-gate.png" alt="SonarQube Cloud quality gate results for PR 1">
+  <p class="caption">Figure 5. Actual PR quality gate failure at SHA f51b0c7c63ead6740d6de8b47024093df4f5b86f: reliability C (required A), security C (required A), new-code coverage 0.0% (required at least 80.0%), and duplicated lines 79.0% (allowed at most 3.0%).</p>
+  <img src="screenshots/actions-sonar-job.png" alt="GitHub Actions Sonar quality gate job">
+  <p class="caption">Figure 6. GitHub Actions Sonar job for the analyzed SHA. Coverage download and the LCOV existence check passed; the scan step failed after Sonar reported the failed quality gate.</p>
+  <p>The Sonar Overview warning is <code>'main' branch has not been analyzed yet.</code> The PR scan nevertheless completed; no scanner error said that a first main analysis was required to upload the PR analysis. The project currently reports 19 new issues, and the 0.0% coverage measure applies to 94 new lines to cover (including 94 uncovered lines in <code>e2e</code>), distinct from the 100% controller coverage result.</p>
+  <p>The PR remains open for team review. No direct push to or merge into <code>main</code> was performed. Earlier local Docker attempts are historical and are detailed in <code>quality-report.md</code>.</p>
+
+  <div class="page"></div>
+  <h2>Risks and exit criteria</h2>
+  <table>
+    <tr><th>Highest risk</th><th>L×I</th><th>Mitigation</th><th>Linked criterion</th></tr>
+    <tr><td>Double booking because creation does not enforce conflicts</td><td>4×5 = 20 Critical</td><td>Transactional conflict check and concurrency tests</td><td>EC-01 coverage</td></tr>
+    <tr><td>Invalid table assignment capacity/location/activity</td><td>4×5 = 20 Critical</td><td>Assignment validation and MCC/boundary tests</td><td>EC-01, EC-02</td></tr>
+    <tr><td>Status lifecycle is not enforced</td><td>4×4 = 16 High</td><td>Transition map and state tests</td><td>EC-01</td></tr>
+    <tr><td>Coverage/mutation scope exceeds schedule</td><td>4×4 = 16 High</td><td>Inventory and prioritize critical rules</td><td>EC-01, EC-02</td></tr>
+  </table>
+  <table>
+    <tr><th>ID</th><th>Target</th><th>Actual</th><th>Status</th></tr>
+    <tr><td>EC-01</td><td>100% statements and branches</td><td>100% / 100% across both selected controllers</td><td>Pass</td></tr>
+    <tr><td>EC-02</td><td>Mutation score at least 60%; 15 survivors classified</td><td>63.31%; 15 classified, two custom operators killed</td><td>Pass</td></tr>
+    <tr><td>EC-03</td><td>Sonar quality gate with imported LCOV</td><td>Analysis at f51b0c7 completed; new-code coverage 0%, reliability/security C, duplication 79%</td><td>Fail</td></tr>
+    <tr><td>EC-04</td><td>Required GitHub checks and reviewed PR</td><td>PR #1 open; coverage/mutation/custom pass; Sonar/aggregate fail; separate E2E fails on unsupported Ubuntu 26.04 Chromium</td><td>Fail</td></tr>
+  </table>
+
+  <h2>Conclusion</h2>
+  <p>White-box coverage, MCC/MC/DC, mutation threshold/custom operators, and both local browser use cases pass. The real Sonar PR analysis and CI evidence are now captured, but the quality gate and aggregate job fail, and the separate CI E2E job is blocked by its Ubuntu/Playwright Chromium mismatch. The main baseline awaits the reviewed PR merge, so the overall Member 1 release decision remains hold.</p>
+</body>
+</html>

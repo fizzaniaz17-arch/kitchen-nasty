@@ -1,0 +1,131 @@
+name: Member 1 Quality Gates
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  member1-coverage:
+    name: Member 1 / 100% Coverage
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx -w packages/server prisma generate --schema ../../prisma/schema.prisma
+      - run: npm run coverage:member1
+      - name: Upload coverage evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: member1-coverage
+          path: packages/server/coverage/member-1/
+          retention-days: 14
+
+  member1-mutation:
+    name: Member 1 / Mutation 60%
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx -w packages/server prisma generate --schema ../../prisma/schema.prisma
+      - run: npm run mutation:member1
+      - name: Upload mutation evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: member1-mutation
+          path: reports/mutation/final-56-tests/
+          retention-days: 14
+
+  member1-custom-mutations:
+    name: Member 1 / Custom Mutations
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx -w packages/server prisma generate --schema ../../prisma/schema.prisma
+      - name: CM-A maximum 50 to 49 must fail
+        shell: bash
+        run: |
+          sed -i '0,/\.max(50)/s//.max(49)/' packages/server/src/controllers/reservation.controller.ts
+          if npm run test:member1; then
+            echo "CM-A survived unexpectedly"
+            exit 1
+          fi
+          git restore packages/server/src/controllers/reservation.controller.ts
+      - name: CM-B inverted slot match must fail
+        shell: bash
+        run: |
+          sed -i '0,/r\.time === time && r\.tableId/s//r.time !== time \&\& r.tableId/' packages/server/src/controllers/reservation.controller.ts
+          if npm run test:member1; then
+            echo "CM-B survived unexpectedly"
+            exit 1
+          fi
+          git restore packages/server/src/controllers/reservation.controller.ts
+
+  member1-sonar:
+    name: Member 1 / Sonar Quality Gate
+    runs-on: ubuntu-latest
+    needs: member1-coverage
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/download-artifact@v4
+        with:
+          name: member1-coverage
+          path: packages/server/coverage/member-1
+      - name: Verify Member 1 LCOV report
+        shell: bash
+        run: |
+          if [ ! -f packages/server/coverage/member-1/lcov.info ]; then
+            echo "Expected coverage report packages/server/coverage/member-1/lcov.info was not found."
+            exit 1
+          fi
+      - name: Analyze and wait for this analysis quality gate
+        uses: SonarSource/sonarqube-scan-action@v7
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN2 }}
+        with:
+          args: >-
+            -Dsonar.projectKey=fizzaniaz17-arch_kitchen-nasty
+            -Dsonar.organization=${{ vars.SONAR_ORGANIZATION }}
+            -Dsonar.qualitygate.wait=true
+            -Dsonar.qualitygate.timeout=300
+
+  member1-required:
+    name: Member 1 / Required
+    if: always()
+    runs-on: ubuntu-latest
+    needs: [member1-coverage, member1-mutation, member1-custom-mutations, member1-sonar]
+    steps:
+      - name: Enforce all Member 1 gates
+        env:
+          COVERAGE_RESULT: ${{ needs.member1-coverage.result }}
+          MUTATION_RESULT: ${{ needs.member1-mutation.result }}
+          CUSTOM_RESULT: ${{ needs.member1-custom-mutations.result }}
+          SONAR_RESULT: ${{ needs.member1-sonar.result }}
+        shell: bash
+        run: |
+          test "$COVERAGE_RESULT" = success
+          test "$MUTATION_RESULT" = success
+          test "$CUSTOM_RESULT" = success
+          test "$SONAR_RESULT" = success
