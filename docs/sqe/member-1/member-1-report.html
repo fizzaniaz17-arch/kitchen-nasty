@@ -34,19 +34,20 @@
     <strong>Branch:</strong> sqe/member-1-static-analysis<br>
     <strong>Verified baseline:</strong> d6af7237e9569ebeab19ccab375362f9d144e25e<br>
     <strong>Baseline evidence commit:</strong> 1976b6ccc3967910016d50b682f6f737521208fa<br>
+    <strong>Sonar analysis SHA:</strong> f51b0c7c63ead6740d6de8b47024093df4f5b86f (PR #1)<br>
     <strong>Report date:</strong> 21 November 2026 (Asia/Karachi)
   </div>
 
   <h2>Executive status</h2>
   <table>
     <tr><th>Criterion</th><th>Actual evidence</th><th>Status</th></tr>
-    <tr><td>Reproducible tooling</td><td>Vitest 4.0.18, coverage-v8 4.0.18, Stryker 9.1.1, pinned SonarQube 25.11.0.114957 image</td><td>Partial pass</td></tr>
+    <tr><td>Reproducible tooling</td><td>Vitest 4.0.18, coverage-v8 4.0.18, Stryker 9.1.1, SonarQube Cloud scan action v7</td><td>Pass</td></tr>
     <tr><td>White-box suite</td><td>56/56 tests passed across all reservation/table controller functions</td><td>Pass</td></tr>
     <tr><td>Coverage target</td><td>100% statements and 100% branches; 100% functions and lines</td><td>Pass</td></tr>
     <tr><td>Mutation final</td><td>556 mutants; 351 killed; 204 survived; 0 no coverage; 1 timeout; score 63.31%</td><td>Pass (60%)</td></tr>
-    <tr><td>SonarQube metrics</td><td>Service reached UP, but Docker's internal store became read-only before scanning</td><td>Blocked</td></tr>
+    <tr><td>SonarQube Cloud</td><td>PR analysis uploaded at SHA f51b0c7; quality gate failed on reliability, security, coverage, and duplication</td><td>Fail (analysis completed)</td></tr>
     <tr><td>Browser use cases</td><td>10/10 Playwright flows passed across two Member 1 use cases</td><td>Pass</td></tr>
-    <tr><td>CI and PR evidence</td><td>Required workflow added; remote runs, fix PR and blocked PR remain pending</td><td>Partial</td></tr>
+    <tr><td>CI and PR evidence</td><td>PR #1 open; Member 1 coverage, mutation, and custom jobs pass; Sonar/aggregate fail. Separate CI E2E job fails on Playwright/Ubuntu 26.04 support.</td><td>Fail</td></tr>
   </table>
 
   <h2>Business rules and white-box scope</h2>
@@ -103,11 +104,13 @@
   <div class="note"><strong>Uncovered code justification:</strong> none. The declared denominator contains every statement and branch in <code>reservation.controller.ts</code> and <code>table.controller.ts</code>, and the generated V8 report lists no uncovered lines.</div>
   <img src="screenshots/coverage-overview.png" alt="Vitest coverage overview">
   <p class="caption">Figure 1. Browser-rendered Vitest HTML coverage report generated from the Member 1 suite.</p>
+  <img src="screenshots/sonar-coverage.png" alt="SonarQube Cloud coverage on new code for PR 1">
+  <p class="caption">Figure 2. SonarQube Cloud reports 0.0% coverage on 94 new lines to cover for PR #1, analyzed at SHA f51b0c7c63ead6740d6de8b47024093df4f5b86f. This new-code measure is distinct from the 100% Member 1 controller coverage above.</p>
 
   <div class="page"></div>
   <h2>Mutation testing and survivor classification</h2>
   <img src="screenshots/mutation-overview.png" alt="Stryker mutation overview">
-  <p class="caption">Figure 2. Browser-rendered Stryker HTML report from the genuine pre-strengthening baseline.</p>
+  <p class="caption">Figure 3. Browser-rendered Stryker HTML report from the genuine pre-strengthening baseline.</p>
   <table>
     <tr><th>Class</th><th>Representative surviving behavior</th><th>Reason</th><th>Required action</th></tr>
     <tr><td>Weak assertion</td><td>Response object removed or success boolean flipped</td><td>Some rejection tests assert status/write prevention but not the entire body</td><td>Add exact response assertions</td></tr>
@@ -120,17 +123,18 @@
 
   <h2>Browser and CI evidence</h2>
   <p>Two Member 1 use cases define and automate a main flow, two alternatives and two exceptions each. <code>npm run test:e2e:member1</code> passed all 10 flows in 24.6 seconds using installed Chrome and deterministic synthetic route state.</p>
-  <p><code>member1-quality.yml</code> adds stable coverage, mutation, custom mutation, Sonar and aggregate required checks. Remote execution remains pending. The Sonar job intentionally fails when a reachable host/token is absent; it does not treat missing analysis as success.</p>
+  <p>The remote Member 1 run passed coverage, mutation, and custom mutations. Sonar and the aggregate required job failed because the Sonar quality gate failed. The separate repository E2E check failed before tests with <code>Playwright does not support chromium on ubuntu26.04-x64</code>; this runner/toolchain compatibility failure is not presented as a passing test.</p>
 
-  <h2>SonarQube configuration and blocker</h2>
-  <ul>
-    <li>Server image: <code>sonarqube:25.11.0.114957-community</code>, digest <code>sha256:48dd0e...</code>.</li>
-    <li>Service health reached <code>UP</code> at <code>http://localhost:9000</code>.</li>
-    <li>Scanner scope is defined in <code>sonar-project.properties</code> and points to the exact Member 1 LCOV report.</li>
-    <li>The first scanner command used a nonexistent tag and did not analyze source.</li>
-    <li>During reset, Docker reported its metadata store as read-only and the engine subsequently hung.</li>
-  </ul>
-  <div class="fail">No Sonar metrics or dashboard screenshots are presented as proof. They remain pending until Docker Desktop is manually restarted/repaired and a successful scanner background task completes.</div>
+  <h2>SonarQube Cloud analysis and quality gate</h2>
+  <p>PR #1 was analyzed at <code>f51b0c7c63ead6740d6de8b47024093df4f5b86f</code> (base <code>d6af7237e9569ebeab19ccab375362f9d144e25e</code>). The Member 1 LCOV artifact was downloaded and verified before the scan; Sonar processed the report and uploaded the analysis. The action exited with code 3 only after checking the failed quality gate.</p>
+  <img src="screenshots/sonar-overview.png" alt="SonarQube Cloud project overview">
+  <p class="caption">Figure 4. SonarQube Cloud project Overview warns that the <code>main</code> branch has not been analyzed yet. The workflow adds a main-branch push trigger so the baseline runs after the team's PR review and merge.</p>
+  <img src="screenshots/sonar-quality-gate.png" alt="SonarQube Cloud quality gate results for PR 1">
+  <p class="caption">Figure 5. Actual PR quality gate failure at SHA f51b0c7c63ead6740d6de8b47024093df4f5b86f: reliability C (required A), security C (required A), new-code coverage 0.0% (required at least 80.0%), and duplicated lines 79.0% (allowed at most 3.0%).</p>
+  <img src="screenshots/actions-sonar-job.png" alt="GitHub Actions Sonar quality gate job">
+  <p class="caption">Figure 6. GitHub Actions Sonar job for the analyzed SHA. Coverage download and the LCOV existence check passed; the scan step failed after Sonar reported the failed quality gate.</p>
+  <p>The Sonar Overview warning is <code>'main' branch has not been analyzed yet.</code> The PR scan nevertheless completed; no scanner error said that a first main analysis was required to upload the PR analysis. The project currently reports 19 new issues, and the 0.0% coverage measure applies to 94 new lines to cover (including 94 uncovered lines in <code>e2e</code>), distinct from the 100% controller coverage result.</p>
+  <p>The PR remains open for team review. No direct push to or merge into <code>main</code> was performed. Earlier local Docker attempts are historical and are detailed in <code>quality-report.md</code>.</p>
 
   <div class="page"></div>
   <h2>Risks and exit criteria</h2>
@@ -145,11 +149,11 @@
     <tr><th>ID</th><th>Target</th><th>Actual</th><th>Status</th></tr>
     <tr><td>EC-01</td><td>100% statements and branches</td><td>100% / 100% across both selected controllers</td><td>Pass</td></tr>
     <tr><td>EC-02</td><td>Mutation score at least 60%; 15 survivors classified</td><td>63.31%; 15 classified, two custom operators killed</td><td>Pass</td></tr>
-    <tr><td>EC-03</td><td>Sonar quality gate with imported LCOV</td><td>Docker blocker</td><td>Pending</td></tr>
-    <tr><td>EC-04</td><td>Required GitHub checks and blocked regression PR</td><td>Not demonstrated</td><td>Pending</td></tr>
+    <tr><td>EC-03</td><td>Sonar quality gate with imported LCOV</td><td>Analysis at f51b0c7 completed; new-code coverage 0%, reliability/security C, duplication 79%</td><td>Fail</td></tr>
+    <tr><td>EC-04</td><td>Required GitHub checks and reviewed PR</td><td>PR #1 open; coverage/mutation/custom pass; Sonar/aggregate fail; separate E2E fails on unsupported Ubuntu 26.04 Chromium</td><td>Fail</td></tr>
   </table>
 
   <h2>Conclusion</h2>
-  <p>White-box coverage, MCC/MC/DC, mutation threshold/custom operators, and both browser use cases now pass. Sonar metrics/screenshots and real CI passing/failing PR proof remain blocked or pending, so the overall Member 1 release decision remains hold.</p>
+  <p>White-box coverage, MCC/MC/DC, mutation threshold/custom operators, and both local browser use cases pass. The real Sonar PR analysis and CI evidence are now captured, but the quality gate and aggregate job fail, and the separate CI E2E job is blocked by its Ubuntu/Playwright Chromium mismatch. The main baseline awaits the reviewed PR merge, so the overall Member 1 release decision remains hold.</p>
 </body>
 </html>

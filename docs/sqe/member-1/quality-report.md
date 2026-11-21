@@ -66,6 +66,25 @@ The baseline report is preserved unchanged to maintain chronology; later runs us
 
 The expanded 56-test run first scored 53.78% (298 killed, 257 survived, no no-coverage mutants, one timeout). Exact response and dependency-call assertions raised the final result to 63.31% (351 killed, 204 survived, no no-coverage mutants, one timeout), passing the unchanged 60% break threshold. Fifteen genuine survivors and their matched final outcomes are documented in `mutation-analysis.md`; both deterministic custom operators were killed as recorded in `custom-mutations.md`.
 
-## SonarQube blocker
+## SonarQube Cloud PR analysis
 
-Docker Desktop Engine `29.5.3` was started and `sonarqube:25.11.0.114957-community` reached API status `UP`. The first scanner attempt used a nonexistent scanner tag and performed no analysis. During the disposable instance reset, Docker reported its metadata database as read-only and its engine then stopped responding. Therefore no completed background task, metrics, ratings, or Sonar dashboard screenshots are claimed. `sonar-project.properties` defines production/test scope and imports the exact Member 1 LCOV path. Repair or manually restart Docker Desktop, then use verified scanner tag `sonarsource/sonar-scanner-cli:11.5.0.2154_7.3.0` and capture the resulting dashboard.
+PR #1 was analyzed by workflow run `44894584324` at SHA `f51b0c7c63ead6740d6de8b47024093df4f5b86f`, against base SHA `d6af7237e9569ebeab19ccab375362f9d144e25e`. The coverage artifact downloaded successfully, the `lcov.info` pre-scan check passed, and SonarQube Cloud uploaded and processed the analysis. The scanner then exited with code 3 because the quality gate failed; this was not a scanner startup or token/organization configuration error.
+
+| Quality gate condition | Actual | Required | Result |
+|---|---:|---:|---|
+| New reliability rating | C | A | Fail |
+| New security rating | C | A | Fail |
+| New-code coverage | 0.0% on 94 new lines to cover | At least 80.0% | Fail |
+| New duplicated lines | 79.0% (79.03% in the UI) | At most 3.0% | Fail |
+
+The PR summary reports 19 new issues. The coverage upload/import completed; Sonar's new-code scope counted 94 lines under `e2e`, which are not covered by the imported controller LCOV file. This is distinct from the Member 1 controller coverage result above (100% statements and branches). The high duplication and C reliability/security ratings are also actual gate failures, not treated as passing.
+
+The SonarQube Cloud project Overview shows the exact warning: **`'main' branch has not been analyzed yet.`** No scanner error said that PR analysis was impossible; the PR analysis completed. To establish the baseline through review rather than a direct push, the workflow now also runs on pushes to `main`. That baseline run will occur only after the open PR is reviewed and merged by the team; no direct push or merge was performed.
+
+Screenshots for the Overview, PR new-code coverage, quality gate, and Actions Sonar job are saved in `screenshots/sonar-overview.png`, `screenshots/sonar-coverage.png`, `screenshots/sonar-quality-gate.png`, and `screenshots/actions-sonar-job.png`. They document analyzed SHA `f51b0c7c63ead6740d6de8b47024093df4f5b86f`.
+
+The earlier local Docker/SonarQube attempts remain historical evidence only: Docker Desktop reached a read-only metadata failure before a local scan. They are superseded by this completed Cloud analysis.
+
+## Other PR check failure
+
+The repository's separate E2E job failed before running tests with the exact error `Playwright does not support chromium on ubuntu26.04-x64`. The Member 1 coverage, mutation, and custom-mutation jobs passed. The aggregate Member 1 job failed because the Sonar quality gate failed.

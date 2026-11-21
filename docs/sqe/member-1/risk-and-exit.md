@@ -12,7 +12,7 @@ Likelihood and impact use 1 (lowest) through 5 (highest). Score is `L × I`: Low
 | R-P06 Race allows duplicate table names | Product | 3 | 3 | 9 Medium | DB owner | Composite unique constraint and concurrency test | DB integration |
 | R-P07 Deleting any historically referenced table is permanently blocked | Product | 2 | 3 | 6 Medium | Product owner | Confirm retention policy; state/age partitions | API |
 | R-P08 Staff list is not visibly scoped by staff location | Product | 3 | 4 | 12 High | Auth owner | Authorization requirement and IDOR tests | API/E2E |
-| R-PR01 Docker/Sonar environment unavailable | Project | 4 | 3 | 12 High | Member 1 | Pinned compose/runbook and CI-hosted scanner | Pipeline |
+| R-PR01 Sonar main baseline and quality gate are not established | Project | 4 | 3 | 12 High | Member 1 | Main-branch scan runs after the reviewed workflow PR is merged; resolve the recorded Sonar gate conditions | Pipeline |
 | R-PR02 Coverage/mutation scope exceeds remaining schedule | Project | 4 | 4 | 16 High | Member 1 | Inventory, prioritize critical rules, daily evidence runs | Unit/tooling |
 
 ## 5×5 matrix
@@ -31,8 +31,8 @@ Likelihood and impact use 1 (lowest) through 5 (highest). Score is `L × I`: Low
 |---|---|---|---|---|
 | EC-01 | 100% statement and branch coverage for selected server business logic; controls R-P01/R-P03 | Vitest LCOV | 100% statements, 100% branches | Pass |
 | EC-02 | Mutation score at or above justified CI threshold and at least 15 survivors classified | Stryker JSON/HTML | 63.31%; 15 current-run survivors classified; two custom operators killed | Pass |
-| EC-03 | Sonar quality gate passes with imported LCOV and no blocker/critical issue in module | Sonar task/gate API | Not run: Docker engine unavailable | Pending; blocks release |
-| EC-04 | Required PR checks pass and branch rules block bypass | GitHub checks/ruleset evidence | Workflow implemented locally; remote runs and ruleset proof not yet verified | Pending; blocks release |
+| EC-03 | Sonar quality gate passes with imported LCOV and no blocker/critical issue in module | Sonar PR analysis and quality-gate API | Analysis at `f51b0c7c63ead6740d6de8b47024093df4f5b86f` completed; reliability C, security C, new-code coverage 0.0%, duplication 79.0%; `main` baseline not yet analyzed | Fail; blocks release |
+| EC-04 | Required PR checks pass and branch rules block bypass | GitHub checks/ruleset evidence | PR #1 open; coverage/mutation/custom pass; Sonar and aggregate fail; separate E2E job fails before tests because Chromium is unsupported on `ubuntu26.04-x64` | Fail; blocks release |
 
 ## AI and viva record
 
