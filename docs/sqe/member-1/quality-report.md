@@ -38,12 +38,15 @@ No function-level analyzer value is available yet. A whole-file Sonar complexity
 
 Command: `npm run coverage:member1`
 
-- Test result: 50 passed, 0 failed.
-- Full selected-controller denominator: 100% statements, 100% branches, 100% functions, 100% lines.
+- Test result: 56 passed, 0 failed (21 November 2026 verification run).
+- Selected-controller denominator: 191/191 statements (100%), 99/99 branches (100%), 23/23 functions (100%), and 178/178 lines (100%).
+- `reservation.controller.ts`: 134/134 statements, 75/75 branches, 18/18 functions, and 121/121 lines (all 100%).
+- `table.controller.ts`: 57/57 statements, 24/24 branches, 5/5 functions, and 57/57 lines (all 100%).
 - Gate: passed. The assignment target of 100% statements and branches is met.
 - Uncovered code: none in the declared reservation/table controller denominator.
 - Release effect: the white-box coverage criterion passes; mutation, Sonar, and CI criteria remain independent blockers.
 - LCOV: `packages/server/coverage/member-1/lcov.info`.
+- Browser-rendered report evidence: `screenshots/coverage-overview.png`; machine-readable summary: `packages/server/coverage/member-1/coverage-summary.json`.
 
 ## Mutation baseline
 

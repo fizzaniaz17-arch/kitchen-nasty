@@ -65,4 +65,4 @@ MC/DC pairs for R: T uses R2/R4; Q uses R3/R4. Q is masked in R1/R2 when T is fa
 
 ## Coverage result
 
-`npm run coverage:member1` executed 50 tests in two files. Result: 100% statements, 100% branches, 100% functions, and 100% lines for `reservation.controller.ts` and `table.controller.ts`. There is no uncovered code in the declared denominator.
+`npm run coverage:member1` executed 56 tests in two files on 21 November 2026. Result: 191/191 statements (100%), 99/99 branches (100%), 23/23 functions (100%), and 178/178 lines (100%) for `reservation.controller.ts` and `table.controller.ts`. There is no uncovered code in the declared denominator. The browser-rendered coverage evidence is `screenshots/coverage-overview.png`; the generated V8 summary and LCOV are in `packages/server/coverage/member-1/`.

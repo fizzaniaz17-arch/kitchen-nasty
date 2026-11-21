@@ -100,10 +100,16 @@
 
   <div class="page"></div>
   <h2>Coverage evidence</h2>
-  <div class="pass">Command <code>npm run coverage:member1</code> executed 50 tests: 50 passed, 0 failed. Both selected controllers achieved 100% statements, 100% branches, 100% functions, and 100% lines.</div>
+  <div class="pass">Command <code>npm run coverage:member1</code> executed 56 tests: 56 passed, 0 failed. The selected-controller denominator achieved 100% statements (191/191), 100% branches (99/99), 100% functions (23/23), and 100% lines (178/178).</div>
+  <table>
+    <tr><th>Selected controller</th><th>Statements</th><th>Branches</th><th>Functions</th><th>Lines</th></tr>
+    <tr><td><code>reservation.controller.ts</code></td><td>100% (134/134)</td><td>100% (75/75)</td><td>100% (18/18)</td><td>100% (121/121)</td></tr>
+    <tr><td><code>table.controller.ts</code></td><td>100% (57/57)</td><td>100% (24/24)</td><td>100% (5/5)</td><td>100% (57/57)</td></tr>
+  </table>
   <div class="note"><strong>Uncovered code justification:</strong> none. The declared denominator contains every statement and branch in <code>reservation.controller.ts</code> and <code>table.controller.ts</code>, and the generated V8 report lists no uncovered lines.</div>
   <img src="screenshots/coverage-overview.png" alt="Vitest coverage overview">
-  <p class="caption">Figure 1. Browser-rendered Vitest HTML coverage report generated from the Member 1 suite.</p>
+  <p class="caption">Figure 1. Browser-rendered Vitest HTML coverage report from the 21 November 2026 run; it shows 191/191 statements, 99/99 branches, 23/23 functions, and 178/178 lines covered.</p>
+  <p class="caption">Evidence: <code>packages/server/coverage/member-1/coverage-summary.json</code> and <code>lcov.info</code>. This report covers the two selected server controllers only; it is not repository-wide coverage.</p>
   <img src="screenshots/sonar-coverage.png" alt="SonarQube Cloud coverage on new code for PR 1">
   <p class="caption">Figure 2. SonarQube Cloud reports 0.0% coverage on 94 new lines to cover for PR #1, analyzed at SHA f51b0c7c63ead6740d6de8b47024093df4f5b86f. This new-code measure is distinct from the 100% Member 1 controller coverage above.</p>
 
