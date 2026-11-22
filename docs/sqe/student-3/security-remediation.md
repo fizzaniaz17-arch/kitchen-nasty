@@ -4,7 +4,7 @@
 
 This report covers the security-header findings, social-auth token exposure, and dependency audit for the `hamza` branch of `fizzaniaz17-arch/kitchen-nasty`. No PostgreSQL recovery testing, migrations, seeds, or database changes were performed.
 
-The header and social-auth changes are committed on this branch. Automated checks and local UI captures below are supporting evidence; they do not represent a production deployment or a post-remediation ZAP rescan.
+The header and social-auth changes are committed on this branch. PR [#7](https://github.com/fizzaniaz17-arch/kitchen-nasty/pull/7) targets `main` and remains open; it has not been merged. Automated checks and local UI captures below are supporting evidence; they do not represent a production deployment or a post-remediation ZAP rescan.
 
 ## Security headers
 
@@ -33,10 +33,15 @@ The state and code stores are process-local. Multi-instance deployments need sti
 
 | Check | Result |
 |---|---|
-| Shared and server unit/integration suites (`npm test`) | 395 passed |
+| Shared and server unit/integration suites (`npm test`) | 396 passed |
+| Member 1 coverage gate | 56 passed; 100% statements, branches, functions, and lines |
+| Member 1 mutation gate | 64.93%; above the 60% break threshold |
+| Focused partial-update regression suites | 121 passed |
 | Security-header and social-callback Playwright checks | 3 passed |
 | Mobile TypeScript check | Passed |
 | Expo public configuration smoke check | Passed |
+| iOS and Android Expo bundle exports | Passed |
+| Server TypeScript build | Passed |
 | Shared, server, admin, and storefront production builds | Passed |
 | Documentation build | Passed with VitePress 1.6.4 and Vite 6.4.6 |
 | Local admin/storefront response-header inspection | All four expected headers present |
@@ -59,11 +64,11 @@ The callback screenshot uses stubbed API responses and a synthetic test identity
 
 The full audit decreased from 95 findings (6 critical, 50 high, 31 moderate, 8 low) to 22 (0 critical, 1 high, 21 moderate). The production-only audit decreased from 62 (3 critical, 31 high, 26 moderate, 2 low) to 20 (0 critical, 1 high, 19 moderate). The server production workspace has no remaining audit findings.
 
-The remaining high finding is `image-size` in the Expo 52 / Metro 0.81.5 dependency tree. The available fixed `image-size` 2.x API exports `imageSize` as a named function, while Metro 0.81.5 calls the package's CommonJS export directly as a function. It was not forced across this API boundary. Remaining moderate findings are Expo SDK dependency-chain findings and two Stryker development-tool findings; see the dependency audit report for triage and evidence.
+The remaining high finding is `image-size` in the Expo 52 / Metro 0.81.5 dependency tree. The available fixed `image-size` 2.x API exports `imageSize` as a named function, while Metro 0.81.5 calls the package's CommonJS export directly as a function. It was not forced across this API boundary. A separate Zod 4 regression found by PR CI was fixed by keeping create-time defaults out of partial update schemas; controller regression tests now verify omitted fields are not written. The mobile app also declares the safe `query-string` 9.5.1 dependency needed by Expo Router's Metro bundle after its navigation dependency stopped providing it transitively. Both mobile platform exports now pass. Remaining moderate findings are Expo SDK dependency-chain findings and two Stryker development-tool findings; see the dependency audit report for triage and evidence.
 
 ## Evidence and limitations
 
 - Baseline and final npm audit JSON files are in `reports/student-3/security/`.
-- The prior security-header and social-auth commits are on `hamza`; no push or merge request is included in this report.
+- The security-header, social-auth, and dependency-audit commits are on `hamza`; PR #7 is open for review and has not been merged.
 - No post-remediation ZAP scan or production Nginx container test was run.
 - No database recovery work was performed.

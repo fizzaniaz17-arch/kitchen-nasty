@@ -13,6 +13,7 @@ The full production-only audit includes all workspaces, including the Expo mobil
 - Updated `@xmldom/xmldom` to 0.8.15 and PostCSS to 8.5.33; Expo configuration and documentation builds passed.
 - Used Vite 6.4.6 for VitePress 1.6.4 through a scoped override. The documentation production build passed.
 - Upgraded direct packages selected during triage, including React Router, Vite, Vue, Babel, Multer, Nodemailer, express-rate-limit, Vitest, and Zod. The Zod 4 API changes were carried through affected controllers.
+- Added `query-string` 9.5.1 directly to the mobile workspace after the Expo Router bundle exposed an undeclared Metro resolution dependency. Its `decode-uri-component` dependency resolves to 0.5.1; the full and production audit totals remain unchanged.
 - Removed unused storefront `intlayer` and redundant `@types/nodemailer` packages.
 
 The npm 10 `audit fix --dry-run` command failed in Arborist; npm 12.2.3 was used ephemerally to resolve the lockfile. No npm CLI version was added to project dependencies.
@@ -26,13 +27,22 @@ The npm 10 `audit fix --dry-run` command failed in Arborist; npm 12.2.3 was used
 | `@stryker-mutator/core` and `@stryker-mutator/vitest-runner` | Two moderate; development-only | Deferred. No npm audit fix is currently available for the selected versions. They are not production dependencies. |
 | VitePress | No remaining Vite high after the Vite 6.4.6 override | The override passed the docs build; retain regression coverage when updating VitePress. |
 
+## CI regression follow-up
+
+PR CI caught that Zod 4 applies create-schema defaults when `.partial()` update schemas are parsed. The affected controller update schemas now explicitly keep those defaulted fields optional, and regression assertions verify partial requests write only the supplied fields. A separate mobile bundle failure was caused by Expo Router importing `query-string` without a package Metro could resolve after the navigation dependency update; the safe direct dependency restores resolution without adding an audit finding.
+
 ## Validation
 
 | Validation | Result |
 |---|---|
-| `npm test` | 395 passed across shared, server unit, and integration tests |
+| `npm test` | 396 passed across shared, server unit, and integration tests |
+| Focused partial-update regression suites | 121 passed |
+| Member 1 coverage gate | 56 passed; 100% statements, branches, functions, and lines |
+| Member 1 mutation gate | 64.93%; above the 60% break threshold |
 | Mobile typecheck | Passed |
 | Expo `config --type public` | Passed |
+| iOS and Android Expo bundle exports | Passed |
+| Server TypeScript build | Passed |
 | Shared/server/admin/storefront builds | Passed |
 | VitePress documentation build | Passed |
 | Security-related Playwright checks | 3 passed |
