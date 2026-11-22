@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { z } from 'zod';
 import prisma from '../lib/db.js';
 import { auditLog } from '../lib/audit.js';
@@ -53,34 +53,38 @@ const updateLocationSchema = createLocationSchema.partial().omit({ slug: true })
 // HANDLERS
 // ============================================================
 
-export async function listLocations(req: Request, res: Response): Promise<void> {
-  const page = Math.max(1, parseInt(req.query.page as string) || 1);
-  const limit = Math.min(50, Math.max(1, parseInt(req.query.limit as string) || 20));
-  const skip = (page - 1) * limit;
+export async function listLocations(req: Request, res: Response, next: NextFunction): Promise<void> {
+  try {
+    const page = Math.max(1, parseInt(req.query.page as string) || 1);
+    const limit = Math.min(50, Math.max(1, parseInt(req.query.limit as string) || 20));
+    const skip = (page - 1) * limit;
 
-  const [locations, total] = await Promise.all([
-    prisma.location.findMany({
-      skip,
-      take: limit,
-      orderBy: { name: 'asc' },
-      include: {
-        operatingHours: { orderBy: { dayOfWeek: 'asc' } },
-        _count: { select: { deliveryZones: true, tables: true, orders: true } },
+    const [locations, total] = await Promise.all([
+      prisma.location.findMany({
+        skip,
+        take: limit,
+        orderBy: { name: 'asc' },
+        include: {
+          operatingHours: { orderBy: { dayOfWeek: 'asc' } },
+          _count: { select: { deliveryZones: true, tables: true, orders: true } },
+        },
+      }),
+      prisma.location.count(),
+    ]);
+
+    res.json({
+      success: true,
+      data: locations,
+      pagination: {
+        page,
+        limit,
+        total,
+        totalPages: Math.ceil(total / limit),
       },
-    }),
-    prisma.location.count(),
-  ]);
-
-  res.json({
-    success: true,
-    data: locations,
-    pagination: {
-      page,
-      limit,
-      total,
-      totalPages: Math.ceil(total / limit),
-    },
-  });
+    });
+  } catch (error) {
+    next(error);
+  }
 }
 
 export async function getLocation(req: Request<{ id: string }>, res: Response): Promise<void> {
