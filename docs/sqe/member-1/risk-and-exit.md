@@ -29,10 +29,10 @@ Likelihood and impact use 1 (lowest) through 5 (highest). Score is `L × I`: Low
 
 | ID | Target and reason | Evidence | Actual | Status/release effect |
 |---|---|---|---|---|
-| EC-01 | 100% statement and branch coverage for selected server business logic; controls R-P01/R-P03 | Vitest LCOV and PR #8 Member 1 run | 59/59 passed; 100% statements, branches, functions, and lines at fix commit `80f720cc750accccb0e46004dbe8fe3d8e67928c`; final PR head `03d977cf352699dbfca919c4209056c1116e3818` gate passed | Pass |
+| EC-01 | 100% statement and branch coverage for selected server business logic; controls R-P01/R-P03 | Vitest LCOV and PR #8 Member 1 run | 59/59 passed; 100% statements, branches, functions, and lines at fix commit `80f720cc750accccb0e46004dbe8fe3d8e67928c`; application-code head `03d977cf352699dbfca919c4209056c1116e3818` gate passed | Pass |
 | EC-02 | Mutation score at or above justified CI threshold and at least 15 survivors classified | Stryker output and PR #8 Member 1 run | Local score 64.78% (365 killed, 199 survived, no no-coverage mutants, 1 timeout) at `80f720cc750accccb0e46004dbe8fe3d8e67928c`; final PR mutation job passed | Pass (60% threshold) |
 | EC-03 | Sonar quality gate passes; keep function-level complexity distinct | Main and PR Member 1 Sonar jobs; manual CFG | Main run `45004176915` and PR #8 final run `45008817893` passed. Manual `updateReservation` V(G)=9; function-level Sonar value remains unavailable | Gate pass; measurement pending |
-| EC-04 | Required PR checks and repository CI pass; preserve intentional blocked demo | GitHub runs and PR status | PR #8 head `03d977cf352699dbfca919c4209056c1116e3818`: required gate, CI, and Mobile Builds passed; PR #8 is open. PR #6 remains open/unmerged and intentionally blocked at `1eedc87cd139459b0f053e47d72bddc1f5de2e6c` | Pass on PR #8; review/merge pending |
+| EC-04 | Required PR checks and repository CI pass; preserve intentional blocked demo | GitHub runs and PR status | Application-code head `03d977cf352699dbfca919c4209056c1116e3818` and report/evidence commit `1c56e714d3fd9f3f0e3d81ca469492713a54acdd` both passed required, CI, and Mobile Builds checks. PR #8 is open. PR #6 remains open/unmerged and intentionally blocked at `1eedc87cd139459b0f053e47d72bddc1f5de2e6c` | Pass on PR #8; review/merge pending |
 
 ## AI and viva record
 

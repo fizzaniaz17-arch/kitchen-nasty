@@ -5,7 +5,7 @@
 - Main is still at `00f0449039601f0a5de1fd39e4d3365e9bbc0b77`; its post-merge Member 1 run `45004176915` passed.
 - PR #6 is still open, targets `main`, and is unmerged. It remains the intentional blocked party-size demo. Its failed required check, merge box, and Actions run evidence are retained in `screenshots/`.
 - The separate past-date fail-to-pass fix is PR #8: regression-only commit `d405f8326be9d8e2db29f60ff7005e4863b46eef`, production fix `80f720cc750accccb0e46004dbe8fe3d8e67928c`, and final integration-fixture correction `03d977cf352699dbfca919c4209056c1116e3818`.
-- At PR #8's final head, Member 1 / Required, coverage, mutation, custom mutation, Sonar Quality Gate, repository CI, and Mobile Builds all passed. PR #8 remains open for review; do not merge it as part of this evidence task.
+- At application-code head `03d977cf352699dbfca919c4209056c1116e3818`, all Member 1, CI, and Mobile Builds checks passed. The report/evidence-only commit `1c56e714d3fd9f3f0e3d81ca469492713a54acdd` also passed the same workflow groups. PR #8 remains open for review; do not merge it as part of this evidence task.
 - Final local Member 1 tests: 59/59 passed. Coverage: 100% statements, branches, functions, and lines. Mutation: 64.78%, exceeding the 60% threshold.
 
 ## Remaining: obtain function-level Sonar complexity for `updateReservation`

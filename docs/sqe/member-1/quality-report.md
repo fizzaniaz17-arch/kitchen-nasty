@@ -95,7 +95,7 @@ The earlier local Docker/SonarQube attempts remain historical evidence only: Doc
 
 ## Historical repository E2E check failure (PR #1)
 
-The repository's separate PR #1 E2E job failed before running tests with the exact error `Playwright does not support chromium on ubuntu26.04-x64`. This historical runner/toolchain failure is distinct from PR #8, whose E2E job passed at the final head.
+The repository's separate PR #1 E2E job failed before running tests with the exact error `Playwright does not support chromium on ubuntu26.04-x64`. This historical runner/toolchain failure is distinct from PR #8, whose E2E job passed at application-code head `03d977cf352699dbfca919c4209056c1116e3818`.
 
 ## Past-date reservation fail-to-pass PR
 
@@ -109,7 +109,7 @@ PR #8 was created from current main with two commits kept in order:
 | Production fix | `80f720cc750accccb0e46004dbe8fe3d8e67928c` | Added a date comparison before database access and returned the documented 400 response. Local Member 1 tests: 59/59 passed; coverage: 100% statements, branches, functions, and lines; mutation: 64.78% (365 killed, 199 survived, no no-coverage mutants, 1 timeout), above the unchanged 60% threshold. |
 | Integration fixture correction | `03d977cf352699dbfca919c4209056c1116e3818` | The first repository CI run on the production-fix commit exposed an existing integration fixture hard-coded to `2026-03-15`, now in the past. The fixture was changed to a date one day ahead. The exact CI integration command then passed 337/337 tests locally. |
 
-At final PR #8 head `03d977cf352699dbfca919c4209056c1116e3818`, [Member 1 run 45008817893](https://github.com/fizzaniaz17-arch/kitchen-nasty/actions/runs/45008817893) passed coverage, mutation, custom mutations, Sonar Quality Gate, and `Member 1 / Required`. [Repository CI run 45008817912](https://github.com/fizzaniaz17-arch/kitchen-nasty/actions/runs/45008817912) passed unit, integration, E2E, security audit, lint, and build jobs; Mobile Builds also passed. PR #8 remains open and unmerged, and no push was made to `main`.
+At PR #8 application-code head `03d977cf352699dbfca919c4209056c1116e3818`, [Member 1 run 45008817893](https://github.com/fizzaniaz17-arch/kitchen-nasty/actions/runs/45008817893) passed coverage, mutation, custom mutations, Sonar Quality Gate, and `Member 1 / Required`. [Repository CI run 45008817912](https://github.com/fizzaniaz17-arch/kitchen-nasty/actions/runs/45008817912) passed unit, integration, E2E, security audit, lint, and build jobs; Mobile Builds also passed. Documentation and evidence were added in commit `1c56e714d3fd9f3f0e3d81ca469492713a54acdd`; its [Member 1 run 45010371565](https://github.com/fizzaniaz17-arch/kitchen-nasty/actions/runs/45010371565), [repository CI run 45010371559](https://github.com/fizzaniaz17-arch/kitchen-nasty/actions/runs/45010371559), and [Mobile Builds run 45010371570](https://github.com/fizzaniaz17-arch/kitchen-nasty/actions/runs/45010371570) also passed. PR #8 remains open and unmerged, and no push was made to `main`.
 
 The final local logs are preserved in `evidence/past-date-fixed-tests.txt`, `evidence/past-date-fixed-coverage.txt`, and `evidence/past-date-fixed-mutation.txt`. Browser captures of the red and green Member 1 run summaries are in `screenshots/pr8-member1-red-d405f83.png` and `screenshots/pr8-member1-green-03d977c.png`.
 

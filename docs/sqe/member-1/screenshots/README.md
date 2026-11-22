@@ -18,6 +18,6 @@ Captured 22 November 2026. These screenshots were supplied in the workspace and 
 | [Screenshot 2026-11-22 141104.png](./Screenshot%202026-11-22%20141104.png) | GitHub Actions run #12 for PR #6, `demo/blocked-party-size-v2`, showing the party-size regression workflow failed. |
 | [pr6-member1-blocked-run-1eedc87.png](./pr6-member1-blocked-run-1eedc87.png) | Live GitHub Actions run `45007186708` for PR #6 at `1eedc87`; coverage and mutation failed, `Member 1 / Required` failed, and Sonar was skipped. |
 | [pr8-member1-red-d405f83.png](./pr8-member1-red-d405f83.png) | Live GitHub Actions run `45007936801` for PR #8 at regression-only commit `d405f83`; the required Member 1 gate failed before the production fix. |
-| [pr8-member1-green-03d977c.png](./pr8-member1-green-03d977c.png) | Live GitHub Actions run `45008817893` for PR #8 at final head `03d977c`; coverage, mutation, custom mutation, Sonar Quality Gate, and `Member 1 / Required` passed. |
+| [pr8-member1-green-03d977c.png](./pr8-member1-green-03d977c.png) | Live GitHub Actions run `45008817893` for PR #8 at application-code head `03d977c`; coverage, mutation, custom mutation, Sonar Quality Gate, and `Member 1 / Required` passed. |
 
 Two other supplied files, `Screenshot 2026-11-22 141720.png` and `Screenshot 2026-11-22 141854.png`, show an unrelated Student 3 mobile-build workflow and are intentionally not included as Member 1 evidence.
