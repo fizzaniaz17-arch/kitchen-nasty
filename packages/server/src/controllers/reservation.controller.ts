@@ -23,7 +23,7 @@ const updateReservationSchema = z.object({
 export async function createReservation(req: Request, res: Response): Promise<void> {
   const parsed = createReservationSchema.safeParse(req.body);
   if (!parsed.success) {
-    res.status(400).json({ success: false, error: parsed.error.errors });
+    res.status(400).json({ success: false, error: parsed.error.issues });
     return;
   }
 
@@ -145,7 +145,7 @@ export async function updateReservation(req: Request<{ id: string }>, res: Respo
   const { id } = req.params;
   const parsed = updateReservationSchema.safeParse(req.body);
   if (!parsed.success) {
-    res.status(400).json({ success: false, error: parsed.error.errors });
+    res.status(400).json({ success: false, error: parsed.error.issues });
     return;
   }
 

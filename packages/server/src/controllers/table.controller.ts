@@ -52,7 +52,7 @@ export async function createTable(req: Request<{ locationId: string }>, res: Res
   const { locationId } = req.params;
   const parsed = createTableSchema.safeParse(req.body);
   if (!parsed.success) {
-    res.status(400).json({ success: false, error: parsed.error.errors });
+    res.status(400).json({ success: false, error: parsed.error.issues });
     return;
   }
 
@@ -82,7 +82,7 @@ export async function updateTable(req: Request<{ locationId: string; tableId: st
   const { locationId, tableId } = req.params;
   const parsed = updateTableSchema.safeParse(req.body);
   if (!parsed.success) {
-    res.status(400).json({ success: false, error: parsed.error.errors });
+    res.status(400).json({ success: false, error: parsed.error.issues });
     return;
   }
 

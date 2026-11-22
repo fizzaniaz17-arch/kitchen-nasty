@@ -35,7 +35,7 @@ export async function getLegalPage(req: Request<{ slug: string }>, res: Response
 export async function upsertLegalPage(req: Request<{ slug: string }>, res: Response): Promise<void> {
   const parsed = upsertPageSchema.safeParse(req.body);
   if (!parsed.success) {
-    res.status(400).json({ success: false, error: parsed.error.errors });
+    res.status(400).json({ success: false, error: parsed.error.issues });
     return;
   }
 
@@ -60,7 +60,7 @@ export async function listCookieCategories(_req: Request, res: Response): Promis
 export async function createCookieCategory(req: Request, res: Response): Promise<void> {
   const parsed = createCategorySchema.safeParse(req.body);
   if (!parsed.success) {
-    res.status(400).json({ success: false, error: parsed.error.errors });
+    res.status(400).json({ success: false, error: parsed.error.issues });
     return;
   }
 
@@ -71,7 +71,7 @@ export async function createCookieCategory(req: Request, res: Response): Promise
 export async function updateCookieCategory(req: Request<{ id: string }>, res: Response): Promise<void> {
   const parsed = updateCategorySchema.safeParse(req.body);
   if (!parsed.success) {
-    res.status(400).json({ success: false, error: parsed.error.errors });
+    res.status(400).json({ success: false, error: parsed.error.issues });
     return;
   }
 

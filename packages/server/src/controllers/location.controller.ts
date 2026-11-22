@@ -98,7 +98,7 @@ export async function getLocation(req: Request<{ id: string }>, res: Response): 
 export async function createLocation(req: Request, res: Response): Promise<void> {
   const parsed = createLocationSchema.safeParse(req.body);
   if (!parsed.success) {
-    res.status(400).json({ success: false, error: parsed.error.errors });
+    res.status(400).json({ success: false, error: parsed.error.issues });
     return;
   }
 
@@ -131,7 +131,7 @@ export async function updateLocation(req: Request<{ id: string }>, res: Response
   const { id } = req.params;
   const parsed = updateLocationSchema.safeParse(req.body);
   if (!parsed.success) {
-    res.status(400).json({ success: false, error: parsed.error.errors });
+    res.status(400).json({ success: false, error: parsed.error.issues });
     return;
   }
 

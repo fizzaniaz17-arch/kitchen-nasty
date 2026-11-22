@@ -9,7 +9,7 @@ const VALID_EVENTS = ['order.created', 'order.statusChanged', 'reservation.creat
 const createRuleSchema = z.object({
   name: z.string().min(1),
   event: z.string().refine((e) => VALID_EVENTS.includes(e), { message: `Event must be one of: ${VALID_EVENTS.join(', ')}` }),
-  conditions: z.record(z.unknown()).nullable().optional(),
+  conditions: z.record(z.string(), z.unknown()).nullable().optional(),
   actions: z.array(z.object({
     type: z.enum(['email', 'webhook', 'sms']),
   }).passthrough()).min(1),
@@ -51,7 +51,7 @@ export async function getAutomationRule(req: Request<{ id: string }>, res: Respo
 export async function createAutomationRule(req: Request, res: Response): Promise<void> {
   const parsed = createRuleSchema.safeParse(req.body);
   if (!parsed.success) {
-    res.status(400).json({ success: false, error: parsed.error.errors });
+    res.status(400).json({ success: false, error: parsed.error.issues });
     return;
   }
 
@@ -70,7 +70,7 @@ export async function createAutomationRule(req: Request, res: Response): Promise
 export async function updateAutomationRule(req: Request<{ id: string }>, res: Response): Promise<void> {
   const parsed = updateRuleSchema.safeParse(req.body);
   if (!parsed.success) {
-    res.status(400).json({ success: false, error: parsed.error.errors });
+    res.status(400).json({ success: false, error: parsed.error.issues });
     return;
   }
 

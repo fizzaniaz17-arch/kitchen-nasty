@@ -31,7 +31,7 @@ export async function listMealtimes(req: Request, res: Response): Promise<void> 
 export async function createMealtime(req: Request, res: Response): Promise<void> {
   const parsed = createMealtimeSchema.safeParse(req.body);
   if (!parsed.success) {
-    res.status(400).json({ success: false, error: parsed.error.errors });
+    res.status(400).json({ success: false, error: parsed.error.issues });
     return;
   }
 
@@ -43,7 +43,7 @@ export async function updateMealtime(req: Request<{ id: string }>, res: Response
   const { id } = req.params;
   const parsed = updateMealtimeSchema.safeParse(req.body);
   if (!parsed.success) {
-    res.status(400).json({ success: false, error: parsed.error.errors });
+    res.status(400).json({ success: false, error: parsed.error.issues });
     return;
   }
 
