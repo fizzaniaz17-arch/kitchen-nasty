@@ -1,0 +1,44 @@
+﻿{
+    "component":  {
+                      "id":  "AaH6jw1g9NjD9dXWc-co",
+                      "key":  "fizzaniaz17-arch_kitchen-nasty",
+                      "name":  "KitchenAsty SQE",
+                      "qualifier":  "TRK",
+                      "measures":  [
+                                       {
+                                           "metric":  "coverage",
+                                           "value":  "4.4",
+                                           "bestValue":  false
+                                       },
+                                       {
+                                           "metric":  "reliability_rating",
+                                           "value":  "3.0",
+                                           "bestValue":  false
+                                       },
+                                       {
+                                           "metric":  "complexity",
+                                           "value":  "4425"
+                                       },
+                                       {
+                                           "metric":  "bugs",
+                                           "value":  "27",
+                                           "bestValue":  false
+                                       },
+                                       {
+                                           "metric":  "duplicated_lines_density",
+                                           "value":  "10.9",
+                                           "bestValue":  false
+                                       },
+                                       {
+                                           "metric":  "security_rating",
+                                           "value":  "5.0",
+                                           "bestValue":  false
+                                       },
+                                       {
+                                           "metric":  "vulnerabilities",
+                                           "value":  "59",
+                                           "bestValue":  false
+                                       }
+                                   ]
+                  }
+}

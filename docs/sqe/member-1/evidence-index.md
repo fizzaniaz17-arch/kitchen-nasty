@@ -20,5 +20,15 @@
 | EV-SS-01 | Installed Chrome driven by Playwright | Coverage and mutation HTML proof screenshots captured | `docs/sqe/member-1/screenshots/` |
 | EV-SS-02 | SonarQube Cloud and GitHub Actions pages for SHA `f51b0c7c63ead6740d6de8b47024093df4f5b86f` | Overview, new-code coverage, quality gate, and Sonar job screenshots captured; quality gate failure is preserved | `screenshots/sonar-overview.png`, `sonar-coverage.png`, `sonar-quality-gate.png`, `actions-sonar-job.png` |
 | EV-PDF-01 | Chromium `page.pdf()` from committed HTML | PDF report generated with CFG, MCC/MC/DC, metrics and screenshots | `docs/sqe/member-1/KitchenAsty-Member-1-SQE-Report.pdf` |
+| EV-EXPORT-01 | Public GitHub Actions API at 22 November 2026 | Main Member 1 and CI run metadata, SHA, event, status, and job conclusions | `docs/sqe/member-1/evidence/github-main-quality-run.json`, `github-main-e2e-run.json`, `github-main-quality-jobs.json`, `github-actions-runs.json` |
+| EV-EXPORT-02 | Public SonarQube Cloud API at 22 November 2026 | Analysis list, project measures, project gate status, and issue export | `docs/sqe/member-1/evidence/sonar-analyses.json`, `sonar-main-measures.json`, `sonar-project-status.json`, `sonar-issues-first-100.json` |
+| EV-COV-02 | Coverage artifact from latest 57-test follow-up | Machine-readable LCOV and selected-controller coverage evidence | `docs/sqe/member-1/evidence/lcov.info`, `coverage-summary.json` |
+| EV-MUT-05 | Follow-up Stryker rerun | 363 killed, 192 survived, 65.47%; mutants 434 and 435 killed | `docs/sqe/member-1/evidence/mutation-final.json` |
+| EV-FIX-PR-01 | Local red run before fix commit `2cccd05` | 2 failures for party size 50; 55 passed | `docs/sqe/member-1/evidence/fix-pr-red.txt` |
+| EV-FIX-PR-02 | Local green run after fix commit `2cccd05` | 57 passed; 0 failed | `docs/sqe/member-1/evidence/fix-pr-green.txt` |
+| EV-BLOCK-01 | Local blocked-PR branch run, commit `6fb10af` | 1 failure for party size 50; 55 passed | `docs/sqe/member-1/evidence/blocked-pr-red.txt` |
+| EV-LIVE-01 | Public browser capture 22 November 2026 | Live Sonar overview, main Member 1 run, and main repository E2E run | `docs/sqe/member-1/screenshots/sonar-overview-live.png`, `github-member1-main-live.png`, `github-e2e-main-live.png` |
+| EV-FOLLOWUP-01 | `npm run test:member1` on follow-up commit `ecb7ed0` | 58/58 passed | `docs/sqe/member-1/evidence/followup-test.txt` |
+| EV-FOLLOWUP-02 | `npm run coverage:member1` on follow-up commit `ecb7ed0` | 58/58 passed; 100% statements, branches, functions, and lines for the two selected controllers | `docs/sqe/member-1/evidence/followup-coverage.txt`, `packages/server/coverage/member-1/lcov.info` |
 
 GitHub PR, workflow, Sonar API, screenshots, custom operators, browser-flow evidence, and final survivor reruns remain pending and must be added with durable URLs/commit SHAs rather than estimates.
