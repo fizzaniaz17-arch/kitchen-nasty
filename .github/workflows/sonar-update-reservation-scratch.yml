@@ -45,7 +45,7 @@ jobs:
           ce_task_url="https://sonarcloud.io/api/ce/task?id=${ce_task_id}"
 
           for attempt in $(seq 1 60); do
-            task_json="$(curl -fsS -u "${SONAR_TOKEN}:" "$ce_task_url")"
+            task_json="$(curl -fsS -H "Authorization: Bearer ${SONAR_TOKEN}" "$ce_task_url")"
             task_status="$(printf '%s' "$task_json" | jq -r '.task.status')"
             if [ "$task_status" = "SUCCESS" ]; then
               analysis_id="$(printf '%s' "$task_json" | jq -r '.task.analysisId')"
@@ -63,7 +63,7 @@ jobs:
             exit 1
           fi
 
-          measures_json="$(curl -fsS -u "${SONAR_TOKEN}:" --get \
+          measures_json="$(curl -fsS -H "Authorization: Bearer ${SONAR_TOKEN}" --get \
             "https://sonarcloud.io/api/measures/component" \
             --data-urlencode "branch=scratch/sonar-update-reservation" \
             --data-urlencode "component=${PROJECT_KEY}:updateReservation.ts" \
