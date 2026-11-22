@@ -1,0 +1,35 @@
+{
+  "observedAt": "2026-11-22T10:23:42.474Z",
+  "health": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "data": {
+        "status": "ok",
+        "timestamp": "2026-11-22T10:23:42.267Z",
+        "version": "1.0.0"
+      }
+    }
+  },
+  "locationsStatus": 200,
+  "locationCount": 1,
+  "locationIds": [
+    {
+      "id": "student3-recovery-location-1",
+      "slug": "student3-recovery-test-location"
+    }
+  ],
+  "reservation": {
+    "id": "student3-recovery-reservation-1",
+    "date": "2026-11-23",
+    "time": "19:00",
+    "status": "CONFIRMED",
+    "partySize": 2,
+    "customerEmail": "student3-recovery@example.test",
+    "locationSlug": "student3-recovery-test-location",
+    "tableName": "Recovery Test Table 1"
+  },
+  "rowCountById": 1,
+  "duplicateMatchCount": 1,
+  "relationsPresent": true
+}

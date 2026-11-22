@@ -1,0 +1,32 @@
+Prisma schema loaded from prisma\schema.prisma
+Datasource "db": PostgreSQL database "student3_recovery_e2e", schema "public" at "127.0.0.1:55432"
+
+7 migrations found in prisma/migrations
+
+Applying migration `20260218103330_init`
+Applying migration `20260220120000_add_busy_mode_loyalty_automation`
+Applying migration `20260224120000_add_settings_legal_invites`
+Applying migration `20260302120000_add_storefront_template`
+Applying migration `20260302130000_add_observability`
+Applying migration `20260514100737_add_gallery_images`
+Applying migration `20260514101500_add_media_assets`
+
+The following migration(s) have been applied:
+
+migrations/
+  └─ 20260218103330_init/
+    └─ migration.sql
+  └─ 20260220120000_add_busy_mode_loyalty_automation/
+    └─ migration.sql
+  └─ 20260224120000_add_settings_legal_invites/
+    └─ migration.sql
+  └─ 20260302120000_add_storefront_template/
+    └─ migration.sql
+  └─ 20260302130000_add_observability/
+    └─ migration.sql
+  └─ 20260514100737_add_gallery_images/
+    └─ migration.sql
+  └─ 20260514101500_add_media_assets/
+    └─ migration.sql
+
+All migrations have been successfully applied.
