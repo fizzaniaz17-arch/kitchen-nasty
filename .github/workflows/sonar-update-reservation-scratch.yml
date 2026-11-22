@@ -63,11 +63,30 @@ jobs:
             exit 1
           fi
 
-          measures_json="$(curl -fsS -H "Authorization: Bearer ${SONAR_TOKEN}" --get \
+          measures_response="$(curl -sS -H "Authorization: Bearer ${SONAR_TOKEN}" --get \
             "https://sonarcloud.io/api/measures/component" \
             --data-urlencode "branch=scratch/sonar-update-reservation" \
             --data-urlencode "component=${PROJECT_KEY}:updateReservation.ts" \
-            --data-urlencode "metricKeys=complexity")"
+            --data-urlencode "metricKeys=complexity" \
+            --write-out $'\n%{http_code}')"
+          http_status="${measures_response##*$'\n'}"
+          measures_json="${measures_response%$'\n'*}"
+          if [ "$http_status" = "403" ]; then
+            {
+              echo "### Function-level Sonar analysis"
+              echo "- Analysis ID: \`$analysis_id\`"
+              echo "- Source commit: \`$SOURCE_SHA\`"
+              echo "- Indexed TypeScript files: one (\`sonar-scratch/updateReservation.ts\`), containing only \`updateReservation\`"
+              echo "- Metric retrieval: blocked; the analysis token received HTTP 403 from the measures API."
+            } >> "$GITHUB_STEP_SUMMARY"
+            echo "analysisId=$analysis_id complexity=unavailable sourceSha=$SOURCE_SHA measuresApiStatus=403"
+            exit 0
+          fi
+          if [ "$http_status" != "200" ]; then
+            echo "Sonar measures API returned HTTP $http_status." >&2
+            exit 1
+          fi
+
           complexity="$(printf '%s' "$measures_json" | jq -r '.component.measures[] | select(.metric == "complexity") | .value')"
           if [ -z "$complexity" ] || [ "$complexity" = "null" ]; then
             echo "Sonar did not return complexity for the isolated source file." >&2
