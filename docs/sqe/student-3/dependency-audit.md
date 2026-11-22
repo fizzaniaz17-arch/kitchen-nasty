@@ -14,6 +14,7 @@ The full production-only audit includes all workspaces, including the Expo mobil
 - Used Vite 6.4.6 for VitePress 1.6.4 through a scoped override. The documentation production build passed.
 - Upgraded direct packages selected during triage, including React Router, Vite, Vue, Babel, Multer, Nodemailer, express-rate-limit, Vitest, and Zod. The Zod 4 API changes were carried through affected controllers.
 - Added `query-string` 9.5.1 directly to the mobile workspace after the Expo Router bundle exposed an undeclared Metro resolution dependency. Its `decode-uri-component` dependency resolves to 0.5.1; the full and production audit totals remain unchanged.
+- Added storefront-only Vitest coverage tooling and focused social-auth callback/context tests; the full audit remains at 22 findings.
 - Removed unused storefront `intlayer` and redundant `@types/nodemailer` packages.
 
 The npm 10 `audit fix --dry-run` command failed in Arborist; npm 12.2.3 was used ephemerally to resolve the lockfile. No npm CLI version was added to project dependencies.
@@ -31,12 +32,16 @@ The npm 10 `audit fix --dry-run` command failed in Arborist; npm 12.2.3 was used
 
 PR CI caught that Zod 4 applies create-schema defaults when `.partial()` update schemas are parsed. The affected controller update schemas now explicitly keep those defaulted fields optional, and regression assertions verify partial requests write only the supplied fields. A separate mobile bundle failure was caused by Expo Router importing `query-string` without a package Metro could resolve after the navigation dependency update; the safe direct dependency restores resolution without adding an audit finding.
 
+The SonarCloud run then reported 2.5% new-code coverage because its updated scope behavior ignored the configured source/test properties while CI imported only Member 1 coverage. The workflow now excludes test/E2E and out-of-scope mobile files, generates server and storefront LCOV reports, and keeps the existing quality-gate threshold. Local changed-source coverage is 130/153 added lines (85.0%); the corrected Sonar check is awaiting the next PR run.
+
 ## Validation
 
 | Validation | Result |
 |---|---|
-| `npm test` | 396 passed across shared, server unit, and integration tests |
+| `npm test` | 420 passed across shared, server unit, and integration tests |
 | Focused partial-update regression suites | 121 passed |
+| Full server coverage run | 459 passed |
+| Storefront social-auth tests and coverage | 5 passed; combined changed-source coverage 85.0% |
 | Member 1 coverage gate | 56 passed; 100% statements, branches, functions, and lines |
 | Member 1 mutation gate | 64.93%; above the 60% break threshold |
 | Mobile typecheck | Passed |

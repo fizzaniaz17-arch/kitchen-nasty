@@ -33,10 +33,13 @@ The state and code stores are process-local. Multi-instance deployments need sti
 
 | Check | Result |
 |---|---|
-| Shared and server unit/integration suites (`npm test`) | 396 passed |
+| Shared and server unit/integration suites (`npm test`) | 420 passed |
 | Member 1 coverage gate | 56 passed; 100% statements, branches, functions, and lines |
 | Member 1 mutation gate | 64.93%; above the 60% break threshold |
 | Focused partial-update regression suites | 121 passed |
+| Full server suite used for Sonar LCOV | 459 passed |
+| Storefront social-auth regression tests | 5 passed |
+| Changed-source coverage in combined server/storefront reports | 130/153 added lines (85.0%) |
 | Security-header and social-callback Playwright checks | 3 passed |
 | Mobile TypeScript check | Passed |
 | Expo public configuration smoke check | Passed |
@@ -45,6 +48,12 @@ The state and code stores are process-local. Multi-instance deployments need sti
 | Shared, server, admin, and storefront production builds | Passed |
 | Documentation build | Passed with VitePress 1.6.4 and Vite 6.4.6 |
 | Local admin/storefront response-header inspection | All four expected headers present |
+
+### Sonar coverage follow-up
+
+The previous SonarCloud run reported 2.5% new-code coverage because its newer analysis-scope behavior ignored the repository's `sonar.sources`, `sonar.tests`, and `sonar.test.inclusions` settings, while CI supplied only the Member 1 LCOV report. The analysis consequently treated out-of-scope mobile and E2E/test files as production source.
+
+The workflow now excludes those test and out-of-scope directories without changing the quality-gate threshold. It generates complete server and storefront LCOV reports, normalizes their paths to the repository root, and includes the new controller validation and social-auth callback regression tests. The local combined reports cover 130 of 153 changed source lines (85.0%). The corrected SonarCloud check is pending a PR CI rerun; the previous failed result is not represented as a pass.
 
 The callback screenshot uses stubbed API responses and a synthetic test identity. No real OAuth provider, JWT, or customer data was used. UI screenshots show local development views only.
 
