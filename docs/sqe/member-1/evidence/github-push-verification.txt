@@ -1,0 +1,26 @@
+GitHub push verification
+Date: 2026-11-22
+
+Follow-up branch:
+- sqe/member-1-followup
+- remote commit: ee39624
+- status: pushed and tracking origin/sqe/member-1-followup
+
+Fail-to-pass demonstration branch:
+- demo/fix-fail-to-pass
+- red commit: fe2585c
+- green commit: 2cccd05
+- status: pushed and tracking origin/demo/fix-fail-to-pass
+
+Blocked demonstration branch:
+- demo/blocked-party-size
+- defect commit: 6fb10af
+- status: pushed and tracking origin/demo/blocked-party-size
+
+Main branch:
+- not pushed
+- local main and origin/main remain on d6af723; origin/main is eight commits behind a later team tip
+
+Reason:
+- direct pushes to main are not authorized
+- only focused evidence/demo branches were pushed

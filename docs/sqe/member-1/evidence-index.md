@@ -30,5 +30,6 @@
 | EV-LIVE-01 | Public browser capture 22 November 2026 | Live Sonar overview, main Member 1 run, and main repository E2E run | `docs/sqe/member-1/screenshots/sonar-overview-live.png`, `github-member1-main-live.png`, `github-e2e-main-live.png` |
 | EV-FOLLOWUP-01 | `npm run test:member1` on follow-up commit `ecb7ed0` | 58/58 passed | `docs/sqe/member-1/evidence/followup-test.txt` |
 | EV-FOLLOWUP-02 | `npm run coverage:member1` on follow-up commit `ecb7ed0` | 58/58 passed; 100% statements, branches, functions, and lines for the two selected controllers | `docs/sqe/member-1/evidence/followup-coverage.txt`, `packages/server/coverage/member-1/lcov.info` |
+| EV-PUSH-01 | `git fetch origin` and `git push` branch verification | Follow-up, fail-to-pass, and blocked branches all match their origin tips; main was not pushed | `docs/sqe/member-1/evidence/github-push-verification.txt` |
 
 GitHub PR, workflow, Sonar API, screenshots, custom operators, browser-flow evidence, and final survivor reruns remain pending and must be added with durable URLs/commit SHAs rather than estimates.
