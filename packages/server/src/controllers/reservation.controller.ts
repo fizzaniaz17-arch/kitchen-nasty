@@ -27,6 +27,11 @@ export async function createReservation(req: Request, res: Response): Promise<vo
     return;
   }
 
+  if (parsed.data.date < new Date().toISOString().slice(0, 10)) {
+    res.status(400).json({ success: false, error: 'Cannot reserve in the past' });
+    return;
+  }
+
   const { locationId, date, time, partySize, comment } = parsed.data;
   // Only a customer principal can own a reservation: customerId is an FK to Customer.id,
   // and a staff token carries a User.id from a different table. Matches createOrder.
