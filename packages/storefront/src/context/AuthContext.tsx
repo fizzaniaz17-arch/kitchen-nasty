@@ -43,7 +43,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         if (!res.ok) throw new Error('Invalid token');
         return res.json();
       })
-      .then((data) => setUser(data.data))
+      .then((data) => {
+        const authenticatedUser = data.data?.customer ?? data.data?.user;
+        if (!authenticatedUser) throw new Error('Invalid user response');
+        setUser(authenticatedUser);
+      })
       .catch(() => logout())
       .finally(() => setIsLoading(false));
   }, [token, logout]);
@@ -63,6 +67,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   function loginWithToken(newToken: string) {
     localStorage.setItem('token', newToken);
+    setUser(null);
+    setIsLoading(true);
     setToken(newToken);
   }
 

@@ -40,6 +40,20 @@ does not block existing inline styles or external integrations. It is not a
 complete resource allowlist; expand it only after inventorying the required
 scripts, styles, API connections, images, and payment-provider frames.
 
+### Social login callbacks
+
+OAuth callbacks now require a short-lived, browser-bound state cookie. After a
+successful callback, the server redirects with a single-use authorization code
+that expires after 60 seconds; the web client exchanges it through
+`POST /api/auth/social/exchange`. JWTs are not placed in redirect URLs, and
+callback/exchange responses disable caching and referrers.
+
+The state and authorization-code stores are process-local. Deployments with
+multiple server instances must use sticky routing for the complete OAuth flow
+or move these stores to shared storage before enabling horizontal scaling.
+Social login currently redirects to the storefront; the mobile callback screen
+does not yet have a native social-login launcher.
+
 ## 🚦 Rate Limiting
 
 API endpoints are rate-limited to prevent abuse:
