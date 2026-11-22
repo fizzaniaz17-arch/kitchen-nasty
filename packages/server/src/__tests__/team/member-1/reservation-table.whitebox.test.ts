@@ -33,6 +33,7 @@ import {
 import {
   createTable,
   deleteTable,
+  listTables,
   updateTable,
 } from '../../../controllers/table.controller.js';
 
@@ -218,6 +219,31 @@ describe('M1-BR-04 availability requires active capacity and no conflict', () =>
 });
 
 describe('table management rules', () => {
+  it('lists only tables for the requested location and exact location lookup', async () => {
+    db.location.findUnique.mockResolvedValue({ id: 'loc-downtown', isActive: true });
+    db.table.findMany.mockResolvedValue([
+      { id: 'table-a', name: 'A', locationId: 'loc-downtown' },
+      { id: 'table-b', name: 'B', locationId: 'loc-downtown' },
+    ]);
+    const res = response();
+
+    await listTables(request({ params: { locationId: 'loc-downtown' } }), res);
+
+    expect(db.location.findUnique).toHaveBeenCalledWith({ where: { id: 'loc-downtown' } });
+    expect(db.table.findMany).toHaveBeenCalledWith({
+      where: { locationId: 'loc-downtown' },
+      orderBy: { name: 'asc' },
+      include: { _count: { select: { reservations: true } } },
+    });
+    expect(res.json).toHaveBeenCalledWith({
+      success: true,
+      data: [
+        { id: 'table-a', name: 'A', locationId: 'loc-downtown' },
+        { id: 'table-b', name: 'B', locationId: 'loc-downtown' },
+      ],
+    });
+  });
+
   it('rejects invalid table capacity', async () => {
     const res = response();
     await createTable(request({ params: { locationId: 'loc-1' }, body: { name: 'T1', capacity: 0 } }), res);
