@@ -99,6 +99,15 @@ describe('Location API - Integration Tests', () => {
       expect(res.body.pagination.page).toBe(2);
       expect(res.body.pagination.limit).toBe(5);
     });
+
+    it('returns a server error when the database is unavailable', async () => {
+      mockedPrisma.location.findMany.mockRejectedValue(new Error('Database unavailable'));
+
+      const res = await request(app).get('/api/locations');
+
+      expect(res.status).toBe(500);
+      expect(res.body).toEqual({ success: false, error: 'Database unavailable' });
+    });
   });
 
   // ============================================================
