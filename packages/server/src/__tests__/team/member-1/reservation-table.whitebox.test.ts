@@ -59,6 +59,20 @@ function request(value: Partial<Request>): Request {
 beforeEach(() => vi.clearAllMocks());
 
 describe('M1-BR-01 reservation party-size boundary', () => {
+  it('rejects a past reservation date before database access', async () => {
+    const res = response();
+
+    await createReservation(request({
+      body: { locationId: 'loc-1', date: '2020-01-01', time: '19:00', partySize: 2 },
+      user: { id: 'customer-1', type: 'customer' },
+    }), res);
+
+    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.json).toHaveBeenCalledWith({ success: false, error: 'Cannot reserve in the past' });
+    expect(db.location.findUnique).not.toHaveBeenCalled();
+    expect(db.reservation.create).not.toHaveBeenCalled();
+  });
+
   it('accepts the exact maximum party size and persists it', async () => {
     db.location.findUnique.mockResolvedValue({ id: 'loc-1', isActive: true });
     db.reservation.create.mockResolvedValue({ id: 'reservation-50', partySize: 50 });
