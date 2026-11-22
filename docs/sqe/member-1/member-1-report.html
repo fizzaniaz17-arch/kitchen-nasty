@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>KitchenAsty — Member 1 SQE Report</title>
+  <title>KitchenAsty - Member 1 SQE Report</title>
   <style>
     @page { size: A4; margin: 16mm; }
     body { font-family: Arial, sans-serif; color: #172033; font-size: 10.5pt; line-height: 1.4; }
@@ -14,6 +14,7 @@
     th { background: #e9f2fa; }
     code { font-family: Consolas, monospace; font-size: 9pt; }
     .meta, .note { background: #eef5fb; border-left: 4px solid #3884c5; padding: 9px; }
+    .note, .pass, .fail { break-inside: avoid; }
     .fail { background: #fff0f0; border-left: 4px solid #c93636; padding: 9px; }
     .pass { background: #eef9f0; border-left: 4px solid #2f8a46; padding: 9px; }
     .page { break-before: page; }
@@ -31,53 +32,57 @@
   <p><strong>Member 1:</strong> Static analysis, white-box testing, mutation testing, CI quality gates, risks and exit criteria</p>
   <div class="meta">
     <strong>Repository:</strong> fizzaniaz17-arch/kitchen-nasty<br>
-    <strong>Branch:</strong> sqe/member-1-static-analysis<br>
+    <strong>Evidence branch:</strong> demo/reservation-fix-v3<br>
     <strong>Verified baseline:</strong> d6af7237e9569ebeab19ccab375362f9d144e25e<br>
     <strong>Baseline evidence commit:</strong> 1976b6ccc3967910016d50b682f6f737521208fa<br>
     <strong>Sonar analysis SHA:</strong> f51b0c7c63ead6740d6de8b47024093df4f5b86f (PR #1)<br>
-    <strong>Report date:</strong> 21 November 2026 (Asia/Karachi)
+    <strong>Main SHA:</strong> 00f0449039601f0a5de1fd39e4d3365e9bbc0b77<br>
+    <strong>Latest fix PR head:</strong> 03d977cf352699dbfca919c4209056c1116e3818 (PR #8)<br>
+    <strong>Report date:</strong> 22 November 2026 (Asia/Karachi)
   </div>
 
   <h2>Executive status</h2>
   <table>
     <tr><th>Criterion</th><th>Actual evidence</th><th>Status</th></tr>
     <tr><td>Reproducible tooling</td><td>Vitest 4.0.18, coverage-v8 4.0.18, Stryker 9.1.1, SonarQube Cloud scan action v7</td><td>Pass</td></tr>
-    <tr><td>White-box suite</td><td>Historical 56/56 passed; latest follow-up 57/57 passed across reservation/table controller functions</td><td>Pass</td></tr>
-    <tr><td>Coverage target</td><td>100% statements and 100% branches; 100% functions and lines</td><td>Pass</td></tr>
-    <tr><td>Mutation historical/follow-up</td><td>556 mutants; historical 351 killed/204 survived/63.31%; follow-up 57-test rerun 363 killed/192 survived/65.47%; 0 no coverage; 1 timeout</td><td>Pass (60%)</td></tr>
-    <tr><td>SonarQube Cloud</td><td>PR analysis uploaded at SHA f51b0c7; quality gate failed on reliability, security, coverage, and duplication</td><td>Fail (analysis completed)</td></tr>
+    <tr><td>White-box suite</td><td>59/59 passed at PR #8 final head across reservation/table controller functions</td><td>Pass</td></tr>
+    <tr><td>Coverage target</td><td>59 tests; 100% statements, branches, functions, and lines</td><td>Pass</td></tr>
+    <tr><td>Mutation historical/follow-up</td><td>Historical 63.31%; prior 57-test run 65.47%; current 59-test run at 80f720c: 365 killed, 199 survived, 64.78%, 0 no coverage, 1 timeout</td><td>Pass (60%)</td></tr>
+    <tr><td>SonarQube Cloud</td><td>Main quality run at 00f0449 and PR #8 final gate passed; function-level updateReservation complexity is still unavailable</td><td>Gate pass; metric pending</td></tr>
     <tr><td>Browser use cases</td><td>10/10 Playwright flows passed across two Member 1 use cases</td><td>Pass</td></tr>
-    <tr><td>CI and PR evidence</td><td>PR #1 open; Member 1 coverage, mutation, and custom jobs pass; Sonar/aggregate fail. Separate CI E2E job fails on Playwright/Ubuntu 26.04 support.</td><td>Fail</td></tr>
+    <tr><td>CI and PR evidence</td><td>PR #8 head 03d977c passes required gate, Sonar, CI, and Mobile Builds; PR #6 remains intentionally open and blocked</td><td>Pass; PR #8 review pending</td></tr>
   </table>
 
   <h2>Business rules and white-box scope</h2>
   <table>
-    <tr><th>ID</th><th>Rule</th><th>Technique</th><th>Evidence</th></tr>
-    <tr><td>M1-BR-01</td><td>Party size is an integer from 1 through 50.</td><td>Equivalence partitions and boundaries 0, 1, 50, 51</td><td>Rejected cases assert no write; accepted boundaries assert Prisma payload.</td></tr>
-    <tr><td>M1-BR-02</td><td>Creation requires a customer principal and active location.</td><td>MCC and MC/DC</td><td>Unauthenticated, staff, missing location, inactive location, and valid customer rows.</td></tr>
-    <tr><td>M1-BR-03</td><td>Partial update changes supplied fields only and supports explicit null.</td><td>Data-flow and branch testing</td><td>Invalid, missing record, omitted fields, null fields, and all supplied fields.</td></tr>
-    <tr><td>M1-BR-04</td><td>Availability needs an active sufficiently large unreserved table.</td><td>Compound condition and conflict partitions</td><td>Required query, default party size, fully occupied and available slots.</td></tr>
+    <thead><tr><th>ID</th><th>Rule</th><th>Technique</th><th>Evidence</th></tr></thead>
+    <tbody>
+      <tr><td>M1-BR-01</td><td>Party size is an integer from 1 through 50.</td><td>Equivalence partitions and boundaries 0, 1, 50, 51</td><td>Rejected cases assert no write; accepted boundaries assert Prisma payload.</td></tr>
+      <tr><td>M1-BR-02</td><td>Creation requires a customer principal and active location.</td><td>MCC and MC/DC</td><td>Unauthenticated, staff, missing location, inactive location, and valid customer rows.</td></tr>
+      <tr><td>M1-BR-03</td><td>Partial update changes supplied fields only and supports explicit null.</td><td>Data-flow and branch testing</td><td>Invalid, missing record, omitted fields, null fields, and all supplied fields.</td></tr>
+      <tr><td>M1-BR-04</td><td>Availability needs an active sufficiently large unreserved table.</td><td>Compound condition and conflict partitions</td><td>Required query, default party size, fully occupied and available slots.</td></tr>
+      <tr><td>M1-BR-05</td><td>Reservation creation rejects a date before today with 400 and <code>Cannot reserve in the past</code>.</td><td>Date boundary regression</td><td>PR #8 test proves the old implementation proceeded to the location lookup; the fix rejects before database access.</td></tr>
+    </tbody>
   </table>
-  <div class="fail"><strong>Verified requirement mismatch:</strong> documentation promises past-date rejection, conflict rejection during creation, table assignment capacity/location validation, and lifecycle enforcement. The controller currently does not enforce those rules.</div>
+  <div class="fail"><strong>Verified requirement mismatch at main:</strong> the API allowed past-date creation despite the documented rejection rule. PR #8 fixes and tests that mismatch, but remains open; main is unchanged until review and merge. Other documented rule gaps are outside this fix.</div>
 
-  <div class="page"></div>
   <h2>Control-flow graph and complexity</h2>
-  <p>The graph models <code>updateReservation</code>. Assignment nodes on each true optional-field edge are counted even though the compact visual groups the branch labels.</p>
+  <p>The graph models <code>updateReservation</code>. Each optional check's true edge applies its assignment; the false edge bypasses it. Both paths rejoin at the next check.</p>
   <div class="cfg">
     <div class="node">Entry → parse body</div><div class="arrow">↓</div>
     <div class="node decision">Parse success?</div><div class="arrow">no → 400 → shared exit &nbsp; | &nbsp; yes ↓</div>
     <div class="node">Find reservation</div><div class="arrow">↓</div>
     <div class="node decision">Reservation exists?</div><div class="arrow">no → 404 → shared exit &nbsp; | &nbsp; yes ↓</div>
     <div class="node">Initialize update data</div><div class="arrow">↓</div>
-    <div class="node decision">status supplied?</div><div class="arrow">↓</div>
-    <div class="node decision">tableId supplied?</div><div class="arrow">↓</div>
-    <div class="node decision">date supplied?</div><div class="arrow">↓</div>
-    <div class="node decision">time supplied?</div><div class="arrow">↓</div>
-    <div class="node decision">partySize supplied?</div><div class="arrow">↓</div>
-    <div class="node decision">comment supplied?</div><div class="arrow">↓</div>
+    <div class="node decision">status supplied?</div><div class="arrow">yes → assign status; no → bypass; both continue ↓</div>
+    <div class="node decision">tableId supplied?</div><div class="arrow">yes → assign tableId; no → bypass; both continue ↓</div>
+    <div class="node decision">date supplied?</div><div class="arrow">yes → parse and assign date; no → bypass; both continue ↓</div>
+    <div class="node decision">time supplied?</div><div class="arrow">yes → assign time; no → bypass; both continue ↓</div>
+    <div class="node decision">partySize supplied?</div><div class="arrow">yes → assign partySize; no → bypass; both continue ↓</div>
+    <div class="node decision">comment supplied?</div><div class="arrow">yes → assign comment; no → bypass; both continue ↓</div>
     <div class="node">Prisma update → 200 response → shared exit</div>
   </div>
-  <div class="note"><strong>Manual result:</strong> N = 19, E = 26, P = 1. Therefore V(G) = E − N + 2P = 26 − 19 + 2 = <strong>9</strong>. Implicit Promise, Prisma, Date, Express, and Zod exceptions are outside the graph.</div>
+  <div class="note"><strong>Manual result:</strong> N = 19, E = 26, P = 1. Therefore V(G) = E − N + 2P = 26 − 19 + 2 = <strong>9</strong>. The function has eight explicit decisions and one formula baseline; this is not nine independent decisions. Implicit Promise, Prisma, Date, Express, and Zod exceptions are outside the graph. The create-date fix did not change <code>updateReservation</code>; a function-level Sonar measurement remains pending.</div>
 
   <h2>MCC and MC/DC</h2>
   <p>Location rejection is <code>!location || !location.isActive</code>. Let A = location exists and B = active.</p>
@@ -100,7 +105,7 @@
 
   <div class="page"></div>
   <h2>Coverage evidence</h2>
-  <div class="pass">Command <code>npm run coverage:member1</code> executed 50 tests: 50 passed, 0 failed. Both selected controllers achieved 100% statements, 100% branches, 100% functions, and 100% lines.</div>
+  <div class="pass">At PR #8 code commit <code>80f720cc750accccb0e46004dbe8fe3d8e67928c</code>, <code>npm run coverage:member1</code> executed 59 tests: 59 passed, 0 failed. Both selected controllers achieved 100% statements, 100% branches, 100% functions, and 100% lines. The final PR head's required coverage job also passed.</div>
   <div class="note"><strong>Uncovered code justification:</strong> none. The declared denominator contains every statement and branch in <code>reservation.controller.ts</code> and <code>table.controller.ts</code>, and the generated V8 report lists no uncovered lines.</div>
   <img src="screenshots/coverage-overview.png" alt="Vitest coverage overview">
   <p class="caption">Figure 1. Browser-rendered Vitest HTML coverage report generated from the Member 1 suite.</p>
@@ -119,22 +124,32 @@
     <tr><td>Missing test</td><td><code>isActive</code> default true changed to false</td><td>No successful create-table test omits <code>isActive</code></td><td>Assert persisted default</td></tr>
     <tr><td>Equivalent candidate</td><td>Mutation in output field not observable under current mocked return</td><td>Production behavior may be determined by mocked Prisma response</td><td>Confirm invariant before classifying equivalent</td></tr>
   </table>
-  <p>The fifteen historical survivors are classified in <code>mutation-analysis.md</code>. The follow-up 57-test rerun killed 363 mutants, survived 192, and scored 65.47%; mutants 434 and 435 are now killed by exact table-location lookup assertions. Two application-specific custom mutants were both killed in an isolated worktree.</p>
+  <p>The fifteen historical survivors are classified in <code>mutation-analysis.md</code>. At code commit <code>80f720cc750accccb0e46004dbe8fe3d8e67928c</code>, the 59-test rerun killed 365 mutants, survived 199, timed out 1, had no no-coverage mutants, and scored 64.78%, above the unchanged 60% threshold. The earlier 57-test score of 65.47% remains historical. Two application-specific custom mutants were both killed; the final PR #8 mutation and custom-mutation jobs passed.</p>
 
   <h2>Browser and CI evidence</h2>
   <p>Two Member 1 use cases define and automate a main flow, two alternatives and two exceptions each. <code>npm run test:e2e:member1</code> passed all 10 flows in 24.6 seconds using installed Chrome and deterministic synthetic route state.</p>
-  <p>The remote Member 1 run passed coverage, mutation, and custom mutations. Sonar and the aggregate required job failed because the Sonar quality gate failed. The separate repository E2E check failed before tests with <code>Playwright does not support chromium on ubuntu26.04-x64</code>; this runner/toolchain compatibility failure is not presented as a passing test.</p>
+  <p>PR #8's test-only commit <code>d405f83</code> was the red phase: the exact assertion expected <code>Cannot reserve in the past</code> but received <code>Location not found or inactive</code>; the workflow recorded 58 passed and 1 failed. The production fix was committed separately as <code>80f720c</code>. An initial repository CI run then exposed a stale integration fixture using <code>2026-03-15</code>; commit <code>03d977c</code> moved it to a date one day ahead. At final PR head <code>03d977cf352699dbfca919c4209056c1116e3818</code>, Member 1 / Required, coverage, mutation, custom mutation, Sonar Quality Gate, repository integration/unit/E2E/security/lint/build checks, and Mobile Builds all passed.</p>
+  <p>Links: <a href="https://github.com/fizzaniaz17-arch/kitchen-nasty/pull/8">PR #8</a>, <a href="https://github.com/fizzaniaz17-arch/kitchen-nasty/actions/runs/45007936801">red workflow</a>, <a href="https://github.com/fizzaniaz17-arch/kitchen-nasty/actions/runs/45007936801/job/137163603085">failing assertion job</a>, <a href="https://github.com/fizzaniaz17-arch/kitchen-nasty/actions/runs/45008817893">green Member 1 workflow</a>, and <a href="https://github.com/fizzaniaz17-arch/kitchen-nasty/actions/runs/45008817912">green repository CI</a>.</p>
+  <img src="screenshots/pr8-member1-red-d405f83.png" alt="PR 8 red Member 1 run at regression-only commit d405f83">
+  <p class="caption">Figure 4. Authentic failed PR #8 Member 1 run `45007936801` at red commit `d405f83`; the specific failed assertion is preserved in the coverage job log linked in <code>evidence-index.md</code>.</p>
+  <img src="screenshots/pr8-member1-green-03d977c.png" alt="PR 8 green Member 1 run at final head 03d977c">
+  <p class="caption">Figure 5. Authentic passing PR #8 Member 1 run `45008817893` at final head `03d977c`; all five Member 1 jobs are green.</p>
+  <img src="screenshots/Screenshot 2026-11-22 141015.png" alt="PR 6 merge box showing the required check blocks merge">
+  <p class="caption">Figure 6. PR #6 merge box: `Member 1 / Required` is marked Required and failed; the merge action is disabled. PR #6 is the intentional blocked demo, not the release state of main.</p>
+  <img src="screenshots/Screenshot 2026-11-22 141104.png" alt="PR 6 failed Member 1 workflow run">
+  <p class="caption">Figure 7. PR #6 Actions failure at the intentional party-size regression commit.</p>
+  <p>PR #6 references: <a href="https://github.com/fizzaniaz17-arch/kitchen-nasty/pull/6">open PR</a>, <a href="https://github.com/fizzaniaz17-arch/kitchen-nasty/actions/runs/45007186708">latest failed Member 1 run</a>, and <a href="https://github.com/fizzaniaz17-arch/kitchen-nasty/actions/runs/45004176915">passing main run at 00f0449</a>.</p>
 
   <h2>SonarQube Cloud analysis and quality gate</h2>
   <p>PR #1 was analyzed at <code>f51b0c7c63ead6740d6de8b47024093df4f5b86f</code> (base <code>d6af7237e9569ebeab19ccab375362f9d144e25e</code>). The Member 1 LCOV artifact was downloaded and verified before the scan; Sonar processed the report and uploaded the analysis. The action exited with code 3 only after checking the failed quality gate.</p>
-  <img src="screenshots/sonar-overview.png" alt="SonarQube Cloud project overview">
-  <p class="caption">Figure 4. SonarQube Cloud project Overview warns that the <code>main</code> branch has not been analyzed yet. The workflow adds a main-branch push trigger so the baseline runs after the team's PR review and merge.</p>
+  <img src="screenshots/sonar-overview.png" alt="Historical SonarQube Cloud project overview">
+  <p class="caption">Figure 8. Historical SonarQube Cloud project Overview warned that the <code>main</code> branch had not been analyzed yet, before the later passing main analysis at <code>00f0449</code>.</p>
   <img src="screenshots/sonar-quality-gate.png" alt="SonarQube Cloud quality gate results for PR 1">
-  <p class="caption">Figure 5. Actual PR quality gate failure at SHA f51b0c7c63ead6740d6de8b47024093df4f5b86f: reliability C (required A), security C (required A), new-code coverage 0.0% (required at least 80.0%), and duplicated lines 79.0% (allowed at most 3.0%).</p>
+  <p class="caption">Figure 9. Historical PR #1 quality gate failure at SHA f51b0c7c63ead6740d6de8b47024093df4f5b86f: reliability C (required A), security C (required A), new-code coverage 0.0% (required at least 80.0%), and duplicated lines 79.0% (allowed at most 3.0%).</p>
   <img src="screenshots/actions-sonar-job.png" alt="GitHub Actions Sonar quality gate job">
-  <p class="caption">Figure 6. GitHub Actions Sonar job for the analyzed SHA. Coverage download and the LCOV existence check passed; the scan step failed after Sonar reported the failed quality gate.</p>
-  <p>The Sonar Overview warning is <code>'main' branch has not been analyzed yet.</code> The PR scan nevertheless completed; no scanner error said that a first main analysis was required to upload the PR analysis. The project currently reports 19 new issues, and the 0.0% coverage measure applies to 94 new lines to cover (including 94 uncovered lines in <code>e2e</code>), distinct from the 100% controller coverage result.</p>
-  <p>The PR remains open for team review. No direct push to or merge into <code>main</code> was performed. Earlier local Docker attempts are historical and are detailed in <code>quality-report.md</code>.</p>
+  <p class="caption">Figure 10. Historical GitHub Actions Sonar job for the analyzed SHA. Coverage download and the LCOV existence check passed; the scan step failed after Sonar reported the failed quality gate.</p>
+  <p>At the time of the historical PR #1 scan, the Sonar Overview warning was <code>'main' branch has not been analyzed yet.</code> That PR scan completed; no scanner error said that a first main analysis was required. The PR #1 summary then reported 19 new issues, and its 0.0% coverage measure applied to 94 new lines to cover (including 94 uncovered lines in <code>e2e</code>), distinct from the 100% controller coverage result. The later main analysis at <code>00f0449</code> passed.</p>
+  <p>That PR #1 gate failure is historical. The main quality gate passed after PR #5 at SHA <code>00f0449039601f0a5de1fd39e4d3365e9bbc0b77</code>; PR #8's Sonar Quality Gate job also passed at its final head. Function-level complexity for <code>updateReservation</code> is still pending because the available result does not expose a function-specific value. PR #8 is open for review and has not been merged; no direct push to <code>main</code> was performed. Earlier local Docker attempts are historical and are detailed in <code>quality-report.md</code>.</p>
 
   <div class="page"></div>
   <h2>Risks and exit criteria</h2>
@@ -143,17 +158,17 @@
     <tr><td>Double booking because creation does not enforce conflicts</td><td>4×5 = 20 Critical</td><td>Transactional conflict check and concurrency tests</td><td>EC-01 coverage</td></tr>
     <tr><td>Invalid table assignment capacity/location/activity</td><td>4×5 = 20 Critical</td><td>Assignment validation and MCC/boundary tests</td><td>EC-01, EC-02</td></tr>
     <tr><td>Status lifecycle is not enforced</td><td>4×4 = 16 High</td><td>Transition map and state tests</td><td>EC-01</td></tr>
-    <tr><td>Coverage/mutation scope exceeds schedule</td><td>4×4 = 16 High</td><td>Inventory and prioritize critical rules</td><td>EC-01, EC-02</td></tr>
+    <tr><td>Past reservations remain creatable on main until PR #8 merges</td><td>3×4 = 12 High</td><td>PR #8 fixes the rule and has passing checks; keep main status distinct until review/merge</td><td>EC-04</td></tr>
   </table>
   <table>
     <tr><th>ID</th><th>Target</th><th>Actual</th><th>Status</th></tr>
-    <tr><td>EC-01</td><td>100% statements and branches</td><td>100% / 100% across both selected controllers</td><td>Pass</td></tr>
-    <tr><td>EC-02</td><td>Mutation score at least 60%; 15 historical survivors classified</td><td>Historical 63.31%; follow-up 65.47%; 434/435 killed, two custom operators killed</td><td>Pass</td></tr>
-    <tr><td>EC-03</td><td>Sonar quality gate with imported LCOV</td><td>Analysis at f51b0c7 completed; new-code coverage 0%, reliability/security C, duplication 79%</td><td>Fail</td></tr>
-    <tr><td>EC-04</td><td>Required GitHub checks and reviewed PR</td><td>PR #1 open; coverage/mutation/custom pass; Sonar/aggregate fail; separate E2E fails on unsupported Ubuntu 26.04 Chromium</td><td>Fail</td></tr>
+    <tr><td>EC-01</td><td>100% statements and branches</td><td>59 tests pass; 100% statements, branches, functions, and lines at fix commit 80f720c; final PR gate passes at 03d977c</td><td>Pass</td></tr>
+    <tr><td>EC-02</td><td>Mutation score at least 60%; historical survivors classified</td><td>Current 59-test run 64.78% (365 killed, 199 survived, 1 timeout); prior 65.47% retained historically</td><td>Pass</td></tr>
+    <tr><td>EC-03</td><td>Sonar quality gate passes; separately obtain function-level complexity</td><td>Main run 45004176915 and PR #8 run 45008817893 pass; manual updateReservation V(G)=9; Sonar function-level value unavailable</td><td>Gate pass; measurement pending</td></tr>
+    <tr><td>EC-04</td><td>Required GitHub checks and repository CI pass; preserve PR #6</td><td>PR #8 final head 03d977c passes required, CI, and Mobile Builds; PR #6 remains open/unmerged and blocked</td><td>Pass on PR #8; review/merge pending</td></tr>
   </table>
 
   <h2>Conclusion</h2>
-  <p>White-box coverage, MCC/MC/DC, mutation threshold/custom operators, and both local browser use cases pass. The real Sonar PR analysis and CI evidence are now captured, but the quality gate and aggregate job fail, and the separate CI E2E job is blocked by its Ubuntu/Playwright Chromium mismatch. The main baseline awaits the reviewed PR merge, so the overall Member 1 release decision remains hold.</p>
+  <p>The past-date API defect is proven red-to-green on PR #8, and its final Member 1 and repository CI checks pass. Main remains at the previously verified SHA until PR #8 is reviewed and merged. PR #6 remains a separate intentional blocked demo. The main quality gate passes; the remaining technical evidence gap is a function-level Sonar complexity value for <code>updateReservation</code>. The manual value remains 9, and the controller-wide Sonar metric is not substituted.</p>
 </body>
 </html>
