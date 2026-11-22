@@ -1,0 +1,14 @@
+{
+    "observedAt":  "2026-11-22T15:21:23.7245491+05:00",
+    "isolatedContainer":  "exited",
+    "health":  {
+                   "status":  200,
+                   "body":  "{\"success\":true,\"data\":{\"status\":\"ok\",\"timestamp\":\"2026-11-22T10:21:17.393Z\",\"version\":\"1.0.0\"}}",
+                   "error":  null
+               },
+    "locations":  {
+                      "status":  null,
+                      "body":  null,
+                      "error":  "Unable to connect to the remote server"
+                  }
+}

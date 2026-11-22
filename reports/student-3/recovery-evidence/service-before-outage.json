@@ -1,0 +1,17 @@
+{
+    "observedAt":  "2026-11-22T15:21:00.5841513+05:00",
+    "health":  {
+                   "success":  true,
+                   "data":  {
+                                "status":  "ok",
+                                "timestamp":  "2026-11-22T10:21:00.279Z",
+                                "version":  "1.0.0"
+                            }
+               },
+    "locationCount":  1,
+    "locations":  {
+                      "name":  "Student 3 Recovery Test Location",
+                      "id":  "student3-recovery-location-1",
+                      "slug":  "student3-recovery-test-location"
+                  }
+}
