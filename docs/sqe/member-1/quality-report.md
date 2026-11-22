@@ -40,7 +40,13 @@ flowchart TD
 
 Each optional decision has a true edge labeled with its assignment and a false edge labeled as a bypass; both join at the next decision. The two early error paths each show a response node and a return node before joining the single exit. The verified graph has 19 nodes and 26 edges, one connected component, so `V(G) = E - N + 2 = 26 - 19 + 2 = 9`. This matches the eight explicit decisions (parse success, reservation existence, and six supplied-field checks) plus one formula baseline: `8 + 1 = 9`. It must not be described as nine independent decisions. Promise rejection, Prisma exceptions, `new Date` behavior, Express failures, and Zod internals are implicit exceptions omitted from the graph.
 
-No function-level analyzer value is available yet. A whole-file Sonar complexity value must not be compared to 9.
+The value 9 above is a manual CFG result, not a Sonar measurement. A whole-controller complexity total must not be compared to it.
+
+## Approved function-only Sonar scratch analysis
+
+The approved scratch project `fizzaniaz17-arch_kitchen-nasty-update-reservation-scratch` analyzed source commit `03d977cf352699dbfca919c4209056c1116e3818` with SonarScanner CLI `8.0.1.6346`. The scratch project base directory was `sonar-scratch`; the Sonar log reported no root configuration file and exactly one indexed file, `updateReservation.ts`, containing only the unchanged `updateReservation` function. The analysis completed with ID `0e966ce9-1b82-4100-9fe6-3a2c959a7d6a` in [workflow run 45012955478](https://github.com/fizzaniaz17-arch/kitchen-nasty/actions/runs/45012955478), [analysis job 137179069022](https://github.com/fizzaniaz17-arch/kitchen-nasty/actions/runs/45012955478/job/137179069022).
+
+Retrieving the file `complexity` measure from SonarQube Cloud returned HTTP 403 using the configured analysis credential. Therefore, a numeric function-level Sonar value is still pending; the manual `V(G)=9` is not substituted or represented as measured. The next step is to read this analysis using a SonarCloud account/token with Browse access to the scratch project. The run log and scope details are preserved in `evidence/sonar-function-scratch-status.txt`.
 
 ## Coverage run
 

@@ -12,7 +12,7 @@ Likelihood and impact use 1 (lowest) through 5 (highest). Score is `L × I`: Low
 | R-P06 Race allows duplicate table names | Product | 3 | 3 | 9 Medium | DB owner | Composite unique constraint and concurrency test | DB integration |
 | R-P07 Deleting any historically referenced table is permanently blocked | Product | 2 | 3 | 6 Medium | Product owner | Confirm retention policy; state/age partitions | API |
 | R-P08 Staff list is not visibly scoped by staff location | Product | 3 | 4 | 12 High | Auth owner | Authorization requirement and IDOR tests | API/E2E |
-| R-PR01 Function-level Sonar complexity for `updateReservation` is unavailable | Project | 4 | 3 | 12 High | Member 1 | Keep the manual CFG result separate; use an already approved single-function analysis scope or request approval before creating a scratch project | Static analysis |
+| R-PR01 Function-level Sonar complexity for `updateReservation` is not retrievable with the current credential | Project | 4 | 3 | 12 High | Member 1 | Approved scratch project analyzed one TypeScript file; complexity API returned HTTP 403. Read with a SonarCloud identity/token that has Browse access. Keep the manual CFG separate | Static analysis |
 | R-PR02 Coverage/mutation scope exceeds remaining schedule | Project | 4 | 4 | 16 High | Member 1 | Inventory, prioritize critical rules, daily evidence runs | Unit/tooling |
 
 ## 5×5 matrix
@@ -31,7 +31,7 @@ Likelihood and impact use 1 (lowest) through 5 (highest). Score is `L × I`: Low
 |---|---|---|---|---|
 | EC-01 | 100% statement and branch coverage for selected server business logic; controls R-P01/R-P03 | Vitest LCOV and PR #8 Member 1 run | 59/59 passed; 100% statements, branches, functions, and lines at fix commit `80f720cc750accccb0e46004dbe8fe3d8e67928c`; application-code head `03d977cf352699dbfca919c4209056c1116e3818` gate passed | Pass |
 | EC-02 | Mutation score at or above justified CI threshold and at least 15 survivors classified | Stryker output and PR #8 Member 1 run | Local score 64.78% (365 killed, 199 survived, no no-coverage mutants, 1 timeout) at `80f720cc750accccb0e46004dbe8fe3d8e67928c`; final PR mutation job passed | Pass (60% threshold) |
-| EC-03 | Sonar quality gate passes; keep function-level complexity distinct | Main and PR Member 1 Sonar jobs; manual CFG | Main run `45004176915` and PR #8 final run `45008817893` passed. Manual `updateReservation` V(G)=9; function-level Sonar value remains unavailable | Gate pass; measurement pending |
+| EC-03 | Sonar quality gate passes; keep function-level complexity distinct | Main and PR Member 1 Sonar jobs; isolated Sonar scratch analysis; manual CFG | Main run `45004176915` and PR #8 final run `45008817893` passed. Scratch analysis `0e966ce9-1b82-4100-9fe6-3a2c959a7d6a` indexed one TypeScript file at source `03d977c`; measures API returned HTTP 403. Manual `updateReservation` V(G)=9 | Gate pass; measured value pending Browse access |
 | EC-04 | Required PR checks and repository CI pass; preserve intentional blocked demo | GitHub runs and PR status | Application-code head `03d977cf352699dbfca919c4209056c1116e3818` and report/evidence commit `1c56e714d3fd9f3f0e3d81ca469492713a54acdd` both passed required, CI, and Mobile Builds checks. PR #8 is open. PR #6 remains open/unmerged and intentionally blocked at `1eedc87cd139459b0f053e47d72bddc1f5de2e6c` | Pass on PR #8; review/merge pending |
 
 ## AI and viva record

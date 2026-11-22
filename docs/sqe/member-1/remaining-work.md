@@ -12,7 +12,9 @@
 
 The manual CFG is verified as `E=26`, `N=19`, `P=1`, `V(G)=9` (eight explicit decisions plus the formula baseline). The Sonar quality gate passes for the latest PR, but its job does not provide a function-level complexity measurement; a controller-wide number is not an acceptable substitute.
 
-**How to finish:** first determine whether an already approved Sonar project or component API can analyze only the exact unchanged function. If not, create a scratch project only after approval. Record the analyzer version, source SHA, analysis ID, exact indexed source scope, and function-level value, and save a genuine export or screenshot. The manual CFG remains valid at fix SHA `80f720cc750accccb0e46004dbe8fe3d8e67928c` because that commit changed `createReservation`, not `updateReservation`.
+An approved SonarCloud scratch project has now analyzed the exact function from source SHA `03d977cf352699dbfca919c4209056c1116e3818`. SonarScanner CLI `8.0.1.6346` completed analysis `0e966ce9-1b82-4100-9fe6-3a2c959a7d6a` with exactly one indexed TypeScript file. Reading its complexity measure returned HTTP 403; the configured analysis credential cannot read that metric. The source scope, analysis ID, and blocker are recorded in `evidence/sonar-function-scratch-status.txt`.
+
+**Minimum remaining action:** sign into SonarCloud with an identity that has Browse permission to the scratch project, or configure a separate protected credential with that permission, then retrieve the `complexity` measure for `updateReservation.ts`. Do not replace the working scan token unless its use for scanning is preserved. Record the returned value and screenshot/export; keep it distinct from the manual CFG value until then. The manual CFG remains valid at fix SHA `80f720cc750accccb0e46004dbe8fe3d8e67928c` because that commit changed `createReservation`, not `updateReservation`.
 
 ## After team review
 

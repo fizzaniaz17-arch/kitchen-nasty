@@ -49,7 +49,7 @@
     <tr><td>White-box suite</td><td>59/59 passed at PR #8 application-code head across reservation/table controller functions</td><td>Pass</td></tr>
     <tr><td>Coverage target</td><td>59 tests; 100% statements, branches, functions, and lines</td><td>Pass</td></tr>
     <tr><td>Mutation historical/follow-up</td><td>Historical 63.31%; prior 57-test run 65.47%; current 59-test run at 80f720c: 365 killed, 199 survived, 64.78%, 0 no coverage, 1 timeout</td><td>Pass (60%)</td></tr>
-    <tr><td>SonarQube Cloud</td><td>Main quality run at 00f0449 and PR #8 final gate passed; function-level updateReservation complexity is still unavailable</td><td>Gate pass; metric pending</td></tr>
+    <tr><td>SonarQube Cloud</td><td>Main and PR #8 quality gates passed. An approved function-only scan indexed one TypeScript file (CLI 8.0.1.6346, analysis 0e966ce9); the measures API returned 403</td><td>Gate pass; value pending Browse access</td></tr>
     <tr><td>Browser use cases</td><td>10/10 Playwright flows passed across two Member 1 use cases</td><td>Pass</td></tr>
     <tr><td>CI and PR evidence</td><td>PR #8 application-code head 03d977c and report commit 1c56e71 pass required gate, Sonar, CI, and Mobile Builds; PR #6 remains intentionally open and blocked</td><td>Pass; PR #8 review pending</td></tr>
   </table>
@@ -83,7 +83,7 @@
     <div class="node decision">comment supplied?</div><div class="arrow">yes → assign comment; no → bypass; both continue ↓</div>
     <div class="node">Prisma update → 200 response → shared exit</div>
   </div>
-  <div class="note"><strong>Manual result:</strong> N = 19, E = 26, P = 1. Therefore V(G) = E − N + 2P = 26 − 19 + 2 = <strong>9</strong>. The function has eight explicit decisions and one formula baseline; this is not nine independent decisions. Implicit Promise, Prisma, Date, Express, and Zod exceptions are outside the graph. The create-date fix did not change <code>updateReservation</code>; a function-level Sonar measurement remains pending.</div>
+  <div class="note"><strong>Manual result:</strong> N = 19, E = 26, P = 1. Therefore V(G) = E − N + 2P = 26 − 19 + 2 = <strong>9</strong>. The function has eight explicit decisions and one formula baseline; this is not nine independent decisions. Implicit Promise, Prisma, Date, Express, and Zod exceptions are outside the graph. The create-date fix did not change <code>updateReservation</code>. The approved function-only Sonar analysis at source SHA <code>03d977c</code> indexed one TypeScript file (SonarScanner CLI <code>8.0.1.6346</code>, analysis <code>0e966ce9-1b82-4100-9fe6-3a2c959a7d6a</code>); metric retrieval returned HTTP 403. No Sonar value is claimed.</div>
 
   <h2>MCC and MC/DC</h2>
   <p>Location rejection is <code>!location || !location.isActive</code>. Let A = location exists and B = active.</p>
@@ -150,7 +150,7 @@
   <img src="screenshots/actions-sonar-job.png" alt="GitHub Actions Sonar quality gate job">
   <p class="caption">Figure 10. Historical GitHub Actions Sonar job for the analyzed SHA. Coverage download and the LCOV existence check passed; the scan step failed after Sonar reported the failed quality gate.</p>
   <p>At the time of the historical PR #1 scan, the Sonar Overview warning was <code>'main' branch has not been analyzed yet.</code> That PR scan completed; no scanner error said that a first main analysis was required. The PR #1 summary then reported 19 new issues, and its 0.0% coverage measure applied to 94 new lines to cover (including 94 uncovered lines in <code>e2e</code>), distinct from the 100% controller coverage result. The later main analysis at <code>00f0449</code> passed.</p>
-  <p>That PR #1 gate failure is historical. The main quality gate passed after PR #5 at SHA <code>00f0449039601f0a5de1fd39e4d3365e9bbc0b77</code>; PR #8's Sonar Quality Gate job passed at application-code head <code>03d977c</code> and again on report commit <code>1c56e71</code>. Function-level complexity for <code>updateReservation</code> is still pending because the available result does not expose a function-specific value. PR #8 is open for review and has not been merged; no direct push to <code>main</code> was performed. Earlier local Docker attempts are historical and are detailed in <code>quality-report.md</code>.</p>
+  <p>That PR #1 gate failure is historical. The main quality gate passed after PR #5 at SHA <code>00f0449039601f0a5de1fd39e4d3365e9bbc0b77</code>; PR #8's Sonar Quality Gate job passed at application-code head <code>03d977c</code> and again on report commit <code>1c56e71</code>. A function-only scratch analysis was uploaded successfully, but the measures API returned HTTP 403 with the configured analysis credential; an account/token with Browse access is needed to read the function metric. See <a href="https://github.com/fizzaniaz17-arch/kitchen-nasty/actions/runs/45012955478">scratch workflow run 45012955478</a> and <code>evidence/sonar-function-scratch-status.txt</code>. PR #8 is open for review and has not been merged; no direct push to <code>main</code> was performed. Earlier local Docker attempts are historical and are detailed in <code>quality-report.md</code>.</p>
 
   <div class="page"></div>
   <h2>Risks and exit criteria</h2>
@@ -165,11 +165,11 @@
     <tr><th>ID</th><th>Target</th><th>Actual</th><th>Status</th></tr>
     <tr><td>EC-01</td><td>100% statements and branches</td><td>59 tests pass; 100% statements, branches, functions, and lines at fix commit 80f720c; final PR gate passes at 03d977c</td><td>Pass</td></tr>
     <tr><td>EC-02</td><td>Mutation score at least 60%; historical survivors classified</td><td>Current 59-test run 64.78% (365 killed, 199 survived, 1 timeout); prior 65.47% retained historically</td><td>Pass</td></tr>
-    <tr><td>EC-03</td><td>Sonar quality gate passes; separately obtain function-level complexity</td><td>Main run 45004176915 and PR #8 run 45008817893 pass; manual updateReservation V(G)=9; Sonar function-level value unavailable</td><td>Gate pass; measurement pending</td></tr>
+    <tr><td>EC-03</td><td>Sonar quality gate passes; separately obtain function-level complexity</td><td>Main run 45004176915 and PR #8 run 45008817893 pass; scratch analysis 0e966ce9 indexed one TypeScript file; measures API returned 403; manual updateReservation V(G)=9</td><td>Gate pass; value pending Browse access</td></tr>
     <tr><td>EC-04</td><td>Required GitHub checks and repository CI pass; preserve PR #6</td><td>PR #8 application-code head 03d977c and report commit 1c56e71 pass required, CI, and Mobile Builds; PR #6 remains open/unmerged and blocked</td><td>Pass on PR #8; review/merge pending</td></tr>
   </table>
 
   <h2>Conclusion</h2>
-  <p>The past-date API defect is proven red-to-green on PR #8, and its final Member 1 and repository CI checks pass. Main remains at the previously verified SHA until PR #8 is reviewed and merged. PR #6 remains a separate intentional blocked demo. The main quality gate passes; the remaining technical evidence gap is a function-level Sonar complexity value for <code>updateReservation</code>. The manual value remains 9, and the controller-wide Sonar metric is not substituted.</p>
+  <p>The past-date API defect is proven red-to-green on PR #8, and its final Member 1 and repository CI checks pass. Main remains at the previously verified SHA until PR #8 is reviewed and merged. PR #6 remains a separate intentional blocked demo. The main quality gate passes. A function-only Sonar scan has now been completed, but its complexity measure remains unavailable because the measures API returned HTTP 403; the next step is to read it with Browse access. The manual value remains 9, and the controller-wide Sonar metric is not substituted.</p>
 </body>
 </html>
