@@ -1,4 +1,4 @@
-import { randomBytes } from 'crypto';
+import { randomBytes } from 'node:crypto';
 import { Request, Response } from 'express';
 import { generateToken } from '../middleware/auth.js';
 

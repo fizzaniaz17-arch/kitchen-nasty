@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { randomBytes } from 'crypto';
+import { randomBytes } from 'node:crypto';
 
 const SOCIAL_AUTH_STATE_PATTERN = /^[A-Za-z0-9_-]{43}$/;
 const SOCIAL_AUTH_STATE_COOKIE_PREFIX = 'social_auth_state_';
