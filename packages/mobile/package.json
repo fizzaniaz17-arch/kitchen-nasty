@@ -27,6 +27,7 @@
     "expo-web-browser": "~14.0.2",
     "i18next": "^25.8.10",
     "nativewind": "^4.1.23",
+    "query-string": "^9.5.1",
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "react-i18next": "^16.5.4",
@@ -40,7 +41,7 @@
     "zustand": "^5.0.3"
   },
   "devDependencies": {
-    "@babel/core": "^7.25.0",
+    "@babel/core": "^7.29.13",
     "@types/react": "~18.3.0",
     "tailwindcss": "^3.4.0",
     "typescript": "^5.7.0"

@@ -170,6 +170,7 @@ describe('Table API - Integration Tests', () => {
 
       expect(res.status).toBe(200);
       expect(res.body.data.capacity).toBe(8);
+      expect(mockedPrisma.table.update.mock.calls[0][0].data).toStrictEqual({ capacity: 8 });
     });
 
     it('returns 404 for unknown table', async () => {

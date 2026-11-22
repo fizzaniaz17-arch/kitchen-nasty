@@ -38,7 +38,12 @@ const createMenuItemSchema = z.object({
   mealtimeIds: z.array(z.string()).optional(),
 });
 
-const updateMenuItemSchema = createMenuItemSchema.partial().omit({ slug: true });
+const updateMenuItemSchema = createMenuItemSchema.partial().omit({ slug: true }).extend({
+  isActive: z.boolean().optional(),
+  sortOrder: z.number().int().min(0).optional(),
+  trackStock: z.boolean().optional(),
+  stockQty: z.number().int().min(0).optional(),
+});
 
 export async function listMenuItems(req: Request, res: Response): Promise<void> {
   const page = Math.max(1, parseInt(req.query.page as string) || 1);
@@ -101,7 +106,7 @@ export async function getMenuItem(req: Request<{ id: string }>, res: Response): 
 export async function createMenuItem(req: Request, res: Response): Promise<void> {
   const parsed = createMenuItemSchema.safeParse(req.body);
   if (!parsed.success) {
-    res.status(400).json({ success: false, error: parsed.error.errors });
+    res.status(400).json({ success: false, error: parsed.error.issues });
     return;
   }
 
@@ -159,7 +164,7 @@ export async function updateMenuItem(req: Request<{ id: string }>, res: Response
   const { id } = req.params;
   const parsed = updateMenuItemSchema.safeParse(req.body);
   if (!parsed.success) {
-    res.status(400).json({ success: false, error: parsed.error.errors });
+    res.status(400).json({ success: false, error: parsed.error.issues });
     return;
   }
 

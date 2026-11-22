@@ -52,7 +52,7 @@ function generateOrderNumber(): string {
 export async function createOrder(req: Request, res: Response): Promise<void> {
   const parsed = createOrderSchema.safeParse(req.body);
   if (!parsed.success) {
-    res.status(400).json({ success: false, error: parsed.error.errors });
+    res.status(400).json({ success: false, error: parsed.error.issues });
     return;
   }
 

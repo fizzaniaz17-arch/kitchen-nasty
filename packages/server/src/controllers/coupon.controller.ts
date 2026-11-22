@@ -21,7 +21,7 @@ const updateCouponSchema = createCouponSchema.partial();
 export async function createCoupon(req: Request, res: Response): Promise<void> {
   const parsed = createCouponSchema.safeParse(req.body);
   if (!parsed.success) {
-    res.status(400).json({ success: false, error: parsed.error.errors });
+    res.status(400).json({ success: false, error: parsed.error.issues });
     return;
   }
 
@@ -81,7 +81,7 @@ export async function getCoupon(req: Request<{ id: string }>, res: Response): Pr
 export async function updateCoupon(req: Request<{ id: string }>, res: Response): Promise<void> {
   const parsed = updateCouponSchema.safeParse(req.body);
   if (!parsed.success) {
-    res.status(400).json({ success: false, error: parsed.error.errors });
+    res.status(400).json({ success: false, error: parsed.error.issues });
     return;
   }
 

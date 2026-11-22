@@ -89,15 +89,38 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - uses: actions/download-artifact@v4
+      - uses: actions/setup-node@v4
         with:
-          name: member1-coverage
-          path: packages/server/coverage/member-1
-      - name: Verify Member 1 LCOV report
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Generate Prisma client
+        run: npx -w packages/server prisma generate --schema ../../prisma/schema.prisma
+      - name: Generate server coverage
+        run: npx -w packages/server vitest run --coverage --coverage.reporter=lcov --coverage.reportsDirectory=coverage/sonar
+      - name: Generate storefront coverage
+        run: npm run test:coverage --workspace packages/storefront
+      - name: Normalize LCOV paths
+        run: |
+          sed -i 's#^SF:src/#SF:packages/server/src/#' packages/server/coverage/sonar/lcov.info
+          sed -i 's#^SF:src/#SF:packages/storefront/src/#' packages/storefront/coverage/sonar/lcov.info
+      - name: Verify Sonar LCOV reports
         shell: bash
         run: |
-          if [ ! -f packages/server/coverage/member-1/lcov.info ]; then
-            echo "Expected coverage report packages/server/coverage/member-1/lcov.info was not found."
+          if [ ! -f packages/server/coverage/sonar/lcov.info ]; then
+            echo "Expected coverage report packages/server/coverage/sonar/lcov.info was not found."
+            exit 1
+          fi
+          if [ ! -f packages/storefront/coverage/sonar/lcov.info ]; then
+            echo "Expected coverage report packages/storefront/coverage/sonar/lcov.info was not found."
+            exit 1
+          fi
+          if ! grep -q '^SF:packages/server/src/' packages/server/coverage/sonar/lcov.info; then
+            echo "Server LCOV paths were not normalized to the repository root."
+            exit 1
+          fi
+          if ! grep -q '^SF:packages/storefront/src/' packages/storefront/coverage/sonar/lcov.info; then
+            echo "Storefront LCOV paths were not normalized to the repository root."
             exit 1
           fi
       - name: Analyze and wait for this analysis quality gate

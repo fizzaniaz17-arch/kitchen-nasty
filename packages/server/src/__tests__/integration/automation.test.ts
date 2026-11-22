@@ -245,6 +245,7 @@ describe('Automation Rules API', () => {
             expect(res.status).toBe(200);
             expect(res.body.success).toBe(true);
             expect(res.body.data.name).toBe('Updated rule');
+            expect(mockedPrisma.automationRule.update.mock.calls[0][0].data).toStrictEqual({ name: 'Updated rule' });
         });
 
         it('updates isActive flag', async () => {

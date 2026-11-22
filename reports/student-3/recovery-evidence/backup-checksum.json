@@ -1,0 +1,8 @@
+{
+    "file":  "student3-recovery.dump",
+    "bytes":  70940,
+    "sha256":  "6A7371BAF4B1C0B24E6B45F53067B285AFABD37BA7B4881BEFE245EA101E505A",
+    "format":  "PostgreSQL custom archive",
+    "database":  "student3_recovery",
+    "createdAt":  "2026-11-22T15:24:04.9105053+05:00"
+}
