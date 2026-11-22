@@ -11,7 +11,9 @@ const createMealtimeSchema = z.object({
   locationId: z.string().optional(),
 });
 
-const updateMealtimeSchema = createMealtimeSchema.partial();
+const updateMealtimeSchema = createMealtimeSchema.partial().extend({
+  isActive: z.boolean().optional(),
+});
 
 export async function listMealtimes(req: Request, res: Response): Promise<void> {
   const locationId = req.query.locationId as string | undefined;

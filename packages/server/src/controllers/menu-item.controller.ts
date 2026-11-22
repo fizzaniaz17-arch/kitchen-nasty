@@ -38,7 +38,12 @@ const createMenuItemSchema = z.object({
   mealtimeIds: z.array(z.string()).optional(),
 });
 
-const updateMenuItemSchema = createMenuItemSchema.partial().omit({ slug: true });
+const updateMenuItemSchema = createMenuItemSchema.partial().omit({ slug: true }).extend({
+  isActive: z.boolean().optional(),
+  sortOrder: z.number().int().min(0).optional(),
+  trackStock: z.boolean().optional(),
+  stockQty: z.number().int().min(0).optional(),
+});
 
 export async function listMenuItems(req: Request, res: Response): Promise<void> {
   const page = Math.max(1, parseInt(req.query.page as string) || 1);

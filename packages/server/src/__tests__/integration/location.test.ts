@@ -205,6 +205,10 @@ describe('Location API - Integration Tests', () => {
 
       expect(res.status).toBe(200);
       expect(res.body.data.name).toBe('Updated Name');
+      expect(mockedPrisma.location.update.mock.calls[0][0].data).toStrictEqual({
+        name: 'Updated Name',
+        operatingHours: undefined,
+      });
     });
 
     it('returns 404 for unknown id', async () => {
@@ -310,6 +314,21 @@ describe('Location API - Integration Tests', () => {
 
       expect(res.status).toBe(201);
       expect(res.body.data.name).toBe('Zone 2');
+    });
+  });
+
+  describe('PATCH /api/locations/:locationId/delivery-zones/:zoneId', () => {
+    it('does not apply create defaults to partial updates', async () => {
+      mockedPrisma.deliveryZone.findFirst.mockResolvedValue({ id: 'z1', locationId: 'loc-1' } as any);
+      mockedPrisma.deliveryZone.update.mockResolvedValue({ id: 'z1', name: 'Updated zone' } as any);
+
+      const res = await request(app)
+        .patch('/api/locations/loc-1/delivery-zones/z1')
+        .set('Authorization', `Bearer ${managerToken}`)
+        .send({ name: 'Updated zone' });
+
+      expect(res.status).toBe(200);
+      expect(mockedPrisma.deliveryZone.update.mock.calls[0][0].data).toStrictEqual({ name: 'Updated zone' });
     });
   });
 

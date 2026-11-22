@@ -14,7 +14,10 @@ const createCategorySchema = z.object({
   locationId: z.string().optional(),
 });
 
-const updateCategorySchema = createCategorySchema.partial().omit({ slug: true });
+const updateCategorySchema = createCategorySchema.partial().omit({ slug: true }).extend({
+  sortOrder: z.number().int().min(0).optional(),
+  isActive: z.boolean().optional(),
+});
 
 export async function listCategories(req: Request, res: Response): Promise<void> {
   const locationId = req.query.locationId as string | undefined;

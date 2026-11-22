@@ -38,7 +38,16 @@ const createLocationSchema = z.object({
   })).optional(),
 });
 
-const updateLocationSchema = createLocationSchema.partial().omit({ slug: true });
+const updateLocationSchema = createLocationSchema.partial().omit({ slug: true }).extend({
+  country: z.string().optional(),
+  isActive: z.boolean().optional(),
+  deliveryEnabled: z.boolean().optional(),
+  pickupEnabled: z.boolean().optional(),
+  minOrderDelivery: z.number().min(0).optional(),
+  minOrderPickup: z.number().min(0).optional(),
+  deliveryLeadTime: z.number().int().min(0).optional(),
+  pickupLeadTime: z.number().int().min(0).optional(),
+});
 
 // ============================================================
 // HANDLERS

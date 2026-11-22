@@ -11,7 +11,11 @@ const createZoneSchema = z.object({
   isActive: z.boolean().default(true),
 });
 
-const updateZoneSchema = createZoneSchema.partial();
+const updateZoneSchema = createZoneSchema.partial().extend({
+  charge: z.number().min(0).optional(),
+  minOrder: z.number().min(0).optional(),
+  isActive: z.boolean().optional(),
+});
 
 export async function listDeliveryZones(req: Request<{ locationId: string }>, res: Response): Promise<void> {
   const { locationId } = req.params;
