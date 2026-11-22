@@ -19,7 +19,7 @@ The full production-only audit includes all workspaces, including the Expo mobil
 
 The npm 10 `audit fix --dry-run` command failed in Arborist; npm 12.2.3 was used ephemerally to resolve the lockfile. No npm CLI version was added to project dependencies.
 
-## Remaining findings and decisions
+## Remaining findings and decisions (reviewed 2026-11-22)
 
 | Finding group | Severity / scope | Decision |
 |---|---|---|
@@ -28,13 +28,32 @@ The npm 10 `audit fix --dry-run` command failed in Arborist; npm 12.2.3 was used
 | `@stryker-mutator/core` and `@stryker-mutator/vitest-runner` | Two moderate; development-only | Deferred. No npm audit fix is currently available for the selected versions. They are not production dependencies. |
 | VitePress | No remaining Vite high after the Vite 6.4.6 override | The override passed the docs build; retain regression coverage when updating VitePress. |
 
+## Final advisory reachability review (2026-11-22)
+
+The table above records the initial grouping. The following advisory-level
+review supersedes its broad categories and distinguishes build-tool exposure
+from application server runtime risk.
+
+| Advisory / package path | Severity / scope | Assessment and decision |
+|---|---|---|
+| [GHSA-5p2g-fcmc-qvqq](https://github.com/advisories/GHSA-5p2g-fcmc-qvqq) and [GHSA-w3rx-r6r6-pgpr](https://github.com/advisories/GHSA-w3rx-r6r6-pgpr), `image-size@1.2.1` through Expo 52 / Metro 0.81.5 | High; included in mobile production audit | Crafted JXL/HEIF or ICNS assets can trigger parser denial of service when Metro reads project asset bytes. This is build/dev-time availability exposure if an attacker can supply an asset to the project, not a production server-runtime path. Fixed in 2.0.3, but Metro 0.81.5 declares `^1.0.2` and invokes the CommonJS export as a function; 2.x exports an object. No safe drop-in override was applied. A coordinated Expo/Metro upgrade or an API-adapting, regression-tested Metro change is needed. |
+| [GHSA-3g3m-2fjr-6pw4](https://github.com/advisories/GHSA-3g3m-2fjr-6pw4), `glob@10.5.0` in Expo CLI/config tooling | Moderate; transitive tooling finding | Continued filesystem traversal after an aborted glob walk. `glob@14.0.2` is fixed, but no compatible patch was identified in the installed glob 10 range. Exposure is to build/tooling availability, not application server runtime. |
+| [GHSA-g3hv-75wg-m249](https://github.com/advisories/GHSA-g3hv-75wg-m249), nested `minimatch@9.0.9` and development `minimatch@10.2.6` | Moderate; Expo and development tooling | Pattern-amplification denial of service; fixed in `11.0.1`, outside the current dependency ranges. No compatible in-range override was identified. |
+| [GHSA-w5hq-g745-h8pq](https://github.com/advisories/GHSA-w5hq-g745-h8pq), `uuid@8.3.2` and Xcode's nested `uuid@7.0.3` | Moderate; transitive Expo/Xcode chain | Affected call forms use caller-provided buffers; the inspected Xcode path uses `uuid.v4()`. No reachable vulnerable-form call was found in the reviewed path. Patched UUID majors do not fit the existing dependency ranges. |
+
+The current audit still reports 22 findings (0 critical, 1 high, 21 moderate),
+20 production-only findings (0 critical, 1 high, 19 moderate), and zero server
+production findings. The Expo 58.0.26 suggestion is a coordinated semver-major
+SDK migration, not a compatible in-range fix; no dependency upgrade was made
+during this review.
+
 ## CI regression follow-up
 
 PR CI caught that Zod 4 applies create-schema defaults when `.partial()` update schemas are parsed. The affected controller update schemas now explicitly keep those defaulted fields optional, and regression assertions verify partial requests write only the supplied fields. A separate mobile bundle failure was caused by Expo Router importing `query-string` without a package Metro could resolve after the navigation dependency update; the safe direct dependency restores resolution without adding an audit finding.
 
-The SonarCloud run then reported 2.5% new-code coverage because its updated scope behavior ignored the configured source/test properties while CI imported only Member 1 coverage. The workflow now excludes test/E2E and out-of-scope mobile files, generates server and storefront LCOV reports, and keeps the existing quality-gate threshold. Local changed-source coverage is 130/153 added lines (85.0%); the corrected Sonar check is awaiting the next PR run.
+The SonarCloud run then reported 2.5% new-code coverage because its updated scope behavior ignored the configured source/test properties while CI imported only Member 1 coverage. The workflow now excludes test/E2E and out-of-scope mobile files, generates server and storefront LCOV reports, and keeps the existing quality-gate threshold. The earlier 130/153 changed-source figure predates the recovery error-handling change and is not claimed as the current percentage. Local verification regenerated the reports and confirmed 62 server and 2 storefront source paths are normalized to repository-relative paths. The current remote Sonar check is still failing and predates the local changes; a new PR run is required for a final result.
 
-## Validation
+## Earlier validation (before the final recovery/test rerun)
 
 | Validation | Result |
 |---|---|
@@ -50,8 +69,24 @@ The SonarCloud run then reported 2.5% new-code coverage because its updated scop
 | Server TypeScript build | Passed |
 | Shared/server/admin/storefront builds | Passed |
 | VitePress documentation build | Passed |
-| Security-related Playwright checks | 3 passed |
 | Server production audit | 0 findings |
+
+## Final validation (2026-11-22)
+
+| Validation | Result |
+|---|---|
+| `npm test` | 421 passed: 17 shared, 60 server unit, and 344 server integration |
+| Full server coverage / Sonar LCOV | 460 passed across 29 files |
+| Member 1 coverage gate | 56 passed; 100% statements, branches, functions, and lines |
+| Storefront tests and coverage | 5 passed |
+| Full Playwright E2E | 135 passed, 5 failed: four existing Member 1 reservation tests have an auth mock shape incompatible with `AuthContext`; the parallel footer failure passed when rerun alone |
+| Security-header and social-auth browser regressions | 3 passed |
+| Mobile typecheck and iOS/Android Expo exports | Passed |
+| Server TypeScript and shared/server/admin/storefront builds | Passed |
+| VitePress documentation build | Passed |
+| Sonar LCOV path verification | Passed: 62 server and 2 storefront source records use repository-relative paths |
+| Final audit | 22 full, 20 production-only, 0 server production findings |
+| Local lint script | Unavailable: `eslint` is not installed; no tooling dependency was added |
 
 ## Audit evidence files
 
