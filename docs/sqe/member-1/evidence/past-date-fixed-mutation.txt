@@ -1,0 +1,2762 @@
+
+> kitchenasty@0.3.2 mutation:member1
+> stryker run stryker.member1.config.json
+
+[32m14:33:58 (23988) INFO ProjectReader[39m Found 2 of 530 file(s) to be mutated.
+[32m14:33:59 (23988) INFO Instrumenter[39m Instrumented 2 source file(s) with 565 mutant(s)
+[32m14:34:01 (23988) INFO ConcurrencyTokenProvider[39m Creating 2 test runner process(es).
+[32m14:34:03 (23988) INFO BroadcastReporter[39m Detected that current console does not support the "progress" reporter, downgrading to "progress-append-only" reporter
+[32m14:34:05 (23988) INFO DryRunExecutor[39m Starting initial test run (vitest test runner with "perTest" coverage analysis). This may take a while.
+[32m14:34:05 (23988) INFO DryRunExecutor[39m Initial test run succeeded. Ran 59 tests in 0 seconds (net 59.654400000000805 ms, overhead 542.3455999999992 ms).
+[33m14:34:05 (23988) WARN MutantTestPlanner[39m Detected 45 static mutants (8% of total) that are estimated to take 59% of the time running the tests!
+  You might want to enable "ignoreStatic" to ignore these static mutants for your next run.
+  For more information about static mutants visit: https://stryker-mutator.io/docs/mutation-testing-elements/static-mutants
+  (disable "warnings.slow" to ignore this warning)
+Mutation testing 14% (elapsed: <1m, remaining: <1m) 45/565 tested (4 survived, 0 timed out)
+Mutation testing 26% (elapsed: <1m, remaining: <1m) 103/565 tested (40 survived, 0 timed out)
+Mutation testing 28% (elapsed: <1m, remaining: ~1m) 159/565 tested (64 survived, 0 timed out)
+Mutation testing 30% (elapsed: <1m, remaining: ~1m) 207/565 tested (90 survived, 0 timed out)
+Mutation testing 32% (elapsed: <1m, remaining: ~1m) 275/565 tested (117 survived, 0 timed out)
+Mutation testing 36% (elapsed: ~1m, remaining: ~1m) 341/565 tested (150 survived, 0 timed out)
+Mutation testing 38% (elapsed: ~1m, remaining: ~1m) 404/565 tested (162 survived, 1 timed out)
+Mutation testing 39% (elapsed: ~1m, remaining: ~2m) 461/565 tested (175 survived, 1 timed out)
+Mutation testing 40% (elapsed: ~1m, remaining: ~2m) 516/565 tested (186 survived, 1 timed out)
+Mutation testing 96% (elapsed: ~1m, remaining: <1m) 562/565 tested (199 survived, 1 timed out)
+
+All tests
+  controller-completeness.test.ts
+    ✓ reservation controller completeness creates a reservation with an optional comment (killed 15)
+    ✓ reservation controller completeness lists reservations with clamped filters 0 (killed 14)
+    ✓ reservation controller completeness lists reservations with clamped filters 1 (killed 1)
+    ✓ reservation controller completeness lists reservations with clamped filters 2 (killed 6)
+    ✓ reservation controller completeness returns 404 for a missing reservation read (killed 7)
+    ✓ reservation controller completeness denies undefined from reading another reservation (anonymous) (killed 8)
+    ✓ reservation controller completeness denies { id: 'other', type: 'customer' } from reading another reservation (different customer) (killed 3)
+    ✓ reservation controller completeness allows reservation read by { id: 'owner', type: 'customer' } (owner) (killed 5)
+    ✓ reservation controller completeness allows reservation read by { id: 'staff-1', type: 'staff' } (staff) (killed 2)
+    ✓ reservation controller completeness returns 404 rather than deleting a missing reservation (killed 7)
+    ✓ reservation controller completeness deletes an existing reservation (killed 6)
+    ✓ reservation controller completeness performs a valid no-op partial update with every optional field omitted (killed 6)
+    ✓ reservation controller completeness requires authentication for customer reservations (killed 8)
+    ✓ reservation controller completeness lists customer reservations with pagination 0 (killed 14)
+    ✓ reservation controller completeness lists customer reservations with pagination 1 (killed 1)
+    ✓ reservation controller completeness lists customer reservations with pagination 2 (killed 3)
+    ✓ reservation controller completeness maps analytics, defaults, bounds and zero values 0 (killed 31)
+    ✓ reservation controller completeness maps analytics, defaults, bounds and zero values 1 (killed 3)
+    ~ reservation controller completeness maps analytics, defaults, bounds and zero values 2 (covered 73)
+    ✓ table controller completeness returns 404 when listing tables for a missing location (killed 5)
+    ✓ table controller completeness lists tables for an existing location (killed 2)
+    ✓ table controller completeness gets a table result 0 (killed 7)
+    ✓ table controller completeness gets a table result 1 (killed 3)
+    ✓ table controller completeness returns 404 when creating in a missing location (killed 10)
+    ✓ table controller completeness creates a unique table and applies active default (killed 4)
+    ✓ table controller completeness rejects an invalid table update before lookup (killed 3)
+    ✓ table controller completeness returns 404 for a missing table update (killed 6)
+    ✓ table controller completeness handles changed-name duplicate decision 0 (killed 7)
+    ✓ table controller completeness handles changed-name duplicate decision 1 (killed 5)
+    ✓ table controller completeness returns 404 when deleting a missing table (killed 5)
+  reservation-table.whitebox.test.ts
+    ✓ M1-BR-01 reservation party-size boundary rejects a past reservation date before database access (killed 13)
+    ✓ M1-BR-01 reservation party-size boundary accepts the exact maximum party size and persists it (killed 5)
+    ✓ M1-BR-01 reservation party-size boundary rejects semantic MCC case P1 with party size 2 before database access (killed 4)
+    ~ M1-BR-01 reservation party-size boundary rejects semantic MCC case P2 with party size 0.5 before database access (covered 7)
+    ~ M1-BR-01 reservation party-size boundary rejects semantic MCC case P3 with party size 2.5 before database access (covered 7)
+    ~ M1-BR-01 reservation party-size boundary rejects semantic MCC case P4 with party size 50.5 before database access (covered 7)
+    ~ M1-BR-01 reservation party-size boundary rejects invalid party size 0 without writes (covered 7)
+    ~ M1-BR-01 reservation party-size boundary rejects invalid party size 51 without writes (covered 7)
+    ~ M1-BR-01 reservation party-size boundary accepts boundary or adjacent party size 1 (covered 43)
+    ~ M1-BR-01 reservation party-size boundary accepts boundary or adjacent party size 2 (covered 43)
+    ~ M1-BR-01 reservation party-size boundary accepts boundary or adjacent party size 49 (covered 43)
+    ~ M1-BR-01 reservation party-size boundary accepts boundary or adjacent party size 50 (covered 43)
+    ✓ M1-BR-02 customer and active-location decision rejects an unauthenticated request without reading or writing (killed 8)
+    ✓ M1-BR-02 customer and active-location decision rejects a staff principal without a reservation write (killed 5)
+    ✓ M1-BR-02 customer and active-location decision rejects missing or inactive location (killed 8)
+    ✓ M1-BR-03 partial reservation update rejects an invalid update before lookup (killed 4)
+    ✓ M1-BR-03 partial reservation update returns 404 without updating (killed 5)
+    ✓ M1-BR-03 partial reservation update preserves omitted fields and supports explicit null (killed 6)
+    ✓ M1-BR-03 partial reservation update maps every supplied optional field into the Prisma payload (killed 20)
+    ✓ M1-BR-04 availability requires active capacity and no conflict requires location and date (killed 6)
+    ✓ M1-BR-04 availability requires active capacity and no conflict uses party size two by default and marks occupied and free slots (killed 38)
+    ✓ table management rules lists only tables for the requested location and exact location lookup (killed 13)
+    ✓ table management rules rejects invalid table capacity (killed 3)
+    ✓ table management rules rejects duplicate table names in the same location (killed 8)
+    ✓ table management rules updates with { name: 'T1' } without duplicate lookup (unchanged name) (killed 5)
+    ~ table management rules updates with { capacity: 6 } without duplicate lookup (omitted name) (covered 16)
+    ✓ table management rules blocks deletion when reservations reference the table (killed 10)
+    ✓ table management rules deletes an unreferenced table (killed 7)
+
+[Survived] BlockStatement
+packages/server/src/controllers/reservation.controller.ts:23:85
+-   export async function createReservation(req: Request, res: Response): Promise<void> {
+
+-     const parsed = createReservationSchema.safeParse(req.body);
+
+-     if (!parsed.success) {
+
+-       res.status(400).json({ success: false, error: parsed.error.errors });
+
+-       return;
+
+-     }
+
+-
+
+-     if (parsed.data.date < new Date().toISOString().slice(0, 10)) {
+
+-       res.status(400).json({ success: false, error: 'Cannot reserve in the past' });
+
+-       return;
+
+-     }
+
+-
+
+-     const { locationId, date, time, partySize, comment } = parsed.data;
+
+-     // Only a customer principal can own a reservation: customerId is an FK to Customer.id,
+
+-     // and a staff token carries a User.id from a different table. Matches createOrder.
+
+-     const user = req.user;
+
+-     const customerId = user?.type === 'customer' ? user.id : null;
+
+-
+
+-     if (!customerId) {
+
+-       if (user) {
+
+-         res.status(400).json({ success: false, error: 'Reservations can only be created by a customer account' });
+
+-         return;
+
+-       }
+
+-       res.status(401).json({ success: false, error: 'Authentication required for reservations' });
+
+-       return;
+
+-     }
+
+-
+
+-     // Verify location exists and is active
+
+-     const location = await prisma.location.findUnique({ where: { id: locationId } });
+
+-     if (!location || !location.isActive) {
+
+-       res.status(400).json({ success: false, error: 'Location not found or inactive' });
+
+-       return;
+
+-     }
+
+-
+
+-     const reservation = await prisma.reservation.create({
+
+-       data: {
+
+-         customerId,
+
+-         locationId,
+
+-         date: new Date(date),
+
+-         time,
+
+-         partySize,
+
+-         comment,
+
+-       },
+
+-       include: {
+
+-         location: { select: { id: true, name: true } },
+
+-         customer: { select: { id: true, name: true, email: true } },
+
+-         table: true,
+
+-       },
+
+-     });
+
+-
+
+-     // Emit event for automation rules
+
+-     try {
+
+-       const { appEvents } = await import('../lib/events.js');
+
+-       appEvents.emit('reservation.created', { reservation });
+
+-     } catch {}
+
+-
+
+-     res.status(201).json({ success: true, data: reservation });
+
+-   }
+
++   export async function createReservation(req: Request, res: Response): Promise<void> {}
+
+Tests ran:
+    reservation controller completeness creates a reservation with an optional comment
+    M1-BR-01 reservation party-size boundary rejects a past reservation date before database access
+    M1-BR-01 reservation party-size boundary accepts the exact maximum party size and persists it
+  and 13 more tests!
+
+
+[Survived] EqualityOperator
+packages/server/src/controllers/reservation.controller.ts:30:7
+-     if (parsed.data.date < new Date().toISOString().slice(0, 10)) {
+
++     if (parsed.data.date <= new Date().toISOString().slice(0, 10)) {
+
+Tests ran:
+    reservation controller completeness creates a reservation with an optional comment
+    M1-BR-01 reservation party-size boundary rejects a past reservation date before database access
+    M1-BR-01 reservation party-size boundary accepts the exact maximum party size and persists it
+  and 7 more tests!
+
+
+[Survived] MethodExpression
+packages/server/src/controllers/reservation.controller.ts:30:26
+-     if (parsed.data.date < new Date().toISOString().slice(0, 10)) {
+
++     if (parsed.data.date < new Date().toISOString()) {
+
+Tests ran:
+    reservation controller completeness creates a reservation with an optional comment
+    M1-BR-01 reservation party-size boundary rejects a past reservation date before database access
+    M1-BR-01 reservation party-size boundary accepts the exact maximum party size and persists it
+  and 7 more tests!
+
+
+[Survived] EqualityOperator
+packages/server/src/controllers/reservation.controller.ts:39:22
+-     const customerId = user?.type === 'customer' ? user.id : null;
+
++     const customerId = user?.type !== 'customer' ? user.id : null;
+
+Tests ran:
+    reservation controller completeness creates a reservation with an optional comment
+    M1-BR-01 reservation party-size boundary accepts the exact maximum party size and persists it
+    M1-BR-01 reservation party-size boundary accepts boundary or adjacent party size 1
+  and 6 more tests!
+
+
+[Survived] ObjectLiteral
+packages/server/src/controllers/reservation.controller.ts:66:14
+-       include: {
+
+-         location: { select: { id: true, name: true } },
+
+-         customer: { select: { id: true, name: true, email: true } },
+
+-         table: true,
+
+-       },
+
++       include: {},
+
+Tests ran:
+    reservation controller completeness creates a reservation with an optional comment
+    M1-BR-01 reservation party-size boundary accepts the exact maximum party size and persists it
+    M1-BR-01 reservation party-size boundary accepts boundary or adjacent party size 1
+  and 3 more tests!
+
+
+[Survived] ObjectLiteral
+packages/server/src/controllers/reservation.controller.ts:67:17
+-         location: { select: { id: true, name: true } },
+
++         location: {},
+
+Tests ran:
+    reservation controller completeness creates a reservation with an optional comment
+    M1-BR-01 reservation party-size boundary accepts the exact maximum party size and persists it
+    M1-BR-01 reservation party-size boundary accepts boundary or adjacent party size 1
+  and 3 more tests!
+
+
+[Survived] ObjectLiteral
+packages/server/src/controllers/reservation.controller.ts:67:27
+-         location: { select: { id: true, name: true } },
+
++         location: { select: {} },
+
+Tests ran:
+    reservation controller completeness creates a reservation with an optional comment
+    M1-BR-01 reservation party-size boundary accepts the exact maximum party size and persists it
+    M1-BR-01 reservation party-size boundary accepts boundary or adjacent party size 1
+  and 3 more tests!
+
+
+[Survived] BooleanLiteral
+packages/server/src/controllers/reservation.controller.ts:67:33
+-         location: { select: { id: true, name: true } },
+
++         location: { select: { id: false, name: true } },
+
+Tests ran:
+    reservation controller completeness creates a reservation with an optional comment
+    M1-BR-01 reservation party-size boundary accepts the exact maximum party size and persists it
+    M1-BR-01 reservation party-size boundary accepts boundary or adjacent party size 1
+  and 3 more tests!
+
+
+[Survived] BooleanLiteral
+packages/server/src/controllers/reservation.controller.ts:67:45
+-         location: { select: { id: true, name: true } },
+
++         location: { select: { id: true, name: false } },
+
+Tests ran:
+    reservation controller completeness creates a reservation with an optional comment
+    M1-BR-01 reservation party-size boundary accepts the exact maximum party size and persists it
+    M1-BR-01 reservation party-size boundary accepts boundary or adjacent party size 1
+  and 3 more tests!
+
+
+[Survived] ObjectLiteral
+packages/server/src/controllers/reservation.controller.ts:68:17
+-         customer: { select: { id: true, name: true, email: true } },
+
++         customer: {},
+
+Tests ran:
+    reservation controller completeness creates a reservation with an optional comment
+    M1-BR-01 reservation party-size boundary accepts the exact maximum party size and persists it
+    M1-BR-01 reservation party-size boundary accepts boundary or adjacent party size 1
+  and 3 more tests!
+
+
+[Survived] ObjectLiteral
+packages/server/src/controllers/reservation.controller.ts:68:27
+-         customer: { select: { id: true, name: true, email: true } },
+
++         customer: { select: {} },
+
+Tests ran:
+    reservation controller completeness creates a reservation with an optional comment
+    M1-BR-01 reservation party-size boundary accepts the exact maximum party size and persists it
+    M1-BR-01 reservation party-size boundary accepts boundary or adjacent party size 1
+  and 3 more tests!
+
+
+[Survived] BooleanLiteral
+packages/server/src/controllers/reservation.controller.ts:68:33
+-         customer: { select: { id: true, name: true, email: true } },
+
++         customer: { select: { id: false, name: true, email: true } },
+
+Tests ran:
+    reservation controller completeness creates a reservation with an optional comment
+    M1-BR-01 reservation party-size boundary accepts the exact maximum party size and persists it
+    M1-BR-01 reservation party-size boundary accepts boundary or adjacent party size 1
+  and 3 more tests!
+
+
+[Survived] BooleanLiteral
+packages/server/src/controllers/reservation.controller.ts:68:45
+-         customer: { select: { id: true, name: true, email: true } },
+
++         customer: { select: { id: true, name: false, email: true } },
+
+Tests ran:
+    reservation controller completeness creates a reservation with an optional comment
+    M1-BR-01 reservation party-size boundary accepts the exact maximum party size and persists it
+    M1-BR-01 reservation party-size boundary accepts boundary or adjacent party size 1
+  and 3 more tests!
+
+
+[Survived] BooleanLiteral
+packages/server/src/controllers/reservation.controller.ts:68:58
+-         customer: { select: { id: true, name: true, email: true } },
+
++         customer: { select: { id: true, name: true, email: false } },
+
+Tests ran:
+    reservation controller completeness creates a reservation with an optional comment
+    M1-BR-01 reservation party-size boundary accepts the exact maximum party size and persists it
+    M1-BR-01 reservation party-size boundary accepts boundary or adjacent party size 1
+  and 3 more tests!
+
+
+[Survived] BooleanLiteral
+packages/server/src/controllers/reservation.controller.ts:69:14
+-         table: true,
+
++         table: false,
+
+Tests ran:
+    reservation controller completeness creates a reservation with an optional comment
+    M1-BR-01 reservation party-size boundary accepts the exact maximum party size and persists it
+    M1-BR-01 reservation party-size boundary accepts boundary or adjacent party size 1
+  and 3 more tests!
+
+
+[Survived] BlockStatement
+packages/server/src/controllers/reservation.controller.ts:74:7
+-     try {
+
+-       const { appEvents } = await import('../lib/events.js');
+
+-       appEvents.emit('reservation.created', { reservation });
+
+-     } catch {}
+
++     try {} catch {}
+
+Tests ran:
+    reservation controller completeness creates a reservation with an optional comment
+    M1-BR-01 reservation party-size boundary accepts the exact maximum party size and persists it
+    M1-BR-01 reservation party-size boundary accepts boundary or adjacent party size 1
+  and 3 more tests!
+
+
+[Survived] StringLiteral
+packages/server/src/controllers/reservation.controller.ts:75:40
+-       const { appEvents } = await import('../lib/events.js');
+
++       const { appEvents } = await import("");
+
+Tests ran:
+    reservation controller completeness creates a reservation with an optional comment
+    M1-BR-01 reservation party-size boundary accepts the exact maximum party size and persists it
+    M1-BR-01 reservation party-size boundary accepts boundary or adjacent party size 1
+  and 3 more tests!
+
+
+[Survived] StringLiteral
+packages/server/src/controllers/reservation.controller.ts:76:20
+-       appEvents.emit('reservation.created', { reservation });
+
++       appEvents.emit("", { reservation });
+
+Tests ran:
+    reservation controller completeness creates a reservation with an optional comment
+    M1-BR-01 reservation party-size boundary accepts the exact maximum party size and persists it
+    M1-BR-01 reservation party-size boundary accepts boundary or adjacent party size 1
+  and 3 more tests!
+
+
+[Survived] ObjectLiteral
+packages/server/src/controllers/reservation.controller.ts:76:43
+-       appEvents.emit('reservation.created', { reservation });
+
++       appEvents.emit('reservation.created', {});
+
+Tests ran:
+    reservation controller completeness creates a reservation with an optional comment
+    M1-BR-01 reservation party-size boundary accepts the exact maximum party size and persists it
+    M1-BR-01 reservation party-size boundary accepts boundary or adjacent party size 1
+  and 3 more tests!
+
+
+[Survived] ConditionalExpression
+packages/server/src/controllers/reservation.controller.ts:91:7
+-     if (status) where.status = status;
+
++     if (true) where.status = status;
+
+Tests ran:
+    reservation controller completeness lists reservations with clamped filters 0
+    reservation controller completeness lists reservations with clamped filters 1
+    reservation controller completeness lists reservations with clamped filters 2
+
+
+[Survived] ConditionalExpression
+packages/server/src/controllers/reservation.controller.ts:92:7
+-     if (locationId) where.locationId = locationId;
+
++     if (true) where.locationId = locationId;
+
+Tests ran:
+    reservation controller completeness lists reservations with clamped filters 0
+    reservation controller completeness lists reservations with clamped filters 1
+    reservation controller completeness lists reservations with clamped filters 2
+
+
+[Survived] ArrayDeclaration
+packages/server/src/controllers/reservation.controller.ts:100:16
+-         orderBy: [{ date: 'asc' }, { time: 'asc' }],
+
++         orderBy: [],
+
+Tests ran:
+    reservation controller completeness lists reservations with clamped filters 0
+    reservation controller completeness lists reservations with clamped filters 1
+    reservation controller completeness lists reservations with clamped filters 2
+
+
+[Survived] ObjectLiteral
+packages/server/src/controllers/reservation.controller.ts:100:17
+-         orderBy: [{ date: 'asc' }, { time: 'asc' }],
+
++         orderBy: [{}, { time: 'asc' }],
+
+Tests ran:
+    reservation controller completeness lists reservations with clamped filters 0
+    reservation controller completeness lists reservations with clamped filters 1
+    reservation controller completeness lists reservations with clamped filters 2
+
+
+[Survived] StringLiteral
+packages/server/src/controllers/reservation.controller.ts:100:25
+-         orderBy: [{ date: 'asc' }, { time: 'asc' }],
+
++         orderBy: [{ date: "" }, { time: 'asc' }],
+
+Tests ran:
+    reservation controller completeness lists reservations with clamped filters 0
+    reservation controller completeness lists reservations with clamped filters 1
+    reservation controller completeness lists reservations with clamped filters 2
+
+
+[Survived] ObjectLiteral
+packages/server/src/controllers/reservation.controller.ts:100:34
+-         orderBy: [{ date: 'asc' }, { time: 'asc' }],
+
++         orderBy: [{ date: 'asc' }, {}],
+
+Tests ran:
+    reservation controller completeness lists reservations with clamped filters 0
+    reservation controller completeness lists reservations with clamped filters 1
+    reservation controller completeness lists reservations with clamped filters 2
+
+
+[Survived] StringLiteral
+packages/server/src/controllers/reservation.controller.ts:100:42
+-         orderBy: [{ date: 'asc' }, { time: 'asc' }],
+
++         orderBy: [{ date: 'asc' }, { time: "" }],
+
+Tests ran:
+    reservation controller completeness lists reservations with clamped filters 0
+    reservation controller completeness lists reservations with clamped filters 1
+    reservation controller completeness lists reservations with clamped filters 2
+
+
+[Survived] ObjectLiteral
+packages/server/src/controllers/reservation.controller.ts:102:19
+-           customer: { select: { id: true, name: true, email: true, phone: true } },
+
++           customer: {},
+
+Tests ran:
+    reservation controller completeness lists reservations with clamped filters 0
+    reservation controller completeness lists reservations with clamped filters 1
+    reservation controller completeness lists reservations with clamped filters 2
+
+
+[Survived] ObjectLiteral
+packages/server/src/controllers/reservation.controller.ts:101:16
+-         include: {
+
+-           customer: { select: { id: true, name: true, email: true, phone: true } },
+
+-           location: { select: { id: true, name: true } },
+
+-           table: { select: { id: true, name: true, capacity: true } },
+
+-         },
+
++         include: {},
+
+Tests ran:
+    reservation controller completeness lists reservations with clamped filters 0
+    reservation controller completeness lists reservations with clamped filters 1
+    reservation controller completeness lists reservations with clamped filters 2
+
+
+[Survived] ObjectLiteral
+packages/server/src/controllers/reservation.controller.ts:102:29
+-           customer: { select: { id: true, name: true, email: true, phone: true } },
+
++           customer: { select: {} },
+
+Tests ran:
+    reservation controller completeness lists reservations with clamped filters 0
+    reservation controller completeness lists reservations with clamped filters 1
+    reservation controller completeness lists reservations with clamped filters 2
+
+
+[Survived] BooleanLiteral
+packages/server/src/controllers/reservation.controller.ts:102:35
+-           customer: { select: { id: true, name: true, email: true, phone: true } },
+
++           customer: { select: { id: false, name: true, email: true, phone: true } },
+
+Tests ran:
+    reservation controller completeness lists reservations with clamped filters 0
+    reservation controller completeness lists reservations with clamped filters 1
+    reservation controller completeness lists reservations with clamped filters 2
+
+
+[Survived] BooleanLiteral
+packages/server/src/controllers/reservation.controller.ts:102:47
+-           customer: { select: { id: true, name: true, email: true, phone: true } },
+
++           customer: { select: { id: true, name: false, email: true, phone: true } },
+
+Tests ran:
+    reservation controller completeness lists reservations with clamped filters 0
+    reservation controller completeness lists reservations with clamped filters 1
+    reservation controller completeness lists reservations with clamped filters 2
+
+
+[Survived] BooleanLiteral
+packages/server/src/controllers/reservation.controller.ts:102:60
+-           customer: { select: { id: true, name: true, email: true, phone: true } },
+
++           customer: { select: { id: true, name: true, email: false, phone: true } },
+
+Tests ran:
+    reservation controller completeness lists reservations with clamped filters 0
+    reservation controller completeness lists reservations with clamped filters 1
+    reservation controller completeness lists reservations with clamped filters 2
+
+
+[Survived] BooleanLiteral
+packages/server/src/controllers/reservation.controller.ts:102:73
+-           customer: { select: { id: true, name: true, email: true, phone: true } },
+
++           customer: { select: { id: true, name: true, email: true, phone: false } },
+
+Tests ran:
+    reservation controller completeness lists reservations with clamped filters 0
+    reservation controller completeness lists reservations with clamped filters 1
+    reservation controller completeness lists reservations with clamped filters 2
+
+
+[Survived] ObjectLiteral
+packages/server/src/controllers/reservation.controller.ts:103:19
+-           location: { select: { id: true, name: true } },
+
++           location: {},
+
+Tests ran:
+    reservation controller completeness lists reservations with clamped filters 0
+    reservation controller completeness lists reservations with clamped filters 1
+    reservation controller completeness lists reservations with clamped filters 2
+
+
+[Survived] ObjectLiteral
+packages/server/src/controllers/reservation.controller.ts:103:29
+-           location: { select: { id: true, name: true } },
+
++           location: { select: {} },
+
+Tests ran:
+    reservation controller completeness lists reservations with clamped filters 0
+    reservation controller completeness lists reservations with clamped filters 1
+    reservation controller completeness lists reservations with clamped filters 2
+
+
+[Survived] BooleanLiteral
+packages/server/src/controllers/reservation.controller.ts:103:35
+-           location: { select: { id: true, name: true } },
+
++           location: { select: { id: false, name: true } },
+
+Tests ran:
+    reservation controller completeness lists reservations with clamped filters 0
+    reservation controller completeness lists reservations with clamped filters 1
+    reservation controller completeness lists reservations with clamped filters 2
+
+
+[Survived] BooleanLiteral
+packages/server/src/controllers/reservation.controller.ts:103:47
+-           location: { select: { id: true, name: true } },
+
++           location: { select: { id: true, name: false } },
+
+Tests ran:
+    reservation controller completeness lists reservations with clamped filters 0
+    reservation controller completeness lists reservations with clamped filters 1
+    reservation controller completeness lists reservations with clamped filters 2
+
+
+[Survived] ObjectLiteral
+packages/server/src/controllers/reservation.controller.ts:104:16
+-           table: { select: { id: true, name: true, capacity: true } },
+
++           table: {},
+
+Tests ran:
+    reservation controller completeness lists reservations with clamped filters 0
+    reservation controller completeness lists reservations with clamped filters 1
+    reservation controller completeness lists reservations with clamped filters 2
+
+
+[Survived] ObjectLiteral
+packages/server/src/controllers/reservation.controller.ts:104:26
+-           table: { select: { id: true, name: true, capacity: true } },
+
++           table: { select: {} },
+
+Tests ran:
+    reservation controller completeness lists reservations with clamped filters 0
+    reservation controller completeness lists reservations with clamped filters 1
+    reservation controller completeness lists reservations with clamped filters 2
+
+
+[Survived] BooleanLiteral
+packages/server/src/controllers/reservation.controller.ts:104:32
+-           table: { select: { id: true, name: true, capacity: true } },
+
++           table: { select: { id: false, name: true, capacity: true } },
+
+Tests ran:
+    reservation controller completeness lists reservations with clamped filters 0
+    reservation controller completeness lists reservations with clamped filters 1
+    reservation controller completeness lists reservations with clamped filters 2
+
+
+[Survived] BooleanLiteral
+packages/server/src/controllers/reservation.controller.ts:104:44
+-           table: { select: { id: true, name: true, capacity: true } },
+
++           table: { select: { id: true, name: false, capacity: true } },
+
+Tests ran:
+    reservation controller completeness lists reservations with clamped filters 0
+    reservation controller completeness lists reservations with clamped filters 1
+    reservation controller completeness lists reservations with clamped filters 2
+
+
+[Survived] BooleanLiteral
+packages/server/src/controllers/reservation.controller.ts:104:60
+-           table: { select: { id: true, name: true, capacity: true } },
+
++           table: { select: { id: true, name: true, capacity: false } },
+
+Tests ran:
+    reservation controller completeness lists reservations with clamped filters 0
+    reservation controller completeness lists reservations with clamped filters 1
+    reservation controller completeness lists reservations with clamped filters 2
+
+
+[Survived] ObjectLiteral
+packages/server/src/controllers/reservation.controller.ts:107:30
+-       prisma.reservation.count({ where }),
+
++       prisma.reservation.count({}),
+
+Tests ran:
+    reservation controller completeness lists reservations with clamped filters 0
+    reservation controller completeness lists reservations with clamped filters 1
+    reservation controller completeness lists reservations with clamped filters 2
+
+
+[Survived] BooleanLiteral
+packages/server/src/controllers/reservation.controller.ts:111:14
+-       success: true,
+
++       success: false,
+
+Tests ran:
+    reservation controller completeness lists reservations with clamped filters 0
+    reservation controller completeness lists reservations with clamped filters 1
+    reservation controller completeness lists reservations with clamped filters 2
+
+
+[Survived] ObjectLiteral
+packages/server/src/controllers/reservation.controller.ts:120:59
+-     const reservation = await prisma.reservation.findUnique({
+
+-       where: { id },
+
+-       include: {
+
+-         customer: { select: { id: true, name: true, email: true, phone: true } },
+
+-         location: { select: { id: true, name: true } },
+
+-         table: { select: { id: true, name: true, capacity: true } },
+
+-       },
+
+-     });
+
++     const reservation = await prisma.reservation.findUnique({});
+
+Tests ran:
+    reservation controller completeness returns 404 for a missing reservation read
+    reservation controller completeness denies undefined from reading another reservation (anonymous)
+    reservation controller completeness denies { id: 'other', type: 'customer' } from reading another reservation (different customer)
+  and 2 more tests!
+
+
+[Survived] ObjectLiteral
+packages/server/src/controllers/reservation.controller.ts:121:12
+-       where: { id },
+
++       where: {},
+
+Tests ran:
+    reservation controller completeness returns 404 for a missing reservation read
+    reservation controller completeness denies undefined from reading another reservation (anonymous)
+    reservation controller completeness denies { id: 'other', type: 'customer' } from reading another reservation (different customer)
+  and 2 more tests!
+
+
+[Survived] ObjectLiteral
+packages/server/src/controllers/reservation.controller.ts:122:14
+-       include: {
+
+-         customer: { select: { id: true, name: true, email: true, phone: true } },
+
+-         location: { select: { id: true, name: true } },
+
+-         table: { select: { id: true, name: true, capacity: true } },
+
+-       },
+
++       include: {},
+
+Tests ran:
+    reservation controller completeness returns 404 for a missing reservation read
+    reservation controller completeness denies undefined from reading another reservation (anonymous)
+    reservation controller completeness denies { id: 'other', type: 'customer' } from reading another reservation (different customer)
+  and 2 more tests!
+
+
+[Survived] ObjectLiteral
+packages/server/src/controllers/reservation.controller.ts:123:17
+-         customer: { select: { id: true, name: true, email: true, phone: true } },
+
++         customer: {},
+
+Tests ran:
+    reservation controller completeness returns 404 for a missing reservation read
+    reservation controller completeness denies undefined from reading another reservation (anonymous)
+    reservation controller completeness denies { id: 'other', type: 'customer' } from reading another reservation (different customer)
+  and 2 more tests!
+
+
+[Survived] ObjectLiteral
+packages/server/src/controllers/reservation.controller.ts:123:27
+-         customer: { select: { id: true, name: true, email: true, phone: true } },
+
++         customer: { select: {} },
+
+Tests ran:
+    reservation controller completeness returns 404 for a missing reservation read
+    reservation controller completeness denies undefined from reading another reservation (anonymous)
+    reservation controller completeness denies { id: 'other', type: 'customer' } from reading another reservation (different customer)
+  and 2 more tests!
+
+
+[Survived] BooleanLiteral
+packages/server/src/controllers/reservation.controller.ts:123:33
+-         customer: { select: { id: true, name: true, email: true, phone: true } },
+
++         customer: { select: { id: false, name: true, email: true, phone: true } },
+
+Tests ran:
+    reservation controller completeness returns 404 for a missing reservation read
+    reservation controller completeness denies undefined from reading another reservation (anonymous)
+    reservation controller completeness denies { id: 'other', type: 'customer' } from reading another reservation (different customer)
+  and 2 more tests!
+
+
+[Survived] BooleanLiteral
+packages/server/src/controllers/reservation.controller.ts:123:45
+-         customer: { select: { id: true, name: true, email: true, phone: true } },
+
++         customer: { select: { id: true, name: false, email: true, phone: true } },
+
+Tests ran:
+    reservation controller completeness returns 404 for a missing reservation read
+    reservation controller completeness denies undefined from reading another reservation (anonymous)
+    reservation controller completeness denies { id: 'other', type: 'customer' } from reading another reservation (different customer)
+  and 2 more tests!
+
+
+[Survived] BooleanLiteral
+packages/server/src/controllers/reservation.controller.ts:123:58
+-         customer: { select: { id: true, name: true, email: true, phone: true } },
+
++         customer: { select: { id: true, name: true, email: false, phone: true } },
+
+Tests ran:
+    reservation controller completeness returns 404 for a missing reservation read
+    reservation controller completeness denies undefined from reading another reservation (anonymous)
+    reservation controller completeness denies { id: 'other', type: 'customer' } from reading another reservation (different customer)
+  and 2 more tests!
+
+
+[Survived] BooleanLiteral
+packages/server/src/controllers/reservation.controller.ts:123:71
+-         customer: { select: { id: true, name: true, email: true, phone: true } },
+
++         customer: { select: { id: true, name: true, email: true, phone: false } },
+
+Tests ran:
+    reservation controller completeness returns 404 for a missing reservation read
+    reservation controller completeness denies undefined from reading another reservation (anonymous)
+    reservation controller completeness denies { id: 'other', type: 'customer' } from reading another reservation (different customer)
+  and 2 more tests!
+
+
+[Survived] ObjectLiteral
+packages/server/src/controllers/reservation.controller.ts:124:17
+-         location: { select: { id: true, name: true } },
+
++         location: {},
+
+Tests ran:
+    reservation controller completeness returns 404 for a missing reservation read
+    reservation controller completeness denies undefined from reading another reservation (anonymous)
+    reservation controller completeness denies { id: 'other', type: 'customer' } from reading another reservation (different customer)
+  and 2 more tests!
+
+
+[Survived] ObjectLiteral
+packages/server/src/controllers/reservation.controller.ts:124:27
+-         location: { select: { id: true, name: true } },
+
++         location: { select: {} },
+
+Tests ran:
+    reservation controller completeness returns 404 for a missing reservation read
+    reservation controller completeness denies undefined from reading another reservation (anonymous)
+    reservation controller completeness denies { id: 'other', type: 'customer' } from reading another reservation (different customer)
+  and 2 more tests!
+
+
+[Survived] BooleanLiteral
+packages/server/src/controllers/reservation.controller.ts:124:33
+-         location: { select: { id: true, name: true } },
+
++         location: { select: { id: false, name: true } },
+
+Tests ran:
+    reservation controller completeness returns 404 for a missing reservation read
+    reservation controller completeness denies undefined from reading another reservation (anonymous)
+    reservation controller completeness denies { id: 'other', type: 'customer' } from reading another reservation (different customer)
+  and 2 more tests!
+
+
+[Survived] BooleanLiteral
+packages/server/src/controllers/reservation.controller.ts:124:45
+-         location: { select: { id: true, name: true } },
+
++         location: { select: { id: true, name: false } },
+
+Tests ran:
+    reservation controller completeness returns 404 for a missing reservation read
+    reservation controller completeness denies undefined from reading another reservation (anonymous)
+    reservation controller completeness denies { id: 'other', type: 'customer' } from reading another reservation (different customer)
+  and 2 more tests!
+
+
+[Survived] ObjectLiteral
+packages/server/src/controllers/reservation.controller.ts:125:14
+-         table: { select: { id: true, name: true, capacity: true } },
+
++         table: {},
+
+Tests ran:
+    reservation controller completeness returns 404 for a missing reservation read
+    reservation controller completeness denies undefined from reading another reservation (anonymous)
+    reservation controller completeness denies { id: 'other', type: 'customer' } from reading another reservation (different customer)
+  and 2 more tests!
+
+
+[Survived] ObjectLiteral
+packages/server/src/controllers/reservation.controller.ts:125:24
+-         table: { select: { id: true, name: true, capacity: true } },
+
++         table: { select: {} },
+
+Tests ran:
+    reservation controller completeness returns 404 for a missing reservation read
+    reservation controller completeness denies undefined from reading another reservation (anonymous)
+    reservation controller completeness denies { id: 'other', type: 'customer' } from reading another reservation (different customer)
+  and 2 more tests!
+
+
+[Survived] BooleanLiteral
+packages/server/src/controllers/reservation.controller.ts:125:30
+-         table: { select: { id: true, name: true, capacity: true } },
+
++         table: { select: { id: false, name: true, capacity: true } },
+
+Tests ran:
+    reservation controller completeness returns 404 for a missing reservation read
+    reservation controller completeness denies undefined from reading another reservation (anonymous)
+    reservation controller completeness denies { id: 'other', type: 'customer' } from reading another reservation (different customer)
+  and 2 more tests!
+
+
+[Survived] BooleanLiteral
+packages/server/src/controllers/reservation.controller.ts:125:42
+-         table: { select: { id: true, name: true, capacity: true } },
+
++         table: { select: { id: true, name: false, capacity: true } },
+
+Tests ran:
+    reservation controller completeness returns 404 for a missing reservation read
+    reservation controller completeness denies undefined from reading another reservation (anonymous)
+    reservation controller completeness denies { id: 'other', type: 'customer' } from reading another reservation (different customer)
+  and 2 more tests!
+
+
+[Survived] BooleanLiteral
+packages/server/src/controllers/reservation.controller.ts:125:58
+-         table: { select: { id: true, name: true, capacity: true } },
+
++         table: { select: { id: true, name: true, capacity: false } },
+
+Tests ran:
+    reservation controller completeness returns 404 for a missing reservation read
+    reservation controller completeness denies undefined from reading another reservation (anonymous)
+    reservation controller completeness denies { id: 'other', type: 'customer' } from reading another reservation (different customer)
+  and 2 more tests!
+
+
+[Survived] BooleanLiteral
+packages/server/src/controllers/reservation.controller.ts:147:7
+-     if (!parsed.success) {
+
++     if (parsed.success) {
+
+Tests ran:
+    reservation controller completeness performs a valid no-op partial update with every optional field omitted
+    M1-BR-03 partial reservation update rejects an invalid update before lookup
+    M1-BR-03 partial reservation update returns 404 without updating
+  and 2 more tests!
+
+
+[Survived] ObjectLiteral
+packages/server/src/controllers/reservation.controller.ts:148:26
+-       res.status(400).json({ success: false, error: parsed.error.errors });
+
++       res.status(400).json({});
+
+Tests ran:
+    M1-BR-03 partial reservation update rejects an invalid update before lookup
+
+
+[Survived] BooleanLiteral
+packages/server/src/controllers/reservation.controller.ts:148:37
+-       res.status(400).json({ success: false, error: parsed.error.errors });
+
++       res.status(400).json({ success: true, error: parsed.error.errors });
+
+Tests ran:
+    M1-BR-03 partial reservation update rejects an invalid update before lookup
+
+
+[Survived] ObjectLiteral
+packages/server/src/controllers/reservation.controller.ts:152:56
+-     const existing = await prisma.reservation.findUnique({ where: { id } });
+
++     const existing = await prisma.reservation.findUnique({});
+
+Tests ran:
+    reservation controller completeness performs a valid no-op partial update with every optional field omitted
+    M1-BR-03 partial reservation update returns 404 without updating
+    M1-BR-03 partial reservation update preserves omitted fields and supports explicit null
+  and 1 more test!
+
+
+[Survived] ObjectLiteral
+packages/server/src/controllers/reservation.controller.ts:152:65
+-     const existing = await prisma.reservation.findUnique({ where: { id } });
+
++     const existing = await prisma.reservation.findUnique({ where: {} });
+
+Tests ran:
+    reservation controller completeness performs a valid no-op partial update with every optional field omitted
+    M1-BR-03 partial reservation update returns 404 without updating
+    M1-BR-03 partial reservation update preserves omitted fields and supports explicit null
+  and 1 more test!
+
+
+[Survived] ConditionalExpression
+packages/server/src/controllers/reservation.controller.ts:159:7
+-     if (parsed.data.status !== undefined) data.status = parsed.data.status;
+
++     if (true) data.status = parsed.data.status;
+
+Tests ran:
+    reservation controller completeness performs a valid no-op partial update with every optional field omitted
+    M1-BR-03 partial reservation update preserves omitted fields and supports explicit null
+    M1-BR-03 partial reservation update maps every supplied optional field into the Prisma payload
+
+
+[Survived] ConditionalExpression
+packages/server/src/controllers/reservation.controller.ts:160:7
+-     if (parsed.data.tableId !== undefined) data.tableId = parsed.data.tableId;
+
++     if (true) data.tableId = parsed.data.tableId;
+
+Tests ran:
+    reservation controller completeness performs a valid no-op partial update with every optional field omitted
+    M1-BR-03 partial reservation update preserves omitted fields and supports explicit null
+    M1-BR-03 partial reservation update maps every supplied optional field into the Prisma payload
+
+
+[Survived] EqualityOperator
+packages/server/src/controllers/reservation.controller.ts:161:7
+-     if (parsed.data.date !== undefined) data.date = new Date(parsed.data.date);
+
++     if (parsed.data.date === undefined) data.date = new Date(parsed.data.date);
+
+Tests ran:
+    reservation controller completeness performs a valid no-op partial update with every optional field omitted
+    M1-BR-03 partial reservation update preserves omitted fields and supports explicit null
+    M1-BR-03 partial reservation update maps every supplied optional field into the Prisma payload
+
+
+[Survived] ConditionalExpression
+packages/server/src/controllers/reservation.controller.ts:162:7
+-     if (parsed.data.time !== undefined) data.time = parsed.data.time;
+
++     if (true) data.time = parsed.data.time;
+
+Tests ran:
+    reservation controller completeness performs a valid no-op partial update with every optional field omitted
+    M1-BR-03 partial reservation update preserves omitted fields and supports explicit null
+    M1-BR-03 partial reservation update maps every supplied optional field into the Prisma payload
+
+
+[Survived] ConditionalExpression
+packages/server/src/controllers/reservation.controller.ts:163:7
+-     if (parsed.data.partySize !== undefined) data.partySize = parsed.data.partySize;
+
++     if (true) data.partySize = parsed.data.partySize;
+
+Tests ran:
+    reservation controller completeness performs a valid no-op partial update with every optional field omitted
+    M1-BR-03 partial reservation update preserves omitted fields and supports explicit null
+    M1-BR-03 partial reservation update maps every supplied optional field into the Prisma payload
+
+
+[Survived] ConditionalExpression
+packages/server/src/controllers/reservation.controller.ts:164:7
+-     if (parsed.data.comment !== undefined) data.comment = parsed.data.comment;
+
++     if (true) data.comment = parsed.data.comment;
+
+Tests ran:
+    reservation controller completeness performs a valid no-op partial update with every optional field omitted
+    M1-BR-03 partial reservation update preserves omitted fields and supports explicit null
+    M1-BR-03 partial reservation update maps every supplied optional field into the Prisma payload
+
+
+[Survived] ObjectLiteral
+packages/server/src/controllers/reservation.controller.ts:167:12
+-       where: { id },
+
++       where: {},
+
+Tests ran:
+    reservation controller completeness performs a valid no-op partial update with every optional field omitted
+    M1-BR-03 partial reservation update preserves omitted fields and supports explicit null
+    M1-BR-03 partial reservation update maps every supplied optional field into the Prisma payload
+
+
+[Survived] ObjectLiteral
+packages/server/src/controllers/reservation.controller.ts:169:14
+-       include: {
+
+-         customer: { select: { id: true, name: true, email: true, phone: true } },
+
+-         location: { select: { id: true, name: true } },
+
+-         table: { select: { id: true, name: true, capacity: true } },
+
+-       },
+
++       include: {},
+
+Tests ran:
+    reservation controller completeness performs a valid no-op partial update with every optional field omitted
+    M1-BR-03 partial reservation update preserves omitted fields and supports explicit null
+    M1-BR-03 partial reservation update maps every supplied optional field into the Prisma payload
+
+
+[Survived] ObjectLiteral
+packages/server/src/controllers/reservation.controller.ts:170:17
+-         customer: { select: { id: true, name: true, email: true, phone: true } },
+
++         customer: {},
+
+Tests ran:
+    reservation controller completeness performs a valid no-op partial update with every optional field omitted
+    M1-BR-03 partial reservation update preserves omitted fields and supports explicit null
+    M1-BR-03 partial reservation update maps every supplied optional field into the Prisma payload
+
+
+[Survived] ObjectLiteral
+packages/server/src/controllers/reservation.controller.ts:170:27
+-         customer: { select: { id: true, name: true, email: true, phone: true } },
+
++         customer: { select: {} },
+
+Tests ran:
+    reservation controller completeness performs a valid no-op partial update with every optional field omitted
+    M1-BR-03 partial reservation update preserves omitted fields and supports explicit null
+    M1-BR-03 partial reservation update maps every supplied optional field into the Prisma payload
+
+
+[Survived] BooleanLiteral
+packages/server/src/controllers/reservation.controller.ts:170:33
+-         customer: { select: { id: true, name: true, email: true, phone: true } },
+
++         customer: { select: { id: false, name: true, email: true, phone: true } },
+
+Tests ran:
+    reservation controller completeness performs a valid no-op partial update with every optional field omitted
+    M1-BR-03 partial reservation update preserves omitted fields and supports explicit null
+    M1-BR-03 partial reservation update maps every supplied optional field into the Prisma payload
+
+
+[Survived] BooleanLiteral
+packages/server/src/controllers/reservation.controller.ts:170:45
+-         customer: { select: { id: true, name: true, email: true, phone: true } },
+
++         customer: { select: { id: true, name: false, email: true, phone: true } },
+
+Tests ran:
+    reservation controller completeness performs a valid no-op partial update with every optional field omitted
+    M1-BR-03 partial reservation update preserves omitted fields and supports explicit null
+    M1-BR-03 partial reservation update maps every supplied optional field into the Prisma payload
+
+
+[Survived] BooleanLiteral
+packages/server/src/controllers/reservation.controller.ts:170:58
+-         customer: { select: { id: true, name: true, email: true, phone: true } },
+
++         customer: { select: { id: true, name: true, email: false, phone: true } },
+
+Tests ran:
+    reservation controller completeness performs a valid no-op partial update with every optional field omitted
+    M1-BR-03 partial reservation update preserves omitted fields and supports explicit null
+    M1-BR-03 partial reservation update maps every supplied optional field into the Prisma payload
+
+
+[Survived] ObjectLiteral
+packages/server/src/controllers/reservation.controller.ts:171:17
+-         location: { select: { id: true, name: true } },
+
++         location: {},
+
+Tests ran:
+    reservation controller completeness performs a valid no-op partial update with every optional field omitted
+    M1-BR-03 partial reservation update preserves omitted fields and supports explicit null
+    M1-BR-03 partial reservation update maps every supplied optional field into the Prisma payload
+
+
+[Survived] BooleanLiteral
+packages/server/src/controllers/reservation.controller.ts:170:71
+-         customer: { select: { id: true, name: true, email: true, phone: true } },
+
++         customer: { select: { id: true, name: true, email: true, phone: false } },
+
+Tests ran:
+    reservation controller completeness performs a valid no-op partial update with every optional field omitted
+    M1-BR-03 partial reservation update preserves omitted fields and supports explicit null
+    M1-BR-03 partial reservation update maps every supplied optional field into the Prisma payload
+
+
+[Survived] BooleanLiteral
+packages/server/src/controllers/reservation.controller.ts:171:33
+-         location: { select: { id: true, name: true } },
+
++         location: { select: { id: false, name: true } },
+
+Tests ran:
+    reservation controller completeness performs a valid no-op partial update with every optional field omitted
+    M1-BR-03 partial reservation update preserves omitted fields and supports explicit null
+    M1-BR-03 partial reservation update maps every supplied optional field into the Prisma payload
+
+
+[Survived] ObjectLiteral
+packages/server/src/controllers/reservation.controller.ts:171:27
+-         location: { select: { id: true, name: true } },
+
++         location: { select: {} },
+
+Tests ran:
+    reservation controller completeness performs a valid no-op partial update with every optional field omitted
+    M1-BR-03 partial reservation update preserves omitted fields and supports explicit null
+    M1-BR-03 partial reservation update maps every supplied optional field into the Prisma payload
+
+
+[Survived] ObjectLiteral
+packages/server/src/controllers/reservation.controller.ts:172:14
+-         table: { select: { id: true, name: true, capacity: true } },
+
++         table: {},
+
+Tests ran:
+    reservation controller completeness performs a valid no-op partial update with every optional field omitted
+    M1-BR-03 partial reservation update preserves omitted fields and supports explicit null
+    M1-BR-03 partial reservation update maps every supplied optional field into the Prisma payload
+
+
+[Survived] BooleanLiteral
+packages/server/src/controllers/reservation.controller.ts:171:45
+-         location: { select: { id: true, name: true } },
+
++         location: { select: { id: true, name: false } },
+
+Tests ran:
+    reservation controller completeness performs a valid no-op partial update with every optional field omitted
+    M1-BR-03 partial reservation update preserves omitted fields and supports explicit null
+    M1-BR-03 partial reservation update maps every supplied optional field into the Prisma payload
+
+
+[Survived] ObjectLiteral
+packages/server/src/controllers/reservation.controller.ts:172:24
+-         table: { select: { id: true, name: true, capacity: true } },
+
++         table: { select: {} },
+
+Tests ran:
+    reservation controller completeness performs a valid no-op partial update with every optional field omitted
+    M1-BR-03 partial reservation update preserves omitted fields and supports explicit null
+    M1-BR-03 partial reservation update maps every supplied optional field into the Prisma payload
+
+
+[Survived] BooleanLiteral
+packages/server/src/controllers/reservation.controller.ts:172:30
+-         table: { select: { id: true, name: true, capacity: true } },
+
++         table: { select: { id: false, name: true, capacity: true } },
+
+Tests ran:
+    reservation controller completeness performs a valid no-op partial update with every optional field omitted
+    M1-BR-03 partial reservation update preserves omitted fields and supports explicit null
+    M1-BR-03 partial reservation update maps every supplied optional field into the Prisma payload
+
+
+[Survived] BooleanLiteral
+packages/server/src/controllers/reservation.controller.ts:172:42
+-         table: { select: { id: true, name: true, capacity: true } },
+
++         table: { select: { id: true, name: false, capacity: true } },
+
+Tests ran:
+    reservation controller completeness performs a valid no-op partial update with every optional field omitted
+    M1-BR-03 partial reservation update preserves omitted fields and supports explicit null
+    M1-BR-03 partial reservation update maps every supplied optional field into the Prisma payload
+
+
+[Survived] BooleanLiteral
+packages/server/src/controllers/reservation.controller.ts:172:58
+-         table: { select: { id: true, name: true, capacity: true } },
+
++         table: { select: { id: true, name: true, capacity: false } },
+
+Tests ran:
+    reservation controller completeness performs a valid no-op partial update with every optional field omitted
+    M1-BR-03 partial reservation update preserves omitted fields and supports explicit null
+    M1-BR-03 partial reservation update maps every supplied optional field into the Prisma payload
+
+
+[Survived] ObjectLiteral
+packages/server/src/controllers/reservation.controller.ts:182:56
+-     const existing = await prisma.reservation.findUnique({ where: { id } });
+
++     const existing = await prisma.reservation.findUnique({});
+
+Tests ran:
+    reservation controller completeness returns 404 rather than deleting a missing reservation
+    reservation controller completeness deletes an existing reservation
+
+
+[Survived] ObjectLiteral
+packages/server/src/controllers/reservation.controller.ts:182:65
+-     const existing = await prisma.reservation.findUnique({ where: { id } });
+
++     const existing = await prisma.reservation.findUnique({ where: {} });
+
+Tests ran:
+    reservation controller completeness returns 404 rather than deleting a missing reservation
+    reservation controller completeness deletes an existing reservation
+
+
+[Survived] ArrayDeclaration
+packages/server/src/controllers/reservation.controller.ts:210:16
+-         orderBy: [{ date: 'desc' }, { time: 'desc' }],
+
++         orderBy: [],
+
+Tests ran:
+    reservation controller completeness lists customer reservations with pagination 0
+    reservation controller completeness lists customer reservations with pagination 1
+    reservation controller completeness lists customer reservations with pagination 2
+
+
+[Survived] ObjectLiteral
+packages/server/src/controllers/reservation.controller.ts:210:17
+-         orderBy: [{ date: 'desc' }, { time: 'desc' }],
+
++         orderBy: [{}, { time: 'desc' }],
+
+Tests ran:
+    reservation controller completeness lists customer reservations with pagination 0
+    reservation controller completeness lists customer reservations with pagination 1
+    reservation controller completeness lists customer reservations with pagination 2
+
+
+[Survived] StringLiteral
+packages/server/src/controllers/reservation.controller.ts:210:25
+-         orderBy: [{ date: 'desc' }, { time: 'desc' }],
+
++         orderBy: [{ date: "" }, { time: 'desc' }],
+
+Tests ran:
+    reservation controller completeness lists customer reservations with pagination 0
+    reservation controller completeness lists customer reservations with pagination 1
+    reservation controller completeness lists customer reservations with pagination 2
+
+
+[Survived] ObjectLiteral
+packages/server/src/controllers/reservation.controller.ts:210:35
+-         orderBy: [{ date: 'desc' }, { time: 'desc' }],
+
++         orderBy: [{ date: 'desc' }, {}],
+
+Tests ran:
+    reservation controller completeness lists customer reservations with pagination 0
+    reservation controller completeness lists customer reservations with pagination 1
+    reservation controller completeness lists customer reservations with pagination 2
+
+
+[Survived] StringLiteral
+packages/server/src/controllers/reservation.controller.ts:210:43
+-         orderBy: [{ date: 'desc' }, { time: 'desc' }],
+
++         orderBy: [{ date: 'desc' }, { time: "" }],
+
+Tests ran:
+    reservation controller completeness lists customer reservations with pagination 0
+    reservation controller completeness lists customer reservations with pagination 1
+    reservation controller completeness lists customer reservations with pagination 2
+
+
+[Survived] ObjectLiteral
+packages/server/src/controllers/reservation.controller.ts:211:16
+-         include: {
+
+-           location: { select: { id: true, name: true } },
+
+-           table: { select: { id: true, name: true, capacity: true } },
+
+-         },
+
++         include: {},
+
+Tests ran:
+    reservation controller completeness lists customer reservations with pagination 0
+    reservation controller completeness lists customer reservations with pagination 1
+    reservation controller completeness lists customer reservations with pagination 2
+
+
+[Survived] ObjectLiteral
+packages/server/src/controllers/reservation.controller.ts:212:19
+-           location: { select: { id: true, name: true } },
+
++           location: {},
+
+Tests ran:
+    reservation controller completeness lists customer reservations with pagination 0
+    reservation controller completeness lists customer reservations with pagination 1
+    reservation controller completeness lists customer reservations with pagination 2
+
+
+[Survived] ObjectLiteral
+packages/server/src/controllers/reservation.controller.ts:212:29
+-           location: { select: { id: true, name: true } },
+
++           location: { select: {} },
+
+Tests ran:
+    reservation controller completeness lists customer reservations with pagination 0
+    reservation controller completeness lists customer reservations with pagination 1
+    reservation controller completeness lists customer reservations with pagination 2
+
+
+[Survived] BooleanLiteral
+packages/server/src/controllers/reservation.controller.ts:212:35
+-           location: { select: { id: true, name: true } },
+
++           location: { select: { id: false, name: true } },
+
+Tests ran:
+    reservation controller completeness lists customer reservations with pagination 0
+    reservation controller completeness lists customer reservations with pagination 1
+    reservation controller completeness lists customer reservations with pagination 2
+
+
+[Survived] BooleanLiteral
+packages/server/src/controllers/reservation.controller.ts:212:47
+-           location: { select: { id: true, name: true } },
+
++           location: { select: { id: true, name: false } },
+
+Tests ran:
+    reservation controller completeness lists customer reservations with pagination 0
+    reservation controller completeness lists customer reservations with pagination 1
+    reservation controller completeness lists customer reservations with pagination 2
+
+
+[Survived] ObjectLiteral
+packages/server/src/controllers/reservation.controller.ts:213:16
+-           table: { select: { id: true, name: true, capacity: true } },
+
++           table: {},
+
+Tests ran:
+    reservation controller completeness lists customer reservations with pagination 0
+    reservation controller completeness lists customer reservations with pagination 1
+    reservation controller completeness lists customer reservations with pagination 2
+
+
+[Survived] ObjectLiteral
+packages/server/src/controllers/reservation.controller.ts:213:26
+-           table: { select: { id: true, name: true, capacity: true } },
+
++           table: { select: {} },
+
+Tests ran:
+    reservation controller completeness lists customer reservations with pagination 0
+    reservation controller completeness lists customer reservations with pagination 1
+    reservation controller completeness lists customer reservations with pagination 2
+
+
+[Survived] BooleanLiteral
+packages/server/src/controllers/reservation.controller.ts:213:32
+-           table: { select: { id: true, name: true, capacity: true } },
+
++           table: { select: { id: false, name: true, capacity: true } },
+
+Tests ran:
+    reservation controller completeness lists customer reservations with pagination 0
+    reservation controller completeness lists customer reservations with pagination 1
+    reservation controller completeness lists customer reservations with pagination 2
+
+
+[Survived] BooleanLiteral
+packages/server/src/controllers/reservation.controller.ts:213:44
+-           table: { select: { id: true, name: true, capacity: true } },
+
++           table: { select: { id: true, name: false, capacity: true } },
+
+Tests ran:
+    reservation controller completeness lists customer reservations with pagination 0
+    reservation controller completeness lists customer reservations with pagination 1
+    reservation controller completeness lists customer reservations with pagination 2
+
+
+[Survived] BooleanLiteral
+packages/server/src/controllers/reservation.controller.ts:213:60
+-           table: { select: { id: true, name: true, capacity: true } },
+
++           table: { select: { id: true, name: true, capacity: false } },
+
+Tests ran:
+    reservation controller completeness lists customer reservations with pagination 0
+    reservation controller completeness lists customer reservations with pagination 1
+    reservation controller completeness lists customer reservations with pagination 2
+
+
+[Survived] ObjectLiteral
+packages/server/src/controllers/reservation.controller.ts:216:30
+-       prisma.reservation.count({ where }),
+
++       prisma.reservation.count({}),
+
+Tests ran:
+    reservation controller completeness lists customer reservations with pagination 0
+    reservation controller completeness lists customer reservations with pagination 1
+    reservation controller completeness lists customer reservations with pagination 2
+
+
+[Survived] BooleanLiteral
+packages/server/src/controllers/reservation.controller.ts:220:14
+-       success: true,
+
++       success: false,
+
+Tests ran:
+    reservation controller completeness lists customer reservations with pagination 0
+    reservation controller completeness lists customer reservations with pagination 1
+    reservation controller completeness lists customer reservations with pagination 2
+
+
+[Survived] MethodExpression
+packages/server/src/controllers/reservation.controller.ts:227:16
+-     const days = Math.min(365, Math.max(7, parseInt(req.query.days as string) || 30));
+
++     const days = Math.max(365, Math.max(7, parseInt(req.query.days as string) || 30));
+
+Tests ran:
+    reservation controller completeness maps analytics, defaults, bounds and zero values 0
+    reservation controller completeness maps analytics, defaults, bounds and zero values 1
+    reservation controller completeness maps analytics, defaults, bounds and zero values 2
+
+
+[Survived] MethodExpression
+packages/server/src/controllers/reservation.controller.ts:227:30
+-     const days = Math.min(365, Math.max(7, parseInt(req.query.days as string) || 30));
+
++     const days = Math.min(365, Math.min(7, parseInt(req.query.days as string) || 30));
+
+Tests ran:
+    reservation controller completeness maps analytics, defaults, bounds and zero values 0
+    reservation controller completeness maps analytics, defaults, bounds and zero values 1
+    reservation controller completeness maps analytics, defaults, bounds and zero values 2
+
+
+[Survived] ConditionalExpression
+packages/server/src/controllers/reservation.controller.ts:227:42
+-     const days = Math.min(365, Math.max(7, parseInt(req.query.days as string) || 30));
+
++     const days = Math.min(365, Math.max(7, true));
+
+Tests ran:
+    reservation controller completeness maps analytics, defaults, bounds and zero values 0
+    reservation controller completeness maps analytics, defaults, bounds and zero values 1
+    reservation controller completeness maps analytics, defaults, bounds and zero values 2
+
+
+[Survived] ConditionalExpression
+packages/server/src/controllers/reservation.controller.ts:227:42
+-     const days = Math.min(365, Math.max(7, parseInt(req.query.days as string) || 30));
+
++     const days = Math.min(365, Math.max(7, false));
+
+Tests ran:
+    reservation controller completeness maps analytics, defaults, bounds and zero values 0
+    reservation controller completeness maps analytics, defaults, bounds and zero values 1
+    reservation controller completeness maps analytics, defaults, bounds and zero values 2
+
+
+[Survived] MethodExpression
+packages/server/src/controllers/reservation.controller.ts:232:3
+-     startDate.setDate(startDate.getDate() - days);
+
++     startDate.setTime(startDate.getDate() - days);
+
+Tests ran:
+    reservation controller completeness maps analytics, defaults, bounds and zero values 0
+    reservation controller completeness maps analytics, defaults, bounds and zero values 1
+    reservation controller completeness maps analytics, defaults, bounds and zero values 2
+
+
+[Survived] ArithmeticOperator
+packages/server/src/controllers/reservation.controller.ts:232:21
+-     startDate.setDate(startDate.getDate() - days);
+
++     startDate.setDate(startDate.getDate() + days);
+
+Tests ran:
+    reservation controller completeness maps analytics, defaults, bounds and zero values 0
+    reservation controller completeness maps analytics, defaults, bounds and zero values 1
+    reservation controller completeness maps analytics, defaults, bounds and zero values 2
+
+
+[Survived] MethodExpression
+packages/server/src/controllers/reservation.controller.ts:233:3
+-     startDate.setHours(0, 0, 0, 0);
+
++     startDate.setMinutes(0, 0, 0, 0);
+
+Tests ran:
+    reservation controller completeness maps analytics, defaults, bounds and zero values 0
+    reservation controller completeness maps analytics, defaults, bounds and zero values 1
+    reservation controller completeness maps analytics, defaults, bounds and zero values 2
+
+
+[Survived] MethodExpression
+packages/server/src/controllers/reservation.controller.ts:235:3
+-     endDate.setDate(endDate.getDate() + days);
+
++     endDate.setTime(endDate.getDate() + days);
+
+Tests ran:
+    reservation controller completeness maps analytics, defaults, bounds and zero values 0
+    reservation controller completeness maps analytics, defaults, bounds and zero values 1
+    reservation controller completeness maps analytics, defaults, bounds and zero values 2
+
+
+[Survived] ArithmeticOperator
+packages/server/src/controllers/reservation.controller.ts:235:19
+-     endDate.setDate(endDate.getDate() + days);
+
++     endDate.setDate(endDate.getDate() - days);
+
+Tests ran:
+    reservation controller completeness maps analytics, defaults, bounds and zero values 0
+    reservation controller completeness maps analytics, defaults, bounds and zero values 1
+    reservation controller completeness maps analytics, defaults, bounds and zero values 2
+
+
+[Survived] MethodExpression
+packages/server/src/controllers/reservation.controller.ts:236:3
+-     endDate.setHours(23, 59, 59, 999);
+
++     endDate.setMinutes(23, 59, 59, 999);
+
+Tests ran:
+    reservation controller completeness maps analytics, defaults, bounds and zero values 0
+    reservation controller completeness maps analytics, defaults, bounds and zero values 1
+    reservation controller completeness maps analytics, defaults, bounds and zero values 2
+
+
+[Survived] StringLiteral
+packages/server/src/controllers/reservation.controller.ts:238:49
+-     const locationFilter = locationId ? Prisma.sql`AND "locationId" = ${locationId}` : Prisma.empty;
+
++     const locationFilter = locationId ? Prisma.sql`` : Prisma.empty;
+
+Tests ran:
+    reservation controller completeness maps analytics, defaults, bounds and zero values 1
+
+
+[Survived] ObjectLiteral
+packages/server/src/controllers/reservation.controller.ts:239:47
+-     const where: Prisma.ReservationWhereInput = {
+
+-       date: { gte: startDate, lte: endDate },
+
+-       ...(locationId ? { locationId } : {}),
+
+-     };
+
++     const where: Prisma.ReservationWhereInput = {};
+
+Tests ran:
+    reservation controller completeness maps analytics, defaults, bounds and zero values 0
+    reservation controller completeness maps analytics, defaults, bounds and zero values 1
+    reservation controller completeness maps analytics, defaults, bounds and zero values 2
+
+
+[Survived] ObjectLiteral
+packages/server/src/controllers/reservation.controller.ts:240:11
+-       date: { gte: startDate, lte: endDate },
+
++       date: {},
+
+Tests ran:
+    reservation controller completeness maps analytics, defaults, bounds and zero values 0
+    reservation controller completeness maps analytics, defaults, bounds and zero values 1
+    reservation controller completeness maps analytics, defaults, bounds and zero values 2
+
+
+[Survived] ObjectLiteral
+packages/server/src/controllers/reservation.controller.ts:241:22
+-       ...(locationId ? { locationId } : {}),
+
++       ...(locationId ? {} : {}),
+
+Tests ran:
+    reservation controller completeness maps analytics, defaults, bounds and zero values 1
+
+
+[Survived] StringLiteral
+packages/server/src/controllers/reservation.controller.ts:255:17
+-         Prisma.sql`
+
+-           SELECT
+
+-             TO_CHAR("date", 'YYYY-MM-DD') AS date,
+
+-             COUNT(*)::bigint AS reservations,
+
+-             COALESCE(SUM("partySize"), 0)::bigint AS guests
+
+-           FROM "reservations"
+
+-           WHERE "date" >= ${startDate} AND "date" <= ${endDate} ${locationFilter}
+
+-           GROUP BY "date"
+
+-           ORDER BY "date"
+
+-         `
+
++         Prisma.sql``
+
+Tests ran:
+    reservation controller completeness maps analytics, defaults, bounds and zero values 0
+    reservation controller completeness maps analytics, defaults, bounds and zero values 1
+    reservation controller completeness maps analytics, defaults, bounds and zero values 2
+
+
+[Survived] StringLiteral
+packages/server/src/controllers/reservation.controller.ts:267:17
+-         Prisma.sql`
+
+-           SELECT
+
+-             EXTRACT(DOW FROM "date")::int AS dow,
+
+-             COUNT(*)::bigint AS reservations,
+
+-             COALESCE(SUM("partySize"), 0)::bigint AS guests
+
+-           FROM "reservations"
+
+-           WHERE "date" >= ${startDate} AND "date" <= ${endDate} ${locationFilter}
+
+-           GROUP BY EXTRACT(DOW FROM "date")
+
+-           ORDER BY dow
+
+-         `
+
++         Prisma.sql``
+
+Tests ran:
+    reservation controller completeness maps analytics, defaults, bounds and zero values 0
+    reservation controller completeness maps analytics, defaults, bounds and zero values 1
+    reservation controller completeness maps analytics, defaults, bounds and zero values 2
+
+
+[Survived] ObjectLiteral
+packages/server/src/controllers/reservation.controller.ts:278:32
+-       prisma.reservation.groupBy({
+
+-         by: ['partySize'],
+
+-         where,
+
+-         _count: true,
+
+-         orderBy: { partySize: 'asc' },
+
+-       }),
+
++       prisma.reservation.groupBy({}),
+
+Tests ran:
+    reservation controller completeness maps analytics, defaults, bounds and zero values 0
+    reservation controller completeness maps analytics, defaults, bounds and zero values 1
+    reservation controller completeness maps analytics, defaults, bounds and zero values 2
+
+
+[Survived] ArrayDeclaration
+packages/server/src/controllers/reservation.controller.ts:279:11
+-         by: ['partySize'],
+
++         by: [],
+
+Tests ran:
+    reservation controller completeness maps analytics, defaults, bounds and zero values 0
+    reservation controller completeness maps analytics, defaults, bounds and zero values 1
+    reservation controller completeness maps analytics, defaults, bounds and zero values 2
+
+
+[Survived] StringLiteral
+packages/server/src/controllers/reservation.controller.ts:279:12
+-         by: ['partySize'],
+
++         by: [""],
+
+Tests ran:
+    reservation controller completeness maps analytics, defaults, bounds and zero values 0
+    reservation controller completeness maps analytics, defaults, bounds and zero values 1
+    reservation controller completeness maps analytics, defaults, bounds and zero values 2
+
+
+[Survived] BooleanLiteral
+packages/server/src/controllers/reservation.controller.ts:281:15
+-         _count: true,
+
++         _count: false,
+
+Tests ran:
+    reservation controller completeness maps analytics, defaults, bounds and zero values 0
+    reservation controller completeness maps analytics, defaults, bounds and zero values 1
+    reservation controller completeness maps analytics, defaults, bounds and zero values 2
+
+
+[Survived] ObjectLiteral
+packages/server/src/controllers/reservation.controller.ts:282:16
+-         orderBy: { partySize: 'asc' },
+
++         orderBy: {},
+
+Tests ran:
+    reservation controller completeness maps analytics, defaults, bounds and zero values 0
+    reservation controller completeness maps analytics, defaults, bounds and zero values 1
+    reservation controller completeness maps analytics, defaults, bounds and zero values 2
+
+
+[Survived] StringLiteral
+packages/server/src/controllers/reservation.controller.ts:282:29
+-         orderBy: { partySize: 'asc' },
+
++         orderBy: { partySize: "" },
+
+Tests ran:
+    reservation controller completeness maps analytics, defaults, bounds and zero values 0
+    reservation controller completeness maps analytics, defaults, bounds and zero values 1
+    reservation controller completeness maps analytics, defaults, bounds and zero values 2
+
+
+[Survived] ObjectLiteral
+packages/server/src/controllers/reservation.controller.ts:284:32
+-       prisma.reservation.groupBy({
+
+-         by: ['status'],
+
+-         where,
+
+-         _count: true,
+
+-       }),
+
++       prisma.reservation.groupBy({}),
+
+Tests ran:
+    reservation controller completeness maps analytics, defaults, bounds and zero values 0
+    reservation controller completeness maps analytics, defaults, bounds and zero values 1
+    reservation controller completeness maps analytics, defaults, bounds and zero values 2
+
+
+[Survived] ArrayDeclaration
+packages/server/src/controllers/reservation.controller.ts:285:11
+-         by: ['status'],
+
++         by: [],
+
+Tests ran:
+    reservation controller completeness maps analytics, defaults, bounds and zero values 0
+    reservation controller completeness maps analytics, defaults, bounds and zero values 1
+    reservation controller completeness maps analytics, defaults, bounds and zero values 2
+
+
+[Survived] StringLiteral
+packages/server/src/controllers/reservation.controller.ts:285:12
+-         by: ['status'],
+
++         by: [""],
+
+Tests ran:
+    reservation controller completeness maps analytics, defaults, bounds and zero values 0
+    reservation controller completeness maps analytics, defaults, bounds and zero values 1
+    reservation controller completeness maps analytics, defaults, bounds and zero values 2
+
+
+[Survived] BooleanLiteral
+packages/server/src/controllers/reservation.controller.ts:287:15
+-         _count: true,
+
++         _count: false,
+
+Tests ran:
+    reservation controller completeness maps analytics, defaults, bounds and zero values 0
+    reservation controller completeness maps analytics, defaults, bounds and zero values 1
+    reservation controller completeness maps analytics, defaults, bounds and zero values 2
+
+
+[Survived] StringLiteral
+packages/server/src/controllers/reservation.controller.ts:290:17
+-         Prisma.sql`
+
+-           SELECT
+
+-             SPLIT_PART("time", ':', 1)::int AS hour,
+
+-             COUNT(*)::bigint AS reservations
+
+-           FROM "reservations"
+
+-           WHERE "date" >= ${startDate} AND "date" <= ${endDate} ${locationFilter}
+
+-           GROUP BY SPLIT_PART("time", ':', 1)::int
+
+-           ORDER BY hour
+
+-         `
+
++         Prisma.sql``
+
+Tests ran:
+    reservation controller completeness maps analytics, defaults, bounds and zero values 0
+    reservation controller completeness maps analytics, defaults, bounds and zero values 1
+    reservation controller completeness maps analytics, defaults, bounds and zero values 2
+
+
+[Survived] StringLiteral
+packages/server/src/controllers/reservation.controller.ts:301:17
+-         Prisma.sql`
+
+-           SELECT
+
+-             CASE
+
+-               WHEN ("date"::date - "createdAt"::date) <= 0 THEN 'same-day'
+
+-               WHEN ("date"::date - "createdAt"::date) BETWEEN 1 AND 2 THEN '1-2d'
+
+-               WHEN ("date"::date - "createdAt"::date) BETWEEN 3 AND 7 THEN '3-7d'
+
+-               WHEN ("date"::date - "createdAt"::date) BETWEEN 8 AND 14 THEN '8-14d'
+
+-               ELSE '15d+'
+
+-             END AS bucket,
+
+-             COUNT(*)::bigint AS count
+
+-           FROM "reservations"
+
+-           WHERE "date" >= ${startDate} AND "date" <= ${endDate} ${locationFilter}
+
+-           GROUP BY bucket
+
+-         `
+
++         Prisma.sql``
+
+Tests ran:
+    reservation controller completeness maps analytics, defaults, bounds and zero values 0
+    reservation controller completeness maps analytics, defaults, bounds and zero values 1
+    reservation controller completeness maps analytics, defaults, bounds and zero values 2
+
+
+[Survived] ObjectLiteral
+packages/server/src/controllers/reservation.controller.ts:316:34
+-       prisma.reservation.aggregate({
+
+-         where,
+
+-         _count: true,
+
+-         _sum: { partySize: true },
+
+-         _avg: { partySize: true },
+
+-       }),
+
++       prisma.reservation.aggregate({}),
+
+Tests ran:
+    reservation controller completeness maps analytics, defaults, bounds and zero values 0
+    reservation controller completeness maps analytics, defaults, bounds and zero values 1
+    reservation controller completeness maps analytics, defaults, bounds and zero values 2
+
+
+[Survived] BooleanLiteral
+packages/server/src/controllers/reservation.controller.ts:318:15
+-         _count: true,
+
++         _count: false,
+
+Tests ran:
+    reservation controller completeness maps analytics, defaults, bounds and zero values 0
+    reservation controller completeness maps analytics, defaults, bounds and zero values 1
+    reservation controller completeness maps analytics, defaults, bounds and zero values 2
+
+
+[Survived] ObjectLiteral
+packages/server/src/controllers/reservation.controller.ts:319:13
+-         _sum: { partySize: true },
+
++         _sum: {},
+
+Tests ran:
+    reservation controller completeness maps analytics, defaults, bounds and zero values 0
+    reservation controller completeness maps analytics, defaults, bounds and zero values 1
+    reservation controller completeness maps analytics, defaults, bounds and zero values 2
+
+
+[Survived] BooleanLiteral
+packages/server/src/controllers/reservation.controller.ts:319:26
+-         _sum: { partySize: true },
+
++         _sum: { partySize: false },
+
+Tests ran:
+    reservation controller completeness maps analytics, defaults, bounds and zero values 0
+    reservation controller completeness maps analytics, defaults, bounds and zero values 1
+    reservation controller completeness maps analytics, defaults, bounds and zero values 2
+
+
+[Survived] ObjectLiteral
+packages/server/src/controllers/reservation.controller.ts:320:13
+-         _avg: { partySize: true },
+
++         _avg: {},
+
+Tests ran:
+    reservation controller completeness maps analytics, defaults, bounds and zero values 0
+    reservation controller completeness maps analytics, defaults, bounds and zero values 1
+    reservation controller completeness maps analytics, defaults, bounds and zero values 2
+
+
+[Survived] BooleanLiteral
+packages/server/src/controllers/reservation.controller.ts:320:26
+-         _avg: { partySize: true },
+
++         _avg: { partySize: false },
+
+Tests ran:
+    reservation controller completeness maps analytics, defaults, bounds and zero values 0
+    reservation controller completeness maps analytics, defaults, bounds and zero values 1
+    reservation controller completeness maps analytics, defaults, bounds and zero values 2
+
+
+[Survived] ObjectLiteral
+packages/server/src/controllers/reservation.controller.ts:322:30
+-       prisma.reservation.count({
+
+-         where: { ...where, status: { in: ['COMPLETED', 'SEATED'] } },
+
+-       }),
+
++       prisma.reservation.count({}),
+
+Tests ran:
+    reservation controller completeness maps analytics, defaults, bounds and zero values 0
+    reservation controller completeness maps analytics, defaults, bounds and zero values 1
+    reservation controller completeness maps analytics, defaults, bounds and zero values 2
+
+
+[Survived] ObjectLiteral
+packages/server/src/controllers/reservation.controller.ts:323:14
+-         where: { ...where, status: { in: ['COMPLETED', 'SEATED'] } },
+
++         where: {},
+
+Tests ran:
+    reservation controller completeness maps analytics, defaults, bounds and zero values 0
+    reservation controller completeness maps analytics, defaults, bounds and zero values 1
+    reservation controller completeness maps analytics, defaults, bounds and zero values 2
+
+
+[Survived] ObjectLiteral
+packages/server/src/controllers/reservation.controller.ts:323:34
+-         where: { ...where, status: { in: ['COMPLETED', 'SEATED'] } },
+
++         where: { ...where, status: {} },
+
+Tests ran:
+    reservation controller completeness maps analytics, defaults, bounds and zero values 0
+    reservation controller completeness maps analytics, defaults, bounds and zero values 1
+    reservation controller completeness maps analytics, defaults, bounds and zero values 2
+
+
+[Survived] ArrayDeclaration
+packages/server/src/controllers/reservation.controller.ts:323:40
+-         where: { ...where, status: { in: ['COMPLETED', 'SEATED'] } },
+
++         where: { ...where, status: { in: [] } },
+
+Tests ran:
+    reservation controller completeness maps analytics, defaults, bounds and zero values 0
+    reservation controller completeness maps analytics, defaults, bounds and zero values 1
+    reservation controller completeness maps analytics, defaults, bounds and zero values 2
+
+
+[Survived] StringLiteral
+packages/server/src/controllers/reservation.controller.ts:323:41
+-         where: { ...where, status: { in: ['COMPLETED', 'SEATED'] } },
+
++         where: { ...where, status: { in: ["", 'SEATED'] } },
+
+Tests ran:
+    reservation controller completeness maps analytics, defaults, bounds and zero values 0
+    reservation controller completeness maps analytics, defaults, bounds and zero values 1
+    reservation controller completeness maps analytics, defaults, bounds and zero values 2
+
+
+[Survived] StringLiteral
+packages/server/src/controllers/reservation.controller.ts:323:54
+-         where: { ...where, status: { in: ['COMPLETED', 'SEATED'] } },
+
++         where: { ...where, status: { in: ['COMPLETED', ""] } },
+
+Tests ran:
+    reservation controller completeness maps analytics, defaults, bounds and zero values 0
+    reservation controller completeness maps analytics, defaults, bounds and zero values 1
+    reservation controller completeness maps analytics, defaults, bounds and zero values 2
+
+
+[Survived] BooleanLiteral
+packages/server/src/controllers/reservation.controller.ts:338:14
+-       success: true,
+
++       success: false,
+
+Tests ran:
+    reservation controller completeness maps analytics, defaults, bounds and zero values 0
+    reservation controller completeness maps analytics, defaults, bounds and zero values 1
+    reservation controller completeness maps analytics, defaults, bounds and zero values 2
+
+
+[Survived] LogicalOperator
+packages/server/src/controllers/reservation.controller.ts:378:7
+-     if (!locationId || !date) {
+
++     if (!locationId && !date) {
+
+Tests ran:
+    M1-BR-04 availability requires active capacity and no conflict requires location and date
+    M1-BR-04 availability requires active capacity and no conflict uses party size two by default and marks occupied and free slots
+
+
+[Survived] ObjectLiteral
+packages/server/src/controllers/reservation.controller.ts:392:14
+-       orderBy: { capacity: 'asc' },
+
++       orderBy: {},
+
+Tests ran:
+    M1-BR-04 availability requires active capacity and no conflict uses party size two by default and marks occupied and free slots
+
+
+[Survived] StringLiteral
+packages/server/src/controllers/reservation.controller.ts:392:26
+-       orderBy: { capacity: 'asc' },
+
++       orderBy: { capacity: "" },
+
+Tests ran:
+    M1-BR-04 availability requires active capacity and no conflict uses party size two by default and marks occupied and free slots
+
+
+[Survived] ObjectLiteral
+packages/server/src/controllers/reservation.controller.ts:396:66
+-     const existingReservations = await prisma.reservation.findMany({
+
+-       where: {
+
+-         locationId: locationId as string,
+
+-         date: new Date(date as string),
+
+-         status: { not: 'CANCELLED' },
+
+-       },
+
+-       select: { time: true, tableId: true },
+
+-     });
+
++     const existingReservations = await prisma.reservation.findMany({});
+
+Tests ran:
+    M1-BR-04 availability requires active capacity and no conflict uses party size two by default and marks occupied and free slots
+
+
+[Survived] ObjectLiteral
+packages/server/src/controllers/reservation.controller.ts:397:12
+-       where: {
+
+-         locationId: locationId as string,
+
+-         date: new Date(date as string),
+
+-         status: { not: 'CANCELLED' },
+
+-       },
+
++       where: {},
+
+Tests ran:
+    M1-BR-04 availability requires active capacity and no conflict uses party size two by default and marks occupied and free slots
+
+
+[Survived] ObjectLiteral
+packages/server/src/controllers/reservation.controller.ts:400:15
+-         status: { not: 'CANCELLED' },
+
++         status: {},
+
+Tests ran:
+    M1-BR-04 availability requires active capacity and no conflict uses party size two by default and marks occupied and free slots
+
+
+[Survived] StringLiteral
+packages/server/src/controllers/reservation.controller.ts:400:22
+-         status: { not: 'CANCELLED' },
+
++         status: { not: "" },
+
+Tests ran:
+    M1-BR-04 availability requires active capacity and no conflict uses party size two by default and marks occupied and free slots
+
+
+[Survived] ObjectLiteral
+packages/server/src/controllers/reservation.controller.ts:402:13
+-       select: { time: true, tableId: true },
+
++       select: {},
+
+Tests ran:
+    M1-BR-04 availability requires active capacity and no conflict uses party size two by default and marks occupied and free slots
+
+
+[Survived] BooleanLiteral
+packages/server/src/controllers/reservation.controller.ts:402:21
+-       select: { time: true, tableId: true },
+
++       select: { time: false, tableId: true },
+
+Tests ran:
+    M1-BR-04 availability requires active capacity and no conflict uses party size two by default and marks occupied and free slots
+
+
+[Survived] BooleanLiteral
+packages/server/src/controllers/reservation.controller.ts:402:36
+-       select: { time: true, tableId: true },
+
++       select: { time: true, tableId: false },
+
+Tests ran:
+    M1-BR-04 availability requires active capacity and no conflict uses party size two by default and marks occupied and free slots
+
+
+[Survived] StringLiteral
+packages/server/src/controllers/reservation.controller.ts:409:45
+-         const time = `${String(h).padStart(2, '0')}:${m}`;
+
++         const time = `${String(h).padStart(2, "")}:${m}`;
+
+Tests ran:
+    M1-BR-04 availability requires active capacity and no conflict uses party size two by default and marks occupied and free slots
+
+
+[Survived] BooleanLiteral
+packages/server/src/controllers/reservation.controller.ts:419:23
+-     res.json({ success: true, data: { slots, totalTables: tables.length } });
+
++     res.json({ success: false, data: { slots, totalTables: tables.length } });
+
+Tests ran:
+    M1-BR-04 availability requires active capacity and no conflict uses party size two by default and marks occupied and free slots
+
+
+[Survived] Regex
+packages/server/src/controllers/reservation.controller.ts:8:26
+-     date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+
++     date: z.string().regex(/\d{4}-\d{2}-\d{2}$/),
+
+Ran all tests for this mutant.
+
+[Survived] Regex
+packages/server/src/controllers/reservation.controller.ts:8:26
+-     date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+
++     date: z.string().regex(/^\d{4}-\d{2}-\d{2}/),
+
+Ran all tests for this mutant.
+
+[Survived] Regex
+packages/server/src/controllers/reservation.controller.ts:8:26
+-     date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+
++     date: z.string().regex(/^\d{4}-\d{2}-\d$/),
+
+Ran all tests for this mutant.
+
+[Survived] Regex
+packages/server/src/controllers/reservation.controller.ts:9:26
+-     time: z.string().regex(/^\d{2}:\d{2}$/),
+
++     time: z.string().regex(/\d{2}:\d{2}$/),
+
+Ran all tests for this mutant.
+
+[Survived] Regex
+packages/server/src/controllers/reservation.controller.ts:9:26
+-     time: z.string().regex(/^\d{2}:\d{2}$/),
+
++     time: z.string().regex(/^\d{2}:\d{2}/),
+
+Ran all tests for this mutant.
+
+[Survived] StringLiteral
+packages/server/src/controllers/reservation.controller.ts:15:19
+-     status: z.enum(['PENDING', 'CONFIRMED', 'SEATED', 'COMPLETED', 'CANCELLED']).optional(),
+
++     status: z.enum(["", 'CONFIRMED', 'SEATED', 'COMPLETED', 'CANCELLED']).optional(),
+
+Ran all tests for this mutant.
+
+[Survived] StringLiteral
+packages/server/src/controllers/reservation.controller.ts:15:43
+-     status: z.enum(['PENDING', 'CONFIRMED', 'SEATED', 'COMPLETED', 'CANCELLED']).optional(),
+
++     status: z.enum(['PENDING', 'CONFIRMED', "", 'COMPLETED', 'CANCELLED']).optional(),
+
+Ran all tests for this mutant.
+
+[Survived] StringLiteral
+packages/server/src/controllers/reservation.controller.ts:15:53
+-     status: z.enum(['PENDING', 'CONFIRMED', 'SEATED', 'COMPLETED', 'CANCELLED']).optional(),
+
++     status: z.enum(['PENDING', 'CONFIRMED', 'SEATED', "", 'CANCELLED']).optional(),
+
+Ran all tests for this mutant.
+
+[Survived] StringLiteral
+packages/server/src/controllers/reservation.controller.ts:15:66
+-     status: z.enum(['PENDING', 'CONFIRMED', 'SEATED', 'COMPLETED', 'CANCELLED']).optional(),
+
++     status: z.enum(['PENDING', 'CONFIRMED', 'SEATED', 'COMPLETED', ""]).optional(),
+
+Ran all tests for this mutant.
+
+[Survived] Regex
+packages/server/src/controllers/reservation.controller.ts:17:26
+-     date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+
++     date: z.string().regex(/\d{4}-\d{2}-\d{2}$/).optional(),
+
+Ran all tests for this mutant.
+
+[Survived] Regex
+packages/server/src/controllers/reservation.controller.ts:17:26
+-     date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+
++     date: z.string().regex(/^\d{4}-\d{2}-\d{2}/).optional(),
+
+Ran all tests for this mutant.
+
+[Survived] Regex
+packages/server/src/controllers/reservation.controller.ts:18:26
+-     time: z.string().regex(/^\d{2}:\d{2}$/).optional(),
+
++     time: z.string().regex(/\d{2}:\d{2}$/).optional(),
+
+Ran all tests for this mutant.
+
+[Survived] Regex
+packages/server/src/controllers/reservation.controller.ts:18:26
+-     time: z.string().regex(/^\d{2}:\d{2}$/).optional(),
+
++     time: z.string().regex(/^\d{2}:\d{2}/).optional(),
+
+Ran all tests for this mutant.
+
+[Survived] ObjectLiteral
+packages/server/src/controllers/table.controller.ts:36:46
+-     const table = await prisma.table.findFirst({
+
+-       where: { id: tableId, locationId },
+
+-       include: {
+
+-         _count: { select: { reservations: true } },
+
+-       },
+
+-     });
+
++     const table = await prisma.table.findFirst({});
+
+Tests ran:
+    table controller completeness gets a table result 0
+    table controller completeness gets a table result 1
+
+
+[Survived] ObjectLiteral
+packages/server/src/controllers/table.controller.ts:37:12
+-       where: { id: tableId, locationId },
+
++       where: {},
+
+Tests ran:
+    table controller completeness gets a table result 0
+    table controller completeness gets a table result 1
+
+
+[Survived] ObjectLiteral
+packages/server/src/controllers/table.controller.ts:38:14
+-       include: {
+
+-         _count: { select: { reservations: true } },
+
+-       },
+
++       include: {},
+
+Tests ran:
+    table controller completeness gets a table result 0
+    table controller completeness gets a table result 1
+
+
+[Survived] ObjectLiteral
+packages/server/src/controllers/table.controller.ts:39:15
+-         _count: { select: { reservations: true } },
+
++         _count: {},
+
+Tests ran:
+    table controller completeness gets a table result 0
+    table controller completeness gets a table result 1
+
+
+[Survived] ObjectLiteral
+packages/server/src/controllers/table.controller.ts:39:25
+-         _count: { select: { reservations: true } },
+
++         _count: { select: {} },
+
+Tests ran:
+    table controller completeness gets a table result 0
+    table controller completeness gets a table result 1
+
+
+[Survived] BooleanLiteral
+packages/server/src/controllers/table.controller.ts:39:41
+-         _count: { select: { reservations: true } },
+
++         _count: { select: { reservations: false } },
+
+Tests ran:
+    table controller completeness gets a table result 0
+    table controller completeness gets a table result 1
+
+
+[Survived] ObjectLiteral
+packages/server/src/controllers/table.controller.ts:55:26
+-       res.status(400).json({ success: false, error: parsed.error.errors });
+
++       res.status(400).json({});
+
+Tests ran:
+    table management rules rejects invalid table capacity
+
+
+[Survived] BooleanLiteral
+packages/server/src/controllers/table.controller.ts:55:37
+-       res.status(400).json({ success: false, error: parsed.error.errors });
+
++       res.status(400).json({ success: true, error: parsed.error.errors });
+
+Tests ran:
+    table management rules rejects invalid table capacity
+
+
+[Survived] ObjectLiteral
+packages/server/src/controllers/table.controller.ts:59:53
+-     const location = await prisma.location.findUnique({ where: { id: locationId } });
+
++     const location = await prisma.location.findUnique({});
+
+Tests ran:
+    table controller completeness returns 404 when creating in a missing location
+    table controller completeness creates a unique table and applies active default
+    table management rules rejects duplicate table names in the same location
+
+
+[Survived] ObjectLiteral
+packages/server/src/controllers/table.controller.ts:59:62
+-     const location = await prisma.location.findUnique({ where: { id: locationId } });
+
++     const location = await prisma.location.findUnique({ where: {} });
+
+Tests ran:
+    table controller completeness returns 404 when creating in a missing location
+    table controller completeness creates a unique table and applies active default
+    table management rules rejects duplicate table names in the same location
+
+
+[Survived] ConditionalExpression
+packages/server/src/controllers/table.controller.ts:60:7
+-     if (!location) {
+
++     if (true) {
+
+Tests ran:
+    table controller completeness returns 404 when creating in a missing location
+    table controller completeness creates a unique table and applies active default
+    table management rules rejects duplicate table names in the same location
+
+
+[Survived] ObjectLiteral
+packages/server/src/controllers/table.controller.ts:78:24
+-     res.status(201).json({ success: true, data: table });
+
++     res.status(201).json({});
+
+Tests ran:
+    table controller completeness creates a unique table and applies active default
+
+
+[Survived] BooleanLiteral
+packages/server/src/controllers/table.controller.ts:78:35
+-     res.status(201).json({ success: true, data: table });
+
++     res.status(201).json({ success: false, data: table });
+
+Tests ran:
+    table controller completeness creates a unique table and applies active default
+
+
+[Survived] ConditionalExpression
+packages/server/src/controllers/table.controller.ts:84:7
+-     if (!parsed.success) {
+
++     if (true) {
+
+Tests ran:
+    table controller completeness rejects an invalid table update before lookup
+    table controller completeness returns 404 for a missing table update
+    table controller completeness handles changed-name duplicate decision 0
+  and 3 more tests!
+
+
+[Survived] ObjectLiteral
+packages/server/src/controllers/table.controller.ts:85:26
+-       res.status(400).json({ success: false, error: parsed.error.errors });
+
++       res.status(400).json({});
+
+Tests ran:
+    table controller completeness rejects an invalid table update before lookup
+
+
+[Survived] BooleanLiteral
+packages/server/src/controllers/table.controller.ts:85:37
+-       res.status(400).json({ success: false, error: parsed.error.errors });
+
++       res.status(400).json({ success: true, error: parsed.error.errors });
+
+Tests ran:
+    table controller completeness rejects an invalid table update before lookup
+
+
+[Survived] ObjectLiteral
+packages/server/src/controllers/table.controller.ts:89:46
+-     const table = await prisma.table.findFirst({
+
+-       where: { id: tableId, locationId },
+
+-     });
+
++     const table = await prisma.table.findFirst({});
+
+Tests ran:
+    table controller completeness returns 404 for a missing table update
+    table controller completeness handles changed-name duplicate decision 0
+    table controller completeness handles changed-name duplicate decision 1
+  and 2 more tests!
+
+
+[Survived] ObjectLiteral
+packages/server/src/controllers/table.controller.ts:90:12
+-       where: { id: tableId, locationId },
+
++       where: {},
+
+Tests ran:
+    table controller completeness returns 404 for a missing table update
+    table controller completeness handles changed-name duplicate decision 0
+    table controller completeness handles changed-name duplicate decision 1
+  and 2 more tests!
+
+
+[Survived] EqualityOperator
+packages/server/src/controllers/table.controller.ts:98:27
+-     if (parsed.data.name && parsed.data.name !== table.name) {
+
++     if (parsed.data.name && parsed.data.name === table.name) {
+
+Tests ran:
+    table controller completeness handles changed-name duplicate decision 0
+    table controller completeness handles changed-name duplicate decision 1
+    table management rules updates with { name: 'T1' } without duplicate lookup (unchanged name)
+
+
+[Survived] ObjectLiteral
+packages/server/src/controllers/table.controller.ts:99:52
+-       const duplicate = await prisma.table.findFirst({
+
+-         where: { locationId, name: parsed.data.name },
+
+-       });
+
++       const duplicate = await prisma.table.findFirst({});
+
+Tests ran:
+    table controller completeness handles changed-name duplicate decision 0
+    table controller completeness handles changed-name duplicate decision 1
+
+
+[Survived] ObjectLiteral
+packages/server/src/controllers/table.controller.ts:100:14
+-         where: { locationId, name: parsed.data.name },
+
++         where: {},
+
+Tests ran:
+    table controller completeness handles changed-name duplicate decision 0
+    table controller completeness handles changed-name duplicate decision 1
+
+
+[Survived] ObjectLiteral
+packages/server/src/controllers/table.controller.ts:119:46
+-     const table = await prisma.table.findFirst({
+
+-       where: { id: tableId, locationId },
+
+-     });
+
++     const table = await prisma.table.findFirst({});
+
+Tests ran:
+    table controller completeness returns 404 when deleting a missing table
+    table management rules blocks deletion when reservations reference the table
+    table management rules deletes an unreferenced table
+
+
+[Survived] ObjectLiteral
+packages/server/src/controllers/table.controller.ts:120:12
+-       where: { id: tableId, locationId },
+
++       where: {},
+
+Tests ran:
+    table controller completeness returns 404 when deleting a missing table
+    table management rules blocks deletion when reservations reference the table
+    table management rules deletes an unreferenced table
+
+
+[Survived] BooleanLiteral
+packages/server/src/controllers/table.controller.ts:122:7
+-     if (!table) {
+
++     if (table) {
+
+Tests ran:
+    table controller completeness returns 404 when deleting a missing table
+    table management rules blocks deletion when reservations reference the table
+    table management rules deletes an unreferenced table
+
+
+Ran 4.67 tests per mutant on average.
+---------------------------|------------------|----------|-----------|------------|----------|----------|
+                           | % Mutation score |          |           |            |          |          |
+File                       |  total | covered | # killed | # timeout | # survived | # no cov | # errors |
+---------------------------|--------|---------|----------|-----------|------------|----------|----------|
+All files                  |  64.78 |   64.78 |      365 |         1 |        199 |        0 |        0 |
+ reservation.controller.ts |  60.05 |   60.05 |      262 |         1 |        175 |        0 |        0 |
+ table.controller.ts       |  81.10 |   81.10 |      103 |         0 |         24 |        0 |        0 |
+---------------------------|--------|---------|----------|-----------|------------|----------|----------|
+[32m14:35:46 (23988) INFO MutationTestReportHelper[39m Final mutation score of 64.78 is greater than or equal to break threshold 60
+[32m14:35:46 (23988) INFO JsonReporter[39m Your report can be found at: file:///D:/5th%20semester/SQE/SQE%20project/kitchenasty-reservation-fix-v3/reports/mutation/final-56-tests/mutation.json
+[32m14:35:46 (23988) INFO HtmlReporter[39m Your report can be found at: file:///D:/5th%20semester/SQE/SQE%20project/kitchenasty-reservation-fix-v3/reports/mutation/final-56-tests/index.html
+[32m14:35:46 (23988) INFO MutationTestExecutor[39m Done in 1 minute 48 seconds.
