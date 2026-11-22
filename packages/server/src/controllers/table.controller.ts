@@ -8,7 +8,9 @@ const createTableSchema = z.object({
   isActive: z.boolean().default(true),
 });
 
-const updateTableSchema = createTableSchema.partial();
+const updateTableSchema = createTableSchema.partial().extend({
+  isActive: z.boolean().optional(),
+});
 
 export async function listTables(req: Request<{ locationId: string }>, res: Response): Promise<void> {
   const { locationId } = req.params;

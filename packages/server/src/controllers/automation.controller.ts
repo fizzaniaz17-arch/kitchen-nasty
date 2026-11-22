@@ -16,7 +16,9 @@ const createRuleSchema = z.object({
   isActive: z.boolean().default(true),
 });
 
-const updateRuleSchema = createRuleSchema.partial();
+const updateRuleSchema = createRuleSchema.partial().extend({
+  isActive: z.boolean().optional(),
+});
 
 export async function listAutomationRules(req: Request, res: Response): Promise<void> {
   const page = Math.max(1, parseInt(req.query.page as string) || 1);

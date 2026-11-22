@@ -167,6 +167,7 @@ describe('Menu API - Integration Tests', () => {
 
       expect(res.status).toBe(200);
       expect(res.body.data.name).toBe('Starters');
+      expect(mockedPrisma.category.update.mock.calls[0][0].data).toStrictEqual({ name: 'Starters' });
     });
 
     it('returns 404 for unknown id', async () => {
@@ -350,6 +351,12 @@ describe('Menu API - Integration Tests', () => {
 
       expect(res.status).toBe(200);
       expect(res.body.data.price).toBe(14.99);
+      expect(mockedPrisma.menuItem.update.mock.calls[0][0].data).toStrictEqual({
+        price: 14.99,
+        options: undefined,
+        allergens: undefined,
+        mealtimes: undefined,
+      });
     });
 
     it('returns 404 for unknown id', async () => {
