@@ -63,6 +63,7 @@ jobs:
           fi
 
           measures_json="$(curl -fsS -u "${SONAR_TOKEN}:" --get \
+            "https://sonarcloud.io/api/measures/component" \
             --data-urlencode "branch=scratch/sonar-update-reservation" \
             --data-urlencode "component=${PROJECT_KEY}:sonar-scratch/updateReservation.ts" \
             --data-urlencode "metricKeys=complexity")"
