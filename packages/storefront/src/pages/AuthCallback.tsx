@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext.js';
 
@@ -6,22 +6,41 @@ export default function AuthCallback() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const { loginWithToken } = useAuth();
+  const isExchanging = useRef(false);
 
   useEffect(() => {
-    const token = searchParams.get('token');
+    if (isExchanging.current) return;
+    isExchanging.current = true;
+
+    const code = searchParams.get('code');
     const error = searchParams.get('error');
 
     if (error) {
-      navigate('/login?error=' + error);
+      navigate('/login?error=auth_failed', { replace: true });
       return;
     }
 
-    if (token) {
-      loginWithToken(token);
-      navigate('/account');
-    } else {
-      navigate('/login');
+    if (!code) {
+      navigate('/login?error=auth_failed', { replace: true });
+      return;
     }
+
+    navigate('/auth/callback', { replace: true });
+    void (async () => {
+      try {
+        const response = await fetch('/api/auth/social/exchange', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ code }),
+        });
+        const data = await response.json();
+        if (!response.ok || !data.data?.token) throw new Error('Social login exchange failed');
+        loginWithToken(data.data.token);
+        navigate('/account', { replace: true });
+      } catch {
+        navigate('/login?error=auth_failed', { replace: true });
+      }
+    })();
   }, [searchParams, navigate, loginWithToken]);
 
   return (

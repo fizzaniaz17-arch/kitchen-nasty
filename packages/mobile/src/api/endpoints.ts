@@ -36,6 +36,14 @@ export const authApi = {
     return apiClient<ApiResponse<AuthMeData>>('/api/auth/me');
   },
 
+  exchangeSocialCode(code: string) {
+    return apiClient<ApiResponse<{ token: string }>>('/api/auth/social/exchange', {
+      method: 'POST',
+      body: { code },
+      auth: false,
+    });
+  },
+
   savePushToken(expoPushToken: string) {
     return apiClient<ApiResponse<void>>('/api/auth/push-token', {
       method: 'POST',
