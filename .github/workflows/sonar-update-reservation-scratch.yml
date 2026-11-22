@@ -36,11 +36,12 @@ jobs:
         run: |
           set -euo pipefail
           task_file=.scannerwork/report-task.txt
-          ce_task_url="$(sed -n 's/^ceTaskUrl=//p' "$task_file")"
-          if [ -z "$ce_task_url" ]; then
-            echo "Sonar scanner did not return a compute-engine task URL." >&2
+          ce_task_id="$(sed -n 's/^ceTaskId=//p' "$task_file" | tr -d '\r')"
+          if [ -z "$ce_task_id" ]; then
+            echo "Sonar scanner did not return a compute-engine task ID." >&2
             exit 1
           fi
+          ce_task_url="https://sonarcloud.io/api/ce/task?id=${ce_task_id}"
 
           for attempt in $(seq 1 60); do
             task_json="$(curl -fsS -u "${SONAR_TOKEN}:" "$ce_task_url")"
@@ -62,6 +63,7 @@ jobs:
           fi
 
           measures_json="$(curl -fsS -u "${SONAR_TOKEN}:" --get \
+            --data-urlencode "branch=scratch/sonar-update-reservation" \
             --data-urlencode "component=${PROJECT_KEY}:sonar-scratch/updateReservation.ts" \
             --data-urlencode "metricKeys=complexity")"
           complexity="$(printf '%s' "$measures_json" | jq -r '.component.measures[] | select(.metric == "complexity") | .value')"
