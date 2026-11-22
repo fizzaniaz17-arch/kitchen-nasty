@@ -62,7 +62,7 @@ export async function getCategory(req: Request<{ id: string }>, res: Response): 
 export async function createCategory(req: Request, res: Response): Promise<void> {
   const parsed = createCategorySchema.safeParse(req.body);
   if (!parsed.success) {
-    res.status(400).json({ success: false, error: parsed.error.errors });
+    res.status(400).json({ success: false, error: parsed.error.issues });
     return;
   }
 
@@ -94,7 +94,7 @@ export async function updateCategory(req: Request<{ id: string }>, res: Response
   const { id } = req.params;
   const parsed = updateCategorySchema.safeParse(req.body);
   if (!parsed.success) {
-    res.status(400).json({ success: false, error: parsed.error.errors });
+    res.status(400).json({ success: false, error: parsed.error.issues });
     return;
   }
 

@@ -34,7 +34,7 @@ export async function createDeliveryZone(req: Request<{ locationId: string }>, r
   const { locationId } = req.params;
   const parsed = createZoneSchema.safeParse(req.body);
   if (!parsed.success) {
-    res.status(400).json({ success: false, error: parsed.error.errors });
+    res.status(400).json({ success: false, error: parsed.error.issues });
     return;
   }
 
@@ -55,7 +55,7 @@ export async function updateDeliveryZone(req: Request<{ locationId: string; zone
   const { locationId, zoneId } = req.params;
   const parsed = updateZoneSchema.safeParse(req.body);
   if (!parsed.success) {
-    res.status(400).json({ success: false, error: parsed.error.errors });
+    res.status(400).json({ success: false, error: parsed.error.issues });
     return;
   }
 

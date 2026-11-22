@@ -39,7 +39,7 @@ export async function listAllGallery(_req: Request, res: Response): Promise<void
 export async function createGalleryImage(req: Request, res: Response): Promise<void> {
   const parsed = createSchema.safeParse(req.body);
   if (!parsed.success) {
-    res.status(400).json({ success: false, error: parsed.error.errors });
+    res.status(400).json({ success: false, error: parsed.error.issues });
     return;
   }
 
@@ -59,7 +59,7 @@ export async function createGalleryImage(req: Request, res: Response): Promise<v
 export async function updateGalleryImage(req: Request<{ id: string }>, res: Response): Promise<void> {
   const parsed = updateSchema.safeParse(req.body);
   if (!parsed.success) {
-    res.status(400).json({ success: false, error: parsed.error.errors });
+    res.status(400).json({ success: false, error: parsed.error.issues });
     return;
   }
 

@@ -2,6 +2,15 @@
   "name": "kitchenasty",
   "version": "0.3.2",
   "private": true,
+  "overrides": {
+    "@xmldom/xmldom": "^0.8.15",
+    "postcss": "^8.5.33",
+    "qs": "^6.16.2",
+    "tar": "^7.5.23",
+    "vitepress": {
+      "vite": "^6.4.6"
+    }
+  },
   "workspaces": [
     "packages/*"
   ],
@@ -25,10 +34,10 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.58.2",
-    "@stryker-mutator/core": "9.1.1",
-    "@stryker-mutator/vitest-runner": "9.1.1",
+    "@stryker-mutator/core": "9.6.1",
+    "@stryker-mutator/vitest-runner": "9.6.1",
     "@types/node": "^22.0.0",
-    "@vitest/coverage-v8": "4.0.18",
+    "@vitest/coverage-v8": "4.1.12",
     "playwright": "^1.58.2",
     "prisma": "^5.22.0",
     "typescript": "^5.7.0"

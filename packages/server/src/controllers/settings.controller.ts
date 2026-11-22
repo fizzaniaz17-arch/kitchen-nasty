@@ -69,7 +69,7 @@ export async function getSettings(_req: Request, res: Response): Promise<void> {
 export async function updateSettings(req: Request, res: Response): Promise<void> {
   const parsed = updateSettingsSchema.safeParse(req.body);
   if (!parsed.success) {
-    res.status(400).json({ success: false, error: parsed.error.errors });
+    res.status(400).json({ success: false, error: parsed.error.issues });
     return;
   }
 
@@ -247,7 +247,7 @@ export async function getGeneralSettings(_req: Request, res: Response): Promise<
 export async function updateGeneralSettings(req: Request, res: Response): Promise<void> {
   const parsed = generalSettingsSchema.safeParse(req.body);
   if (!parsed.success) {
-    res.status(400).json({ success: false, error: parsed.error.errors });
+    res.status(400).json({ success: false, error: parsed.error.issues });
     return;
   }
   const data = await updateSettingsGroup('generalSettings', parsed.data);
@@ -266,7 +266,7 @@ export async function getOrderSettings(_req: Request, res: Response): Promise<vo
 export async function updateOrderSettings(req: Request, res: Response): Promise<void> {
   const parsed = orderSettingsSchema.safeParse(req.body);
   if (!parsed.success) {
-    res.status(400).json({ success: false, error: parsed.error.errors });
+    res.status(400).json({ success: false, error: parsed.error.issues });
     return;
   }
   const data = await updateSettingsGroup('orderSettings', parsed.data);
@@ -285,7 +285,7 @@ export async function getReservationSettings(_req: Request, res: Response): Prom
 export async function updateReservationSettings(req: Request, res: Response): Promise<void> {
   const parsed = reservationSettingsSchema.safeParse(req.body);
   if (!parsed.success) {
-    res.status(400).json({ success: false, error: parsed.error.errors });
+    res.status(400).json({ success: false, error: parsed.error.issues });
     return;
   }
   const data = await updateSettingsGroup('reservationSettings', parsed.data);
@@ -310,7 +310,7 @@ export async function getMailSettings(_req: Request, res: Response): Promise<voi
 export async function updateMailSettings(req: Request, res: Response): Promise<void> {
   const parsed = mailSettingsSchema.safeParse(req.body);
   if (!parsed.success) {
-    res.status(400).json({ success: false, error: parsed.error.errors });
+    res.status(400).json({ success: false, error: parsed.error.issues });
     return;
   }
 
@@ -385,7 +385,7 @@ export async function getPaymentSettings(_req: Request, res: Response): Promise<
 export async function updatePaymentSettings(req: Request, res: Response): Promise<void> {
   const parsed = paymentSettingsSchema.safeParse(req.body);
   if (!parsed.success) {
-    res.status(400).json({ success: false, error: parsed.error.errors });
+    res.status(400).json({ success: false, error: parsed.error.issues });
     return;
   }
 
@@ -421,7 +421,7 @@ export async function getReviewSettings(_req: Request, res: Response): Promise<v
 export async function updateReviewSettings(req: Request, res: Response): Promise<void> {
   const parsed = reviewSettingsSchema.safeParse(req.body);
   if (!parsed.success) {
-    res.status(400).json({ success: false, error: parsed.error.errors });
+    res.status(400).json({ success: false, error: parsed.error.issues });
     return;
   }
   const data = await updateSettingsGroup('reviewSettings', parsed.data);
@@ -440,7 +440,7 @@ export async function getAdvancedSettings(_req: Request, res: Response): Promise
 export async function updateAdvancedSettings(req: Request, res: Response): Promise<void> {
   const parsed = advancedSettingsSchema.safeParse(req.body);
   if (!parsed.success) {
-    res.status(400).json({ success: false, error: parsed.error.errors });
+    res.status(400).json({ success: false, error: parsed.error.issues });
     return;
   }
   const data = await updateSettingsGroup('advancedSettings', parsed.data);
