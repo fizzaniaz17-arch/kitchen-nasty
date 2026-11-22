@@ -30,7 +30,7 @@ flowchart TD
   N --> Z
 ```
 
-Each optional decision has a true assignment edge and a false bypass edge before joining the next decision. With those assignment nodes expanded, the verified graph has 19 nodes and 26 edges, one connected component, so `V(G) = E - N + 2 = 26 - 19 + 2 = 9`. This matches the nine independent decisions: parse success, existence, and six optional fields plus the entry-to-shared-exit structure represented by the formula. Promise rejection, Prisma exceptions, `new Date` behavior, Express failures, and Zod internals are implicit exceptions omitted from the graph.
+Each optional decision has a true assignment edge and a false bypass edge before joining the next decision. With those assignment nodes expanded, the verified graph has 19 nodes and 26 edges, one connected component, so `V(G) = E - N + 2 = 26 - 19 + 2 = 9`. This matches the eight explicit decisions (parse success, reservation existence, and six supplied-field checks) plus one formula baseline for the connected exit structure: `8 + 1 = 9`. It must not be described as nine independent decisions. Promise rejection, Prisma exceptions, `new Date` behavior, Express failures, and Zod internals are implicit exceptions omitted from the graph.
 
 No function-level analyzer value is available yet. A whole-file Sonar complexity value must not be compared to 9.
 
@@ -64,7 +64,7 @@ The overall denominator includes no-coverage mutants; the covered score excludes
 
 The baseline report is preserved unchanged to maintain chronology; later runs use distinct output directories.
 
-The expanded 56-test run first scored 53.78% (298 killed, 257 survived, no no-coverage mutants, one timeout). Exact response and dependency-call assertions raised the final result to 63.31% (351 killed, 204 survived, no no-coverage mutants, one timeout), passing the unchanged 60% break threshold. Fifteen genuine survivors and their matched final outcomes are documented in `mutation-analysis.md`; both deterministic custom operators were killed as recorded in `custom-mutations.md`.
+The expanded 56-test run first scored 53.78% (298 killed, 257 survived, no no-coverage mutants, one timeout). Exact response and dependency-call assertions raised the historical final result to 63.31% (351 killed, 204 survived, no no-coverage mutants, one timeout). The follow-up rerun with one added exact table-location oracle has 57 tests and scored 65.47% (363 killed, 192 survived, no no-coverage mutants, one timeout), passing the unchanged 60% break threshold. Fifteen genuine survivors and their matched outcomes are documented in `mutation-analysis.md`; mutants 434 and 435 are now killed, and both deterministic custom operators remain killed.
 
 ## SonarQube Cloud PR analysis
 

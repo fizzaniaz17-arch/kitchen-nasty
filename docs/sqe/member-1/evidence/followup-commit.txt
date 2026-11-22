@@ -1,0 +1,2 @@
+﻿4924789094f171997622b6731e574d20b6275081
+fix(sqe): close member 1 follow-up gates

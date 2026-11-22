@@ -42,9 +42,9 @@
   <table>
     <tr><th>Criterion</th><th>Actual evidence</th><th>Status</th></tr>
     <tr><td>Reproducible tooling</td><td>Vitest 4.0.18, coverage-v8 4.0.18, Stryker 9.1.1, SonarQube Cloud scan action v7</td><td>Pass</td></tr>
-    <tr><td>White-box suite</td><td>56/56 tests passed across all reservation/table controller functions</td><td>Pass</td></tr>
+    <tr><td>White-box suite</td><td>Historical 56/56 passed; latest follow-up 57/57 passed across reservation/table controller functions</td><td>Pass</td></tr>
     <tr><td>Coverage target</td><td>100% statements and 100% branches; 100% functions and lines</td><td>Pass</td></tr>
-    <tr><td>Mutation final</td><td>556 mutants; 351 killed; 204 survived; 0 no coverage; 1 timeout; score 63.31%</td><td>Pass (60%)</td></tr>
+    <tr><td>Mutation historical/follow-up</td><td>556 mutants; historical 351 killed/204 survived/63.31%; follow-up 57-test rerun 363 killed/192 survived/65.47%; 0 no coverage; 1 timeout</td><td>Pass (60%)</td></tr>
     <tr><td>SonarQube Cloud</td><td>PR analysis uploaded at SHA f51b0c7; quality gate failed on reliability, security, coverage, and duplication</td><td>Fail (analysis completed)</td></tr>
     <tr><td>Browser use cases</td><td>10/10 Playwright flows passed across two Member 1 use cases</td><td>Pass</td></tr>
     <tr><td>CI and PR evidence</td><td>PR #1 open; Member 1 coverage, mutation, and custom jobs pass; Sonar/aggregate fail. Separate CI E2E job fails on Playwright/Ubuntu 26.04 support.</td><td>Fail</td></tr>
@@ -119,7 +119,7 @@
     <tr><td>Missing test</td><td><code>isActive</code> default true changed to false</td><td>No successful create-table test omits <code>isActive</code></td><td>Assert persisted default</td></tr>
     <tr><td>Equivalent candidate</td><td>Mutation in output field not observable under current mocked return</td><td>Production behavior may be determined by mocked Prisma response</td><td>Confirm invariant before classifying equivalent</td></tr>
   </table>
-  <p>Fifteen genuine current-run survivors are classified in <code>mutation-analysis.md</code>; 13 were killed by stronger response/query assertions and two remain explicitly identified. Two application-specific custom mutants were both killed in an isolated worktree. The final score is 63.31%, passing the retained 60% breaking threshold.</p>
+  <p>The fifteen historical survivors are classified in <code>mutation-analysis.md</code>. The follow-up 57-test rerun killed 363 mutants, survived 192, and scored 65.47%; mutants 434 and 435 are now killed by exact table-location lookup assertions. Two application-specific custom mutants were both killed in an isolated worktree.</p>
 
   <h2>Browser and CI evidence</h2>
   <p>Two Member 1 use cases define and automate a main flow, two alternatives and two exceptions each. <code>npm run test:e2e:member1</code> passed all 10 flows in 24.6 seconds using installed Chrome and deterministic synthetic route state.</p>
@@ -148,7 +148,7 @@
   <table>
     <tr><th>ID</th><th>Target</th><th>Actual</th><th>Status</th></tr>
     <tr><td>EC-01</td><td>100% statements and branches</td><td>100% / 100% across both selected controllers</td><td>Pass</td></tr>
-    <tr><td>EC-02</td><td>Mutation score at least 60%; 15 survivors classified</td><td>63.31%; 15 classified, two custom operators killed</td><td>Pass</td></tr>
+    <tr><td>EC-02</td><td>Mutation score at least 60%; 15 historical survivors classified</td><td>Historical 63.31%; follow-up 65.47%; 434/435 killed, two custom operators killed</td><td>Pass</td></tr>
     <tr><td>EC-03</td><td>Sonar quality gate with imported LCOV</td><td>Analysis at f51b0c7 completed; new-code coverage 0%, reliability/security C, duplication 79%</td><td>Fail</td></tr>
     <tr><td>EC-04</td><td>Required GitHub checks and reviewed PR</td><td>PR #1 open; coverage/mutation/custom pass; Sonar/aggregate fail; separate E2E fails on unsupported Ubuntu 26.04 Chromium</td><td>Fail</td></tr>
   </table>
