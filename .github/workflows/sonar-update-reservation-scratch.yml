@@ -19,12 +19,13 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN2 }}
         with:
+          projectBaseDir: sonar-scratch
           args: >
             -Dsonar.projectKey=fizzaniaz17-arch_kitchen-nasty-update-reservation-scratch
             -Dsonar.organization=fizzaniaz17-arch
             -Dsonar.projectName=KitchenAsty-updateReservation-complexity-scratch
             -Dsonar.projectVersion=03d977cf352699dbfca919c4209056c1116e3818
-            -Dsonar.sources=sonar-scratch
+            -Dsonar.sources=.
             -Dsonar.sourceEncoding=UTF-8
 
       - name: Verify isolated-file complexity
@@ -35,7 +36,7 @@ jobs:
           SOURCE_SHA: 03d977cf352699dbfca919c4209056c1116e3818
         run: |
           set -euo pipefail
-          task_file=.scannerwork/report-task.txt
+          task_file=sonar-scratch/.scannerwork/report-task.txt
           ce_task_id="$(sed -n 's/^ceTaskId=//p' "$task_file" | tr -d '\r')"
           if [ -z "$ce_task_id" ]; then
             echo "Sonar scanner did not return a compute-engine task ID." >&2
@@ -65,7 +66,7 @@ jobs:
           measures_json="$(curl -fsS -u "${SONAR_TOKEN}:" --get \
             "https://sonarcloud.io/api/measures/component" \
             --data-urlencode "branch=scratch/sonar-update-reservation" \
-            --data-urlencode "component=${PROJECT_KEY}:sonar-scratch/updateReservation.ts" \
+            --data-urlencode "component=${PROJECT_KEY}:updateReservation.ts" \
             --data-urlencode "metricKeys=complexity")"
           complexity="$(printf '%s' "$measures_json" | jq -r '.component.measures[] | select(.metric == "complexity") | .value')"
           if [ -z "$complexity" ] || [ "$complexity" = "null" ]; then
