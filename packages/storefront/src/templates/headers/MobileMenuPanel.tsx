@@ -1,14 +1,6 @@
 import { Link } from 'react-router-dom';
 import LanguageSwitcher from '../../components/LanguageSwitcher.js';
-
-export const storefrontMobileNavId = 'storefront-mobile-nav';
-
-export function getMobileMenuToggleA11yProps(isOpen: boolean) {
-  return {
-    'aria-expanded': isOpen,
-    'aria-controls': storefrontMobileNavId,
-  };
-}
+import { storefrontMobileNavId } from './MobileHeaderControls.js';
 
 interface MobileMenuLink {
   to: string;

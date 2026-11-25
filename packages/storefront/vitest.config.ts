@@ -11,6 +11,7 @@ export default defineConfig({
       include: [
         'src/context/AuthContext.tsx',
         'src/pages/AuthCallback.tsx',
+        'src/templates/headers/MobileHeaderControls.tsx',
         'src/templates/headers/MobileMenuPanel.tsx',
       ],
     },
