@@ -1,0 +1,50 @@
+
+> kitchenasty@0.3.2 test
+> npm run test:unit && npm run test:integration
+
+
+> kitchenasty@0.3.2 test:unit
+> npm run test -w packages/shared && npm run test:unit -w packages/server
+
+
+> @kitchenasty/shared@0.3.2 test
+> vitest run
+
+
+ RUN  v4.1.12 D:/SQE/SQE Project/kitchen-nasty/packages/shared
+
+
+ Test Files  1 passed (1)
+      Tests  17 passed (17)
+   Start at  00:03:43
+   Duration  4.12s (transform 468ms, setup 0ms, import 691ms, tests 34ms, environment 0ms)
+
+
+> @kitchenasty/server@0.3.2 test:unit
+> vitest run src/__tests__/unit
+
+
+ RUN  v4.1.12 D:/SQE/SQE Project/kitchen-nasty/packages/server
+
+
+ Test Files  4 passed (4)
+      Tests  60 passed (60)
+   Start at  00:03:58
+   Duration  16.52s (transform 5.39s, setup 0ms, import 30.11s, tests 179ms, environment 1ms)
+
+
+> kitchenasty@0.3.2 test:integration
+> npm run test:integration -w packages/server
+
+
+> @kitchenasty/server@0.3.2 test:integration
+> vitest run src/__tests__/integration
+
+
+ RUN  v4.1.12 D:/SQE/SQE Project/kitchen-nasty/packages/server
+
+
+ Test Files  23 passed (23)
+      Tests  344 passed (344)
+   Start at  00:04:29
+   Duration  303.59s (transform 55.05s, setup 0ms, import 678.33s, tests 55.76s, environment 12ms)

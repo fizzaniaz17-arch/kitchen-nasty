@@ -2,7 +2,7 @@
 
 ## Summary
 
-An initial full audit reported 95 findings (6 critical, 50 high, 31 moderate, 8 low). After compatible updates and evaluated transitive overrides, the final full audit reports 22 findings (0 critical, 1 high, 21 moderate). The production-only total fell from 62 (3 critical, 31 high, 26 moderate, 2 low) to 20 (0 critical, 1 high, 19 moderate). The server production workspace audit reports zero findings.
+An initial full audit reported 95 findings (6 critical, 50 high, 31 moderate, 8 low). After compatible updates and evaluated transitive overrides, the 2026-11-22 full audit reported 22 findings (0 critical, 1 high, 21 moderate). Its production-only total fell from 62 (3 critical, 31 high, 26 moderate, 2 low) to 20 (0 critical, 1 high, 19 moderate). The server production workspace audit reported zero findings at that time. The 2026-11-26 registry recheck is recorded below.
 
 The full production-only audit includes all workspaces, including the Expo mobile app. The remaining production high/moderate findings are concentrated in the Expo 52 toolchain, not the server runtime.
 
@@ -41,11 +41,37 @@ from application server runtime risk.
 | [GHSA-g3hv-75wg-m249](https://github.com/advisories/GHSA-g3hv-75wg-m249), nested `minimatch@9.0.9` and development `minimatch@10.2.6` | Moderate; Expo and development tooling | Pattern-amplification denial of service; fixed in `11.0.1`, outside the current dependency ranges. No compatible in-range override was identified. |
 | [GHSA-w5hq-g745-h8pq](https://github.com/advisories/GHSA-w5hq-g745-h8pq), `uuid@8.3.2` and Xcode's nested `uuid@7.0.3` | Moderate; transitive Expo/Xcode chain | Affected call forms use caller-provided buffers; the inspected Xcode path uses `uuid.v4()`. No reachable vulnerable-form call was found in the reviewed path. Patched UUID majors do not fit the existing dependency ranges. |
 
-The current audit still reports 22 findings (0 critical, 1 high, 21 moderate),
-20 production-only findings (0 critical, 1 high, 19 moderate), and zero server
-production findings. The Expo 58.0.26 suggestion is a coordinated semver-major
-SDK migration, not a compatible in-range fix; no dependency upgrade was made
-during this review.
+As of 2026-11-22, the audit reported 22 findings (0 critical, 1 high, 21
+moderate), 20 production-only findings (0 critical, 1 high, 19 moderate), and
+zero server production findings. The Expo 58.0.26 suggestion was a coordinated
+semver-major SDK migration, not a compatible in-range fix; no dependency
+upgrade was made during that review.
+
+## Current registry recheck (2026-11-26)
+
+| Audit scope | Total | Critical | High | Moderate | Low |
+|---|---:|---:|---:|---:|---:|
+| Full dependency tree | 23 | 0 | 1 | 22 | 0 |
+| Combined production dependencies | 21 | 0 | 1 | 20 | 0 |
+| Server production workspace | 0 | 0 | 0 | 0 | 0 |
+
+The full and production JSON output is retained in
+`reports/student-3/evidence/tests/npm-audit-rerun.json` and
+`npm-audit-production-rerun.json`; the server production output is
+`npm-audit-server-production-rerun.json`. The increase from the 2026-11-22
+counts reflects registry advisories at this later point in time, not a code or
+lockfile change. The audit now marks `i18next` below 26.3.4 as moderate; its
+suggested 27.2.9 fix is semver-major. The Expo package fixes also require a
+coordinated semver-major SDK migration.
+
+The high `image-size@1.2.1` finding remains in the Expo/Metro toolchain.
+Although npm's audit metadata marks an automated fix candidate, the fixed
+`image-size` 2.x API is incompatible with the installed Metro 0.81.5
+CommonJS usage and declared 1.x range. No forced override was applied.
+`npm audit fix --dry-run --json` also failed in the installed npm 10.9.8
+Arborist with `Cannot read properties of null (reading 'edgesOut')`; the dry
+run did not modify the lockfile or dependencies. Raw output is retained at
+`reports/student-3/evidence/tests/npm-audit-fix-dry-run.json`.
 
 ## CI regression follow-up
 
@@ -76,7 +102,7 @@ The SonarCloud run then reported 2.5% new-code coverage because its updated scop
 | Validation | Result |
 |---|---|
 | `npm test` | 421 passed: 17 shared, 60 server unit, and 344 server integration |
-| Full server coverage / Sonar LCOV | 460 passed across 29 files |
+| Full server coverage / Sonar LCOV | 460 passed across 29 files (2026-11-22 historical run) |
 | Member 1 coverage gate | 56 passed; 100% statements, branches, functions, and lines |
 | Storefront tests and coverage | 5 passed |
 | Full Playwright E2E | 135 passed, 5 failed: four existing Member 1 reservation tests have an auth mock shape incompatible with `AuthContext`; the parallel footer failure passed when rerun alone |
@@ -87,6 +113,17 @@ The SonarCloud run then reported 2.5% new-code coverage because its updated scop
 | Sonar LCOV path verification | Passed: 62 server and 2 storefront source records use repository-relative paths |
 | Final audit | 22 full, 20 production-only, 0 server production findings |
 | Local lint script | Unavailable: `eslint` is not installed; no tooling dependency was added |
+
+## Current coverage rerun (2026-11-26)
+
+The full server Vitest coverage run passed 463 tests across 29 files and
+generated the configured `packages/server/coverage/sonar/lcov.info`. The
+storefront coverage command passed 5 tests and generated
+`packages/storefront/coverage/sonar/lcov.info`. Both configured paths were
+verified to exist. Sonar analysis itself was not run because `sonar-scanner`
+and a local `SONAR_TOKEN` were unavailable; the analysis must run in the
+configured CI/Sonar environment. Server coverage output is retained at
+`reports/student-3/evidence/tests/server-coverage-rerun.txt`.
 
 ## Audit evidence files
 
