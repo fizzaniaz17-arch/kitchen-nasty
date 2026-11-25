@@ -1,0 +1,63 @@
+name: Member 2 API requirements
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  reservation-api:
+    name: Member 2 / Reservation API (PostgreSQL)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: kitchenasty_member2_test
+          POSTGRES_USER: member2
+          POSTGRES_PASSWORD: ci-${{ github.run_id }}-${{ github.run_attempt }}
+        ports:
+          - 127.0.0.1:55432:5432
+        options: >-
+          --health-cmd "pg_isready -U member2 -d kitchenasty_member2_test"
+          --health-interval 5s --health-timeout 5s --health-retries 12
+    env:
+      DATABASE_URL: postgresql://member2:ci-${{ github.run_id }}-${{ github.run_attempt }}@127.0.0.1:55432/kitchenasty_member2_test
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx -w packages/server prisma generate --schema ../../prisma/schema.prisma
+      - run: npx -w packages/server prisma migrate deploy --schema ../../prisma/schema.prisma
+      - name: Verify generated cases and demonstrate both constraint changes
+        run: |
+          mkdir -p member2-results
+          node tests/team/member-2/generate-ep-bva.mjs
+          git diff --exit-code -- tests/team/member-2/generated/ep-bva-cases.json
+          node --test tests/team/member-2/generator.test.mjs
+          node tests/team/member-2/demo-constraints.mjs member2-results/constraints.json
+      - name: Exercise reservation workflows
+        shell: bash
+        run: |
+          set -o pipefail
+          MEMBER2_JWT_SECRET="$(openssl rand -hex 32)"
+          echo "::add-mask::$MEMBER2_JWT_SECRET"
+          export MEMBER2_JWT_SECRET
+          npx -w packages/server vitest run --config vitest.member2.config.ts --reporter=verbose --reporter=json --outputFile.json=../../member2-results/vitest.json 2>&1 | tee member2-results/vitest.txt
+      - name: Check generated case execution
+        if: ${{ !cancelled() && hashFiles('member2-results/vitest.json') != '' }}
+        run: node tests/team/member-2/audit-generated-coverage.mjs member2-results/vitest.json member2-results/generated-coverage.json
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: member2-api-evidence
+          path: member2-results/
+          if-no-files-found: warn
+          retention-days: 14

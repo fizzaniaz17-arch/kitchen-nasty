@@ -1,0 +1,13 @@
+✔ required, enum, and boundary cases follow the specification (4.1672ms)
+✔ two independent constraint changes alter generated triplets without mutating the baseline (3.2504ms)
+✔ generates query clamp triplets and path identifier partitions (0.9018ms)
+✔ generates business clock cases separately from schema pattern validity (1.1678ms)
+✔ relative-day triplets follow the minimum UTC-day offset (2.0102ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 204.8772
