@@ -1,0 +1,34 @@
+{
+  "observedAt": "2026-11-25T04:11:43.970Z",
+  "url": "http://127.0.0.1:5174/",
+  "measurement": "WCAG relative-luminance contrast computed from browser-computed RGB gradient endpoint stops and foreground colors",
+  "styles": {
+    "backgroundGradient": "linear-gradient(to right bottom, rgb(194, 73, 10), rgb(126, 47, 6))",
+    "h1Color": "rgb(255, 255, 255)",
+    "h1FontSize": "36px",
+    "h1FontWeight": "700",
+    "subtitleColor": "rgb(255, 255, 255)",
+    "subtitleFontSize": "18px",
+    "subtitleFontWeight": "400"
+  },
+  "results": {
+    "h1": {
+      "requiredRatio": 3,
+      "ratios": [
+        4.94,
+        9.145
+      ],
+      "minimum": 4.94,
+      "passes": true
+    },
+    "subtitle": {
+      "requiredRatio": 4.5,
+      "ratios": [
+        4.94,
+        9.145
+      ],
+      "minimum": 4.94,
+      "passes": true
+    }
+  }
+}

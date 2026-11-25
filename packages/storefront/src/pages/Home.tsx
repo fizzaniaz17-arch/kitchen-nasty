@@ -79,7 +79,7 @@ function ClassicHero({ hero, t }: { hero: HeroSection | null; t: (k: string) => 
           <h1 className="text-4xl lg:text-5xl font-bold mb-6 leading-tight">
             {hero?.title || t('home.heroTitle')}
           </h1>
-          <p className="text-lg text-primary-100 mb-8">
+          <p className="text-lg text-white mb-8">
             {hero?.subtitle || t('home.heroDescription')}
           </p>
           <div className="flex flex-wrap gap-4">
@@ -118,7 +118,7 @@ function ClassicFeatures({ features, t }: { features: FeatureItem[] | null; t: (
               <div className="w-14 h-14 bg-primary-100 dark:bg-primary-900/30 text-primary-600 rounded-xl flex items-center justify-center mx-auto mb-4 text-2xl">
                 {feature.icon}
               </div>
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">{feature.title}</h3>
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">{feature.title}</h2>
               <p className="text-gray-600 dark:text-gray-400 text-sm">{feature.description}</p>
             </div>
           ))
@@ -186,7 +186,7 @@ function FeatureCard({ icon, title, description }: { icon: string; title: string
       <div className="w-14 h-14 bg-primary-100 dark:bg-primary-900/30 text-primary-600 rounded-xl flex items-center justify-center mx-auto mb-4">
         {icons[icon] || icon}
       </div>
-      <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">{title}</h3>
+      <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">{title}</h2>
       <p className="text-gray-600 dark:text-gray-400 text-sm">{description}</p>
     </div>
   );

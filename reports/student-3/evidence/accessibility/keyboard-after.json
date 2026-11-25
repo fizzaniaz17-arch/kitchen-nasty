@@ -1,0 +1,44 @@
+{
+  "observedAt": "2026-11-25T04:11:44.575Z",
+  "url": "http://127.0.0.1:5174/",
+  "viewport": {
+    "width": 375,
+    "height": 812
+  },
+  "tabSequence": [
+    {
+      "tag": "A",
+      "ariaLabel": null,
+      "text": "KKitchenAsty",
+      "href": "/",
+      "outlineStyle": "auto",
+      "outlineWidth": "1px"
+    },
+    {
+      "tag": "BUTTON",
+      "ariaLabel": "Open cart",
+      "text": "",
+      "href": null,
+      "outlineStyle": "auto",
+      "outlineWidth": "1px"
+    },
+    {
+      "tag": "BUTTON",
+      "ariaLabel": "Toggle menu",
+      "text": "",
+      "href": null,
+      "outlineStyle": "auto",
+      "outlineWidth": "1px"
+    }
+  ],
+  "menuStateAfterEnter": {
+    "ariaExpanded": "true",
+    "ariaControls": "storefront-mobile-nav"
+  },
+  "menuVisible": true,
+  "focusAfterOpen": {
+    "tag": "A",
+    "text": "Home",
+    "href": "/"
+  }
+}
