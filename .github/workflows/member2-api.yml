@@ -13,29 +13,26 @@ jobs:
     name: Member 2 / Reservation API (PostgreSQL)
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    services:
-      postgres:
-        image: postgres:16-alpine
-        env:
-          POSTGRES_DB: kitchenasty_member2_test
-          POSTGRES_USER: member2
-          POSTGRES_PASSWORD: ci-${{ github.run_id }}-${{ github.run_attempt }}
-        ports:
-          - 127.0.0.1:55432:5432
-        options: >-
-          --health-cmd "pg_isready -U member2 -d kitchenasty_member2_test"
-          --health-interval 5s --health-timeout 5s --health-retries 12
-    env:
-      DATABASE_URL: postgresql://member2:ci-${{ github.run_id }}-${{ github.run_attempt }}@127.0.0.1:55432/kitchenasty_member2_test
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
-      - run: npm ci
-      - run: npx -w packages/server prisma generate --schema ../../prisma/schema.prisma
-      - run: npx -w packages/server prisma migrate deploy --schema ../../prisma/schema.prisma
+      - run: npm ci --ignore-scripts
+      - name: Start isolated PostgreSQL with a per-job password
+        shell: bash
+        run: |
+          MEMBER2_DB_PASSWORD="$(openssl rand -hex 32)"
+          echo "::add-mask::$MEMBER2_DB_PASSWORD"
+          export MEMBER2_DB_PASSWORD
+          docker compose -p member2-ci -f tests/team/member-2/compose.test.yml up -d --wait postgres
+          printf 'DATABASE_URL=postgresql://member2:%s@127.0.0.1:55432/kitchenasty_member2_test\n' "$MEMBER2_DB_PASSWORD" >> "$GITHUB_ENV"
+      - name: Generate Prisma client from installed packages
+        env:
+          PRISMA_GENERATE_SKIP_AUTOINSTALL: '1'
+        run: node node_modules/prisma/build/index.js generate --schema prisma/schema.prisma
+      - run: node node_modules/prisma/build/index.js migrate deploy --schema prisma/schema.prisma
       - name: Verify generated cases and demonstrate both constraint changes
         run: |
           mkdir -p member2-results
@@ -44,13 +41,14 @@ jobs:
           node --test tests/team/member-2/generator.test.mjs
           node tests/team/member-2/demo-constraints.mjs member2-results/constraints.json
       - name: Exercise reservation workflows
+        working-directory: packages/server
         shell: bash
         run: |
           set -o pipefail
           MEMBER2_JWT_SECRET="$(openssl rand -hex 32)"
           echo "::add-mask::$MEMBER2_JWT_SECRET"
           export MEMBER2_JWT_SECRET
-          npx -w packages/server vitest run --config vitest.member2.config.ts --reporter=verbose --reporter=json --outputFile.json=../../member2-results/vitest.json 2>&1 | tee member2-results/vitest.txt
+          node ../../node_modules/vitest/vitest.mjs run --config vitest.member2.config.ts --reporter=verbose --reporter=json --outputFile.json=../../member2-results/vitest.json 2>&1 | tee ../../member2-results/vitest.txt
       - name: Check generated case execution
         if: ${{ !cancelled() && hashFiles('member2-results/vitest.json') != '' }}
         run: node tests/team/member-2/audit-generated-coverage.mjs member2-results/vitest.json member2-results/generated-coverage.json
