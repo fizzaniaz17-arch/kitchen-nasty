@@ -14,7 +14,12 @@ Security evaluation covered dependency vulnerabilities, security response header
 
 The final full audit contains 0 critical, 1 high, and 21 moderate findings. The production-only audit contains 0 critical, 1 high, and 19 moderate findings.
 
-The remaining high finding is associated with image-size in the Expo 52 / Metro dependency chain. A direct upgrade was deferred because the patched major version changes the API expected by the installed Metro version. Remaining moderate findings are primarily transitive tooling dependencies.
+The remaining high finding is associated with `image-size` 1.2.1 in the Expo 52
+/ Metro 0.81.5 dependency chain. The advisory concerns denial of service while
+Metro parses crafted images during development/build; it is not a production
+server-runtime path. A direct upgrade was deferred because the patched major
+version changes the API expected by the installed Metro version. Remaining
+moderate findings are primarily transitive tooling dependencies.
 
 Detailed advisory analysis and remediation decisions are documented in `../../docs/sqe/student-3/dependency-audit.md`.
 
@@ -52,11 +57,49 @@ The separate security browser regression checks also passed: 3 tests.
 - Server production audit: 0 findings.
 - Security browser regressions: 3 passed.
 - Server integration suite: 344 passed within the final 421-test `npm test` run.
+- Independent review found no confirmed exploitable vulnerability in the
+  reviewed Student 3 code changes. The remaining high `image-size` advisory is
+  a conditional Metro development/build-time denial-of-service risk; the CSP
+  and other header gaps are hardening recommendations, not demonstrated
+  injection or authentication exploits.
+
+## Passive OWASP ZAP baseline
+
+A real Docker-based OWASP ZAP 2.17.0 baseline pass was executed against
+`http://192.168.100.72:5174/`. It crawled 7 URLs and reported zero failures.
+
+Retained report formats:
+
+- `evidence/security/zap-baseline-final.html`
+- `evidence/security/zap-baseline-final.json`
+- `evidence/security/zap-baseline-final.md`
+
+| Risk | Alerts | Assessment |
+|---|---:|---|
+| High | 0 | No high-risk alerts in the passive baseline. |
+| Medium | 4 | Four CSP checks flag the configured policy `frame-ancestors 'none'` as incomplete. This is a genuine limitation: it prevents framing but does not restrict scripts, styles, or other resource sources. ZAP's labels for wildcard/`unsafe-inline` are inferred from absent directives; those literal tokens are not present in the header evidence. |
+| Low | 4 | Missing Permissions Policy and COEP/COOP/CORP headers. These are defense-in-depth recommendations. COEP/COOP can affect cross-origin assets and popup-based OAuth; choose values only after deployment compatibility review. |
+| Informational | 2 | Vite's React-refresh bootstrap identifies a development server; `no-cache` responses are expected for development assets. Neither finding demonstrates a production vulnerability. |
+| Total | 10 | 63 passive rules passed; no active scan or destructive attack was performed. |
+
+The three Nginx configs were inspected: admin and storefront set only the same
+anti-framing CSP, while docs repeats it. These findings are therefore not
+dismissed as ZAP false positives for production; the source policy is
+intentionally limited and needs a resource-aware CSP before a production
+security claim. The ZAP run itself used Vite development mode, so its HMR and
+cache observations are not representative of the built Nginx deployment.
 
 ## Limitations
 
-- No post-remediation passive ZAP scan was performed.
-- Production Nginx behavior was not verified.
+- ZAP scanned only the local storefront development server, not production
+  Nginx or external systems.
+- Docker Desktop is currently stopped after WSL `vpnkit-bridge` handshake
+  failure (`ERROR_NETNAME_DELETED`). At final inspection, `C:` had about
+  0.15 GB free and `D:` had 26.23 GB free. The Docker service and engine were
+  unavailable; Docker's configured WSL data disk remains present at
+  `D:\DockerData\DockerDesktopWSL\disk\docker_data.vhdx` (11.9 GB). No Docker
+  factory reset or data deletion was performed. Database-dependent E2E
+  reruns remain blocked until Windows disk space is freed and Docker is healthy.
 - No production deployment or real customer credentials were used.
 - The remaining Expo dependency findings require coordinated compatibility work.
 
