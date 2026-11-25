@@ -1,55 +1,72 @@
-# Student 3 Final Test Plan and Results
+# Student 3 Test Plan and Results
 
-## Test environment
+## Test environment and safety
 
-Unit and integration tests ran from the `hamza` checkout. Browser E2E tests
-used a fresh, isolated PostgreSQL database named `student3_recovery_e2e` on
-the localhost-only recovery container, with synthetic seed data. No shared or
-production database was used. The recovery database, outage, and backup/restore
-results are documented in [`recovery.md`](./recovery.md).
+The database recovery exercise used an isolated PostgreSQL 16 container bound
+to `127.0.0.1:55432`, synthetic test records, and a separate named volume.
+The shared `kitchenasty-db` container and its volume were not used or changed.
+See [`recovery.md`](./recovery.md) for the recorded migration, outage,
+reconnection, backup, restore, and integrity results.
 
-## Results
+The accessibility, performance, and passive ZAP checks targeted local
+development services. The ZAP run was passive only; no external or production
+target was scanned.
+
+## Current validation results
 
 | Area | Validation | Result |
 |---|---|---|
-| Shared and server | `npm test` | Passed: 17 shared, 60 server unit, and 344 server integration tests (421 total) |
-| Server coverage | Full Vitest run with LCOV | Passed: 460 tests across 29 files |
-| Member 1 coverage gate | `npm run coverage:member1` | Passed: 56 tests; 100% statements, branches, functions, and lines |
-| Storefront | Vitest with coverage | Passed: 5 tests |
-| Authorization and security regressions | Included in server integration suite: auth, reservation IDOR, staff-role gates, social auth, and security validation | Passed as part of the 344 integration tests |
-| Browser security regressions | Admin/storefront security-header checks and social-auth callback | Passed: 3 tests |
-| Full Playwright E2E | All configured admin and storefront tests, one attempt with four workers | 135 passed, 5 failed; see findings below |
-| Mobile | TypeScript check | Passed |
-| Mobile | Expo iOS and Android bundle exports | Passed |
-| Web/server | Shared, server, admin, and storefront builds | Passed; admin build emitted a non-failing large-chunk warning |
-| Documentation | VitePress production build | Passed |
-| Sonar inputs | Server/storefront LCOV generation and repository-relative path checks | Passed: 62 server and 2 storefront source records |
-| Dependency audit | Full / production-only / server-production | 22 / 20 / 0 findings; see [`dependency-audit.md`](../../docs/sqe/student-3/dependency-audit.md) |
-| Lint | `npm run lint` | Blocked: `eslint` is not installed in this checkout |
+| Shared | Vitest | Passed: 17 tests |
+| Server unit | Vitest | Passed: 60 tests |
+| Server integration | Vitest | Passed: 344 tests across 23 files |
+| Storefront | Vitest with coverage | Passed: 5 tests across 2 files |
+| Storefront navigation | Playwright | Passed: 6 tests, including heading hierarchy and keyboard menu checks |
+| Browser security regressions | Admin/storefront security-header checks and social-auth callback | Passed: 3 tests in the recorded isolated run; see [`security-e2e.txt`](./security-e2e.txt) |
+| Accessibility | Lighthouse and axe-core | Lighthouse 98/100 to 100/100; axe violations 1 moderate to 0 |
+| Performance | k6 against local `/api/health` | Four runs completed; 0% failed requests; raw summaries retained |
+| Passive security | OWASP ZAP baseline against local storefront | 7 URLs; 0 high, 4 medium, 4 low, 2 informational alerts |
+| PostgreSQL recovery | Isolated container test | Migration, outage handling after fix, reconnection, backup/restore, and integrity results documented in `recovery.md` |
+| Sonar coverage inputs | `sonar-project.properties` and LCOV paths | Server and storefront LCOV paths resolve to existing files; no Sonar server analysis was run |
 
-The full server coverage run was repeated serially after one authentication
-test exceeded its 10-second limit during a concurrent build/export run. The
-serial run passed all 460 tests.
+Test output and machine-readable audit evidence are retained under
+[`evidence/`](./evidence/).
 
-## Playwright failures
+## Full Playwright E2E status
 
-Four failures came from the existing Member 1 reservation tests in
-`e2e/storefront/member1-reservation.spec.ts`. Their `/api/auth/me` mock returns
-the customer directly as `data`, while the storefront `AuthContext` expects
-`data.customer` or `data.user`. The page therefore treats the synthetic user as
-unauthenticated and keeps the booking button disabled. The relevant
-authorization fixture was not changed as part of Student 3's work.
+The current checkout's full suite was not completed. A diagnostic attempt
+started 142 tests with one worker and an intentionally unavailable database at
+`127.0.0.1:59999`. The first admin coupon flow triggered a Prisma connection
+failure, confirming that the suite requires a working test database. The
+attempt was stopped rather than allowing repeated, predictable DB failures.
+See [`evidence/tests/playwright-full-no-db-result.md`](./evidence/tests/playwright-full-no-db-result.md)
+and the raw console output in
+[`evidence/tests/playwright-full-no-db.txt`](./evidence/tests/playwright-full-no-db.txt).
 
-The fifth failure was the navigation footer becoming detached while scrolling
-during the four-worker run. The same test passed when rerun alone. The failed
-run did not pass overall, and no CI quality gate was relaxed.
+A prior full-run record in [`e2e-full.txt`](./e2e-full.txt) reported 135
+passed and 5 failed: four existing Member 1 reservation tests failed because
+their `/api/auth/me` mock returned a different shape than the storefront
+expects; a footer visibility test detached during the multi-worker run and
+passed when isolated. This is historical evidence, not a result from the
+current checkout. The four reservation failures could not be reconfirmed
+because the database-backed suite is currently blocked. No Member 1 tests or
+functionality were modified.
 
-## Evidence
+## Known blockers and exclusions
 
-- [`e2e-full.txt`](./e2e-full.txt) - complete local Playwright run output
-- [`e2e-footer-isolated.txt`](./e2e-footer-isolated.txt) - isolated footer rerun
-- [`security-e2e.txt`](./security-e2e.txt) - the three passing security browser regressions
-- [`recovery-evidence/e2e-db-migrate.txt`](./recovery-evidence/e2e-db-migrate.txt)
-  and [`e2e-db-seed.txt`](./recovery-evidence/e2e-db-seed.txt) - isolated E2E
-  database setup; seed credentials are omitted
-- [`security/`](./security/) - baseline and final npm audit JSON evidence
+- Docker Desktop's WSL engine is unavailable. At the last inspection, `C:`
+  had about 0.15 GB free and the configured Docker data VHDX remained on `D:`.
+  The Docker data disk was not deleted or factory-reset.
+- The full Playwright suite must be rerun after Docker is recovered and the
+  isolated test database is available.
+- Mobile typecheck and Expo iOS/Android bundle exports were not rerun during
+  this final verification because the system drive has critically low free
+  space. The previous report's pass claims are not treated as current results
+  without fresh output evidence.
+- Sonar server analysis was not run. The configured server and storefront
+  LCOV input files exist; an actual analysis still requires the normal CI or
+  Sonar environment.
+- ESLint was not installed in the checkout, so lint could not be run.
+- No production deployment security scan or production performance test was
+  performed.
+- No assignment-specific performance threshold was supplied; the k6 results
+  are measurements, not a pass/fail claim against an invented target.
