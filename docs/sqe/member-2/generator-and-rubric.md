@@ -15,6 +15,6 @@
 | Accurate OpenAPI and generator used by tests | Scoped version-controlled OpenAPI spec, response schemas, spec-reading generator, generator tests and exact-ID audit exist. It is a scoped contract and was independently audited; undocumented behaviors still need team decisions. |
 | Two changed constraints and regeneration | CLI generation against two temporary spec changes with restore and hash evidence. |
 | Real persistence and evidence | Isolated PostgreSQL, synthetic fixtures, success and rejection read-back, raw and machine-readable results. Some rejected requests are accepted or hang; the actual outcome is recorded. |
-| Shared obligations and viva | AI log exists. Member 2's two browser use cases, integration with the shared risk/traceability and defect management records, and human understanding/verification remain team work. No public GitHub issues were filed. |
+| Shared obligations and viva | AI log and Member 2's two browser use cases exist. The [defect register](defects.md) links all ten findings to GitHub issues, and the [traceability map](ep-bva-and-traceability.md#defect-and-risk-traceability) proposes links to shared risks. Team approval of proposed risks and ambiguous requirements, and human understanding/verification, remain team work. |
 
 The release or PR recommendation must account for the failing requirements. Production fixes require team agreement; tests must not be weakened to obtain a green report. Test counts and historical failures appear in `status.md` and the individual unedited run files.

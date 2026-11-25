@@ -26,3 +26,22 @@ Working source: `tests/team/member-2/reservations.openapi.json`; emitted case ID
 Cross-workflow trace: create as customer (`201`) -> PATCH same ID as staff -> read same ID through HTTP and Prisma -> rejected customer PATCH -> compare stored row. Repeated create, undersized/conflicting/inactive/wrong-location table assignment, lifecycle violations, and impossible date/time cases each have separate assertions and observed evidence. User-confirmed lifecycle test basis: `packages/docs/features/reservations.md`; earlier four business rules: `docs/sqe/member-1/test-basis.md`.
 
 The generated IDs verify consumption of these identified partitions. Multi-record rules use explicit fixtures. Extreme encodings, timezone policy and concurrency are outside this targeted pass. See the defect register for risk mappings and the status report for shared rubric obligations.
+
+## Defect and risk traceability
+
+The [defect register](defects.md) links each issue to exact test titles, observations, and preserved evidence. The following links to the [shared risk register](../member-1/risk-and-exit.md) are proposed for team review.
+
+| Finding | Issue | Test area | Proposed risk link |
+|---|---|---|---|
+| M2-D01 | [#18](https://github.com/fizzaniaz17-arch/kitchen-nasty/issues/18) | Repeated create requests | R-P01, subject to a team decision on retry identity |
+| M2-D02 | [#19](https://github.com/fizzaniaz17-arch/kitchen-nasty/issues/19) | Undersized table assignment | R-P03 |
+| M2-D03 | [#20](https://github.com/fizzaniaz17-arch/kitchen-nasty/issues/20) | Conflicting table assignment | R-P01 |
+| M2-D04 | [#21](https://github.com/fizzaniaz17-arch/kitchen-nasty/issues/21) | Reservation status transitions | R-P02, subject to team approval of the lifecycle matrix |
+| M2-D05 | [#22](https://github.com/fizzaniaz17-arch/kitchen-nasty/issues/22) | Inactive and other-location table assignment | R-P03 |
+| M2-D06 | [#23](https://github.com/fizzaniaz17-arch/kitchen-nasty/issues/23) | Unknown table assignment | R-P03, for team review |
+| M2-D07 | [#24](https://github.com/fizzaniaz17-arch/kitchen-nasty/issues/24) | Calendar and clock validation | M2-R01 (proposed) |
+| M2-D08 | [#25](https://github.com/fizzaniaz17-arch/kitchen-nasty/issues/25) | Malformed date and status filters | M2-R02 (proposed) |
+| M2-D09 | [#26](https://github.com/fizzaniaz17-arch/kitchen-nasty/issues/26) | Availability time and response contract | R-P05, subject to a team decision on the contract |
+| M2-D10 | [#27](https://github.com/fizzaniaz17-arch/kitchen-nasty/issues/27) | Malformed reservation ID encoding | M2-R02 (proposed) |
+
+M2-R01 and M2-R02 remain proposed additions to the shared risk register. The observed 1.5-second timeouts are local test observations. D01's retry identity, D04's cancellation transitions, and D09's availability contract require team decisions.
