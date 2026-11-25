@@ -20,14 +20,14 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci --ignore-scripts
-      - name: Start isolated PostgreSQL with a per-job password
+      - name: Start isolated PostgreSQL with a per-job ephemeral secret
         shell: bash
         run: |
-          MEMBER2_DB_PASSWORD="$(openssl rand -hex 32)"
-          echo "::add-mask::$MEMBER2_DB_PASSWORD"
-          export MEMBER2_DB_PASSWORD
+          MEMBER2_DB_SECRET="$(openssl rand -hex 32)"
+          echo "::add-mask::$MEMBER2_DB_SECRET"
+          export MEMBER2_DB_SECRET
           docker compose -p member2-ci -f tests/team/member-2/compose.test.yml up -d --wait postgres
-          printf 'DATABASE_URL=postgresql://member2:%s@127.0.0.1:55432/kitchenasty_member2_test\n' "$MEMBER2_DB_PASSWORD" >> "$GITHUB_ENV"
+          printf 'DATABASE_URL=postgresql://member2:%s@127.0.0.1:55432/kitchenasty_member2_test\n' "$MEMBER2_DB_SECRET" >> "$GITHUB_ENV"
       - name: Generate Prisma client from installed packages
         env:
           PRISMA_GENERATE_SKIP_AUTOINSTALL: '1'
