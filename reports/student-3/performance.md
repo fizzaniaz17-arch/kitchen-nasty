@@ -4,32 +4,44 @@
 
 Evaluate application response behavior under a controlled load and compare single-user execution with concurrent-user execution.
 
-## Evidence review
+## Executed test setup
 
-The Student 3 report directory and tracked repository files were reviewed for k6 scripts and performance test results.
+The script targets only the local `/api/health` endpoint. This endpoint is
+excluded from the Express rate limiter, so the measurements do not mix
+application latency with an expected `429` response. The API was listening on
+the local Wi-Fi interface and PostgreSQL was isolated on port 55433.
 
-No k6 test script or verified performance result was found in the reviewed evidence.
+Script: `evidence/performance/k6-api.js`
 
-Consequently, no response-time percentile, throughput, error rate, or load-test improvement is claimed.
+| Scenario | Duration | Virtual users | Runs |
+|---|---:|---:|---:|
+| Single | 15 s | 1 | 2 |
+| Concurrent | 20 s | 5 | 2 |
 
-## Required performance test plan
+## Measured results
 
-The intended evaluation should include:
+| Run | Avg ms | Median ms | p90 ms | p95 ms | Max ms | RPS | Failed % | Total requests |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| Single 1 | 5.89 | 5.85 | 8.24 | 8.50 | 8.76 | 0.9921 | 0 | 15 |
+| Single 2 | 5.97 | 4.75 | 12.22 | 13.26 | 13.45 | 0.9930 | 0 | 15 |
+| Concurrent 1 | 8.31 | 4.91 | 20.23 | 22.37 | 52.28 | 4.9351 | 0 | 100 |
+| Concurrent 2 | 6.84 | 5.55 | 13.32 | 17.48 | 20.60 | 4.9483 | 0 | 100 |
 
-| Scenario | Virtual users | Runs |
-|---|---:|---:|
-| Baseline | 1 | 2 |
-| Concurrent load | 5 or more | 2 |
+The console summaries and raw metric JSON are retained under
+`evidence/performance/`. The per-run `*-summary.json` files contain the
+machine-readable k6 metrics; the matching `*-console.txt` files preserve the
+terminal summaries.
 
-The same representative application endpoint should be used for comparable runs. Each run should record:
+## Rate-limiter observation
 
-- Request count and throughput.
-- Average response time.
-- Median response time.
-- 90th and 95th percentile response times.
-- Failed request count and error rate.
-- Test duration and environment.
+An earlier exploratory run that also called `/api/locations` reached the
+API-wide limiter and received `429` responses: 25/190 requests failed in
+Concurrent 1 and 100/200 in Concurrent 2. Those results are not presented as
+application latency measurements. `/api/health` final reruns passed with 0%
+failed requests.
 
 ## Conclusion
 
-Performance testing with k6 is not evidenced in the current Student 3 deliverables. Results must be collected before making performance or scalability claims.
+No assignment-specific performance threshold was provided. The report records
+measured local response behavior without claiming a target pass or production
+readiness.
