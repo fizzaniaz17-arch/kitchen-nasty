@@ -20,19 +20,17 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci --ignore-scripts
-      - name: Start isolated PostgreSQL with a per-job ephemeral secret
-        shell: bash
-        run: |
-          MEMBER2_DB_SECRET="$(openssl rand -hex 32)"
-          echo "::add-mask::$MEMBER2_DB_SECRET"
-          export MEMBER2_DB_SECRET
-          docker compose -p member2-ci -f tests/team/member-2/compose.test.yml up -d --wait postgres
-          printf 'DATABASE_URL=postgresql://member2:%s@127.0.0.1:55432/kitchenasty_member2_test\n' "$MEMBER2_DB_SECRET" >> "$GITHUB_ENV"
+      - name: Start isolated PostgreSQL
+        env:
+          MEMBER2_DB_PASSWORD: ${{ secrets.MEMBER2_CI_POSTGRES_PASSWORD }}
+        run: docker compose -p member2-ci -f tests/team/member-2/compose.test.yml up -d --wait postgres
       - name: Generate Prisma client from installed packages
         env:
           PRISMA_GENERATE_SKIP_AUTOINSTALL: '1'
         run: node node_modules/prisma/build/index.js generate --schema prisma/schema.prisma
       - run: node node_modules/prisma/build/index.js migrate deploy --schema prisma/schema.prisma
+        env:
+          DATABASE_URL: ${{ format('postgresql://member2:{0}@127.0.0.1:55432/kitchenasty_member2_test', secrets.MEMBER2_CI_POSTGRES_PASSWORD) }}
       - name: Verify generated cases and demonstrate both constraint changes
         run: |
           mkdir -p member2-results
@@ -43,6 +41,8 @@ jobs:
       - name: Exercise reservation workflows
         working-directory: packages/server
         shell: bash
+        env:
+          DATABASE_URL: ${{ format('postgresql://member2:{0}@127.0.0.1:55432/kitchenasty_member2_test', secrets.MEMBER2_CI_POSTGRES_PASSWORD) }}
         run: |
           set -o pipefail
           MEMBER2_JWT_SECRET="$(openssl rand -hex 32)"

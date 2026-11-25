@@ -3,7 +3,7 @@ services:
     image: postgres:16-alpine
     environment:
       POSTGRES_USER: member2
-      POSTGRES_PASSWORD: ${MEMBER2_DB_SECRET:?Set MEMBER2_DB_SECRET for the disposable test database}
+      POSTGRES_PASSWORD: ${MEMBER2_DB_PASSWORD:?Set MEMBER2_DB_PASSWORD for the disposable test database}
       POSTGRES_DB: kitchenasty_member2_test
     ports:
       - "127.0.0.1:55432:5432"
