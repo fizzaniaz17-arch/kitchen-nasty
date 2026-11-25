@@ -10,13 +10,19 @@ The work was intended to evaluate the existing application and document findings
 
 ### 1. Browser automation and functional testing
 
-Ran a targeted, single-worker Playwright rerun on 2026-11-26: 9/9 passed,
-covering storefront navigation, heading hierarchy, keyboard menu navigation,
-admin/storefront response headers, and the social-auth callback. The API
-process logged a missing `DATABASE_URL`; these selected browser checks do not
-validate database-backed flows. The full Playwright suite has not been rerun.
-Its previous 135-pass/5-failure result is historical and not claimed as a
-current-branch result.
+Recovered the local Docker engine and prepared a dedicated `student3_e2e`
+database inside the isolated `student3-recovery-pg` PostgreSQL container.
+Applied all seven migrations and seeded synthetic data without using the
+shared `kitchenasty-db` service or volume.
+
+The final single-worker Playwright run executed all 142 tests against that
+database: 138 passed and four existing Member 1 reservation tests failed
+after timing out on clicks of a disabled `Book Table` button. All admin tests
+and all other storefront tests passed. The
+four reservation tests and Member 1 functionality were not modified. The
+focused navigation rerun passed 6/6, including the Elegant mobile menu's
+keyboard/state behavior; the separate targeted security/navigation run passed
+9/9. Logs are retained under `evidence/tests/`.
 
 ### 2. Security evaluation
 
@@ -41,15 +47,14 @@ Detailed results are in `recovery.md`.
 
 ### 4. Test execution and build validation
 
-On this checkout, shared tests passed 17/17, server unit tests passed 60/60,
-server integration tests passed 344/344, and storefront tests passed 5/5.
-The full server coverage run passed 463 tests across 29 files and generated
-the configured Sonar LCOV input.
-Shared/server/admin/storefront production builds passed. Mobile TypeScript
-checking and Expo Android/iOS bundle exports passed. The admin build emitted a
-904 kB minified JavaScript chunk warning. Fresh test/build logs are under
-`evidence/tests/`. The full database-backed Playwright suite has not been
-rerun because Docker and an isolated PostgreSQL service are unavailable.
+Shared tests passed 17/17, server unit tests 60/60, server integration tests
+344/344, and storefront Vitest coverage tests 5/5. The full server coverage
+run passed 463 tests across 29 files and generated the configured Sonar LCOV
+input. The storefront production build passed after the header accessibility
+updates. Shared/server/admin/storefront builds, mobile TypeScript checking,
+and Android/iOS Expo bundle exports passed. The admin build emitted a 904 kB
+minified JavaScript chunk warning. Fresh and historical logs are under
+`evidence/tests/`.
 
 ### 5. Documentation and evidence
 
@@ -57,15 +62,14 @@ Prepared test plans, use-case documentation, repository analysis, security findi
 
 ## Outstanding items
 
-- The Docker Linux engine was unavailable on 2026-11-26; its API named pipe
-  was missing. Disk space is no longer the blocker (9.72 GB free on `C:`).
-- No local PostgreSQL executable/service was available, and ports 5432,
-  55432, and 55433 were not listening. Start Docker safely and use only
-  `student3-recovery-pg` before running the full Playwright suite. Do not start
-  or modify `kitchenasty-db`.
+- Four existing Member 1 reservation E2E cases remain failing. They were not
+  changed because they belong to another member's scope; report the failures
+  rather than claiming the entire suite is green.
 - Sonar server analysis was not run because no local scanner or Sonar token
-  was available. Both configured LCOV inputs are generated; check the branch's
-  CI/Sonar result after pushing.
+  was available. Both configured LCOV inputs are generated; check the
+  branch's CI/Sonar result after pushing.
+- The configured `npm run lint` command could not start because ESLint is not
+  installed or available on PATH.
 - The npm audit reports 23 full-tree findings and 21 combined production
   findings. Proposed Expo 58 and i18next 27 fixes are semver-major; npm 10's
   audit-fix dry run failed internally, so no dependency changes were made.
@@ -77,7 +81,8 @@ Prepared test plans, use-case documentation, repository analysis, security findi
 
 The contribution provides measured accessibility and performance results,
 passive local security evidence, dependency analysis, isolated PostgreSQL
-recovery results, and fresh unit, integration, storefront, mobile, build, and
-targeted browser validation. It is not fully validated for submission until
-the database-backed Playwright suite and Sonar analysis are completed. The
-CSP policy and remaining dependency advisories are documented for review.
+recovery results, and a completed database-backed Playwright run. It is not
+fully green for final submission: four existing Member 1 reservation E2E tests
+still fail, and Sonar analysis must be checked in the configured CI/Sonar
+environment. The CSP policy and remaining dependency advisories are
+documented for review.

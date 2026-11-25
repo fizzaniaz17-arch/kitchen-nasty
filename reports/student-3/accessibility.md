@@ -17,18 +17,20 @@ Keyboard-only testing used Tab and Enter in a real headless Chromium session.
 | Lighthouse accessibility score | 98/100 | 100/100 |
 | axe-core violations | 1 moderate | 0 |
 | axe-core passes | 31 | 31 |
-| Heading-order violation | `h3` elements followed the `h1` without an intervening `h2` | Removed |
-| Mobile menu state | No `aria-expanded` or `aria-controls` | `aria-expanded` and `aria-controls` present |
+| Heading hierarchy | Feature headings skipped a level below the page `h1` | Classic feature headings use `h2`; themed feature headings remain nested under their section `h2` |
+| Mobile menu state | No `aria-expanded` or `aria-controls` | State and control relationship exposed in Classic and all nine themed headers |
 | Hero subtitle contrast | 3.885:1 at the light gradient endpoint, below 4.5:1 | Changed to white text |
 | Keyboard navigation | Menu opened, but state was not announced | Tab sequence and Enter operation verified |
 
 ## Genuine issues fixed
 
 1. The feature-card headings were changed from `h3` to `h2`, preserving the
-   page hierarchy below the existing `h1`.
+   classic page hierarchy below the existing `h1`. In themed layouts, card
+   headings are `h3` children of their section `h2`, which is a valid hierarchy.
 2. The hero subtitle was changed from `text-primary-100` to white text.
 3. The mobile menu button now exposes `aria-expanded={mobileOpen}` and
-   `aria-controls="storefront-mobile-nav"`.
+   `aria-controls="storefront-mobile-nav"` in the classic header and all nine
+   selectable themed headers. Each mobile menu has the matching controlled ID.
 
 The post-fix axe run still reports three gradient text elements as incomplete
 for automated contrast calculation. The browser-computed gradient endpoints and
@@ -53,8 +55,14 @@ bordered CTA passes 4.94:1 minimum.
   `keyboard-after.json`. A fresh post-fix run reached the mobile-menu toggle
   with Tab, opened it with Enter, verified `aria-expanded="true"`, and moved
   focus to the Home link.
-- Playwright navigation suite: 6/6 passed, including heading hierarchy and
-  keyboard mobile-menu regression tests.
+- Final Playwright navigation rerun: 6/6 passed, including the heading
+  hierarchy and keyboard mobile-menu regression tests on the seeded Elegant
+  header. The hierarchy assertion checks for one `h1` and no skipped heading
+  levels rather than requiring sibling section titles to have the same level.
+  Output: `evidence/tests/playwright-navigation-rerun.txt`.
+- The full database-backed Playwright suite also passed the mobile-menu test
+  as part of 138 passing tests; the four failures were in the separate
+  Member 1 reservation suite.
 
 ## Conclusion
 

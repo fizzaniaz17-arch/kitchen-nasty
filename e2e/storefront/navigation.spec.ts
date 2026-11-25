@@ -23,24 +23,31 @@ test.describe('Storefront Navigation', () => {
 
   test('footer is visible at bottom of page', async ({ page }) => {
     await page.goto('/');
+    await expect(page.locator('header')).toContainText('Saffron & Sage');
     const footer = page.locator('footer');
+    await expect(footer).toContainText(new Date().getFullYear().toString());
     await footer.scrollIntoViewIfNeeded();
     await expect(footer).toBeVisible();
-    await expect(footer).toContainText(new Date().getFullYear().toString());
   });
 
   test('home page headings follow a sequential hierarchy', async ({ page }) => {
     await page.goto('/');
+    await expect(page.locator('header')).toContainText('Saffron & Sage');
     const levels = await page.locator('main h1, main h2, main h3').evaluateAll((headings) =>
       headings.map((heading) => Number(heading.tagName.slice(1))),
     );
 
-    expect(levels).toEqual([1, 2, 2, 2, 2]);
+    expect(levels[0]).toBe(1);
+    expect(levels.filter((level) => level === 1)).toHaveLength(1);
+    for (let index = 1; index < levels.length; index += 1) {
+      expect(levels[index]).toBeLessThanOrEqual(levels[index - 1] + 1);
+    }
   });
 
   test('mobile menu exposes its state and supports keyboard navigation', async ({ page }) => {
     await page.setViewportSize({ width: 375, height: 812 });
     await page.goto('/');
+    await expect(page.locator('header')).toContainText('Saffron & Sage');
     const menuToggle = page.getByRole('button', { name: 'Toggle menu' });
 
     await page.keyboard.press('Tab');

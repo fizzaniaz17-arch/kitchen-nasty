@@ -1,0 +1,36 @@
+
+Running 1 test using 1 worker
+
+Keyboard focus after three tabs: <button class="p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100" aria-label="Toggle menu" aria-expanded="false" aria-controls="storefront-mobile-nav"><svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg></button>
+  x  1 [storefront] › e2e\storefront\navigation.spec.ts:41:7 › Storefront Navigation › mobile menu exposes its state and supports keyboard navigation (6.1s)
+
+
+  1) [storefront] › e2e\storefront\navigation.spec.ts:41:7 › Storefront Navigation › mobile menu exposes its state and supports keyboard navigation
+
+    Error: expect(locator).toBeFocused() failed
+
+    Locator:  getByRole('button', { name: 'Toggle menu' })
+    Expected: focused
+    Received: inactive
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toBeFocused" with timeout 5000ms
+      - waiting for getByRole('button', { name: 'Toggle menu' })
+        6 × locator resolved to <button aria-label="Toggle menu" class="p-2 text-gray-600">…</button>
+          - unexpected value "inactive"
+
+
+      48 |     await page.keyboard.press('Tab');
+      49 |     console.log('Keyboard focus after three tabs:', await page.evaluate(() => (document.activeElement as HTMLElement | null)?.outerHTML));
+    > 50 |     await expect(menuToggle).toBeFocused();
+         |                              ^
+      51 |     await expect(menuToggle).toHaveAttribute('aria-expanded', 'false');
+      52 |     await expect(menuToggle).toHaveAttribute('aria-controls', 'storefront-mobile-nav');
+      53 |
+        at D:\SQE\SQE Project\kitchen-nasty\e2e\storefront\navigation.spec.ts:50:30
+
+    Error Context: test-results\storefront-navigation-Stor-1425e-upports-keyboard-navigation-storefront\error-context.md
+
+  1 failed
+    [storefront] › e2e\storefront\navigation.spec.ts:41:7 › Storefront Navigation › mobile menu exposes its state and supports keyboard navigation

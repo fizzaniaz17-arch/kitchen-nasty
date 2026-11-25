@@ -20,8 +20,11 @@ target was scanned.
 | Server unit | Vitest | Passed: 60 tests |
 | Server integration | Vitest | Passed: 344 tests across 23 files |
 | Full server coverage / Sonar LCOV | Vitest with V8 coverage | Passed: 463 tests across 29 files; generated `packages/server/coverage/sonar/lcov.info`; output: `evidence/tests/server-coverage-rerun.txt` |
-| Storefront | Vitest with coverage | Passed: 5 tests across 2 files |
-| Storefront navigation and browser security | Targeted Playwright, single worker (2026-11-26) | Passed: 9 tests covering navigation, heading hierarchy, keyboard menu, response headers, and social-auth callback; API logged missing `DATABASE_URL`, so DB-backed flows were excluded |
+| Storefront | Vitest with coverage | Passed: 5 tests across 2 files; final output: `evidence/tests/storefront-coverage-final.txt` |
+| Storefront production build | TypeScript and Vite | Passed after mobile-header accessibility updates |
+| Storefront navigation | Playwright, single worker, isolated DB | Passed: 6/6, including heading hierarchy and keyboard menu; output: `evidence/tests/playwright-navigation-rerun.txt` |
+| Full Playwright E2E | Playwright, single worker, isolated DB | 142 executed: 138 passed, 4 failed; all four are existing Member 1 reservation tests; output: `evidence/tests/playwright-full-isolated-db-final.txt` |
+| Targeted security/navigation browser tests | Playwright, single worker (2026-11-26) | Passed: 9/9 response-header, navigation, and social-auth callback checks |
 | Accessibility | Lighthouse and axe-core | Lighthouse 98/100 to 100/100; axe violations 1 moderate to 0 |
 | Performance | k6 against local `/api/health` | Four runs completed; 0% failed requests; raw summaries retained |
 | Passive security | OWASP ZAP baseline against local storefront | 7 URLs; 0 high, 4 medium, 4 low, 2 informational alerts |
@@ -40,35 +43,28 @@ Test output and machine-readable audit evidence are retained under
 
 ## Full Playwright E2E status
 
-The current checkout's full suite was not completed. A diagnostic attempt
-started 142 tests with one worker and an intentionally unavailable database at
-`127.0.0.1:59999`. The first admin coupon flow triggered a Prisma connection
-failure, confirming that the suite requires a working test database. The
-attempt was stopped rather than allowing repeated, predictable DB failures.
-See [`evidence/tests/playwright-full-no-db-result.md`](./evidence/tests/playwright-full-no-db-result.md)
-and the raw console output in
-[`evidence/tests/playwright-full-no-db.txt`](./evidence/tests/playwright-full-no-db.txt).
+The full suite was run after starting Docker and preparing the isolated
+`student3_e2e` database. It completed with 138 passed and 4 failed out of 142.
+All four failures are in
+[`e2e/storefront/member1-reservation.spec.ts`](../../e2e/storefront/member1-reservation.spec.ts):
+the tests time out while trying to click a disabled `Book Table` button. These
+are the previously identified Member 1 reservation cases; their code and
+tests were not modified. No other test failed. The complete result is retained
+in [`evidence/tests/playwright-full-isolated-db-final.txt`](./evidence/tests/playwright-full-isolated-db-final.txt).
 
-A prior full-run record in [`e2e-full.txt`](./e2e-full.txt) reported 135
-passed and 5 failed: four existing Member 1 reservation tests failed because
-their `/api/auth/me` mock returned a different shape than the storefront
-expects; a footer visibility test detached during the multi-worker run and
-passed when isolated. This is historical evidence, not a result from the
-current checkout. The four reservation failures could not be reconfirmed because the
-database-backed suite is currently blocked. No Member 1 tests or functionality
-were modified. The 2026-11-26 targeted run passed 9 database-independent
-navigation/security tests; its output is in
-[`evidence/tests/playwright-security-navigation-rerun.txt`](./evidence/tests/playwright-security-navigation-rerun.txt).
+The mobile-menu keyboard and state regression passed in the full run and in
+the focused navigation run (6/6). The Playwright API web server receives
+`NODE_ENV=test`, matching the CI environment and avoiding the production-like
+rate limiter during E2E execution. The database is isolated in the
+`student3-recovery-pg` container on localhost port 55432; the shared project
+database was not started or changed.
 
 ## Known blockers and exclusions
 
-- Docker's Linux engine was unavailable on 2026-11-26 although `C:` had
-  9.72 GB free. The isolated PostgreSQL container could not be started; no
-  PostgreSQL service or executable was available and ports 5432, 55432, and
-  55433 were not listening. The Docker data disk remains on `D:` and was not
-  deleted or factory-reset.
-- The full Playwright suite must be rerun after Docker is recovered and the
-  isolated test database is available.
+- Four known Member 1 reservation tests still fail; resolving them would
+  require authorization to modify that member's test or application scope.
+- Sonar server analysis was not run because no local scanner or token was
+  available. The branch CI/Sonar result should be checked after pushing.
 - Mobile typecheck and Expo iOS/Android bundle exports passed on 2026-11-26;
   fresh output logs are under `evidence/tests/`.
 - Sonar server analysis was not run. Both configured LCOV files now exist;

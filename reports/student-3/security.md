@@ -40,10 +40,13 @@ The admin, storefront, and documentation Nginx configurations define:
 - Referrer-Policy: `no-referrer`
 
 Automated browser response-header checks passed for the admin and storefront
-applications. On 2026-11-26, the targeted single-worker Playwright rerun passed
-9/9 navigation, heading, keyboard-menu, response-header, and social-auth
-callback tests. The API process also logged a missing `DATABASE_URL` during
-the run; database-backed flows were not part of this targeted result.
+applications. The targeted single-worker Playwright security/navigation rerun
+passed 9/9 response-header, navigation, and social-auth callback tests. A
+subsequent full single-worker Playwright run against the isolated test database
+completed 142 tests: 138 passed and four Member 1 reservation cases failed.
+The response-header and social-auth cases passed in that full run; the four
+failures were confined to the existing Member 1 reservation tests and are
+documented in `evidence/tests/playwright-full-isolated-db-final.txt`.
 
 A production Nginx deployment was not tested. The CSP is intentionally limited to anti-framing because a complete resource allowlist was not established.
 
@@ -71,7 +74,9 @@ targeted Playwright tests passed on 2026-11-26.
 - Server production audit: 0 findings.
 - Security/navigation browser regressions: 9 passed in the targeted rerun.
 - Shared/server `npm test`: 421 passed (17 shared, 60 server unit, 344 server
-  integration); storefront tests: 5 passed.
+  integration); storefront Vitest coverage suite: 5 passed. The full
+  database-backed browser run completed with 138 passed and the four
+  out-of-scope reservation failures noted above.
 - Independent review found no confirmed exploitable vulnerability in the
   reviewed Student 3 code changes. The remaining high `image-size` advisory is
   a conditional Metro development/build-time denial-of-service risk; the CSP
@@ -108,13 +113,14 @@ cache observations are not representative of the built Nginx deployment.
 
 - ZAP scanned only the local storefront development server, not production
   Nginx or external systems.
-- Docker's Linux engine was unavailable on 2026-11-26 (the Docker API named
-  pipe did not exist). `C:` had 9.72 GB free and `D:` had 15.68 GB free; the
-  previous low-space condition is no longer present. No PostgreSQL service or
-  executable was available, and ports 5432, 55432, and 55433 were not
-  listening. Database-dependent full E2E reruns therefore remain blocked.
-  Docker's configured WSL data disk remains on `D:`; no Docker reset or data
-  deletion was performed.
+- Docker was started and database-backed E2E ran against the isolated
+  `student3_e2e` database in the `student3-recovery-pg` container. The
+  container uses a separate volume and localhost-only port 55432; the shared
+  `kitchenasty-db` service and volume were not used or changed. The recovery
+  database was preserved.
+- Local Sonar analysis still requires the scanner and token supplied by the
+  normal CI/Sonar environment. Both configured LCOV inputs exist, but no
+  Sonar result is claimed here.
 - No production deployment or real customer credentials were used.
 - The remaining Expo dependency findings require coordinated compatibility work.
 
