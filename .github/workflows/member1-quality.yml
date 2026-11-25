@@ -93,11 +93,11 @@ jobs:
         with:
           node-version: 22
           cache: npm
-      - run: npm ci
+      - run: npm ci --ignore-scripts
       - name: Generate Prisma client
-        run: npx -w packages/server prisma generate --schema ../../prisma/schema.prisma
+        run: node node_modules/prisma/build/index.js generate --schema prisma/schema.prisma
       - name: Generate server coverage
-        run: npx -w packages/server vitest run --coverage --coverage.reporter=lcov --coverage.reportsDirectory=coverage/sonar
+        run: node node_modules/vitest/vitest.mjs run --coverage --coverage.reporter=lcov --coverage.reportsDirectory=coverage/sonar --root packages/server
       - name: Generate storefront coverage
         run: npm run test:coverage --workspace packages/storefront
       - name: Normalize LCOV paths

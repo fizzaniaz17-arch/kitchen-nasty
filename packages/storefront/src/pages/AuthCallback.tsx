@@ -16,16 +16,16 @@ export default function AuthCallback() {
     const error = searchParams.get('error');
 
     if (error) {
-      navigate('/login?error=auth_failed', { replace: true });
+      void navigate('/login?error=auth_failed', { replace: true });
       return;
     }
 
     if (!code) {
-      navigate('/login?error=auth_failed', { replace: true });
+      void navigate('/login?error=auth_failed', { replace: true });
       return;
     }
 
-    navigate('/auth/callback', { replace: true });
+    void navigate('/auth/callback', { replace: true });
     void (async () => {
       try {
         const response = await fetch('/api/auth/social/exchange', {
@@ -36,9 +36,9 @@ export default function AuthCallback() {
         const data = await response.json();
         if (!response.ok || !data.data?.token) throw new Error('Social login exchange failed');
         loginWithToken(data.data.token);
-        navigate('/account', { replace: true });
+        void navigate('/account', { replace: true });
       } catch {
-        navigate('/login?error=auth_failed', { replace: true });
+        void navigate('/login?error=auth_failed', { replace: true });
       }
     })();
   }, [searchParams, navigate, loginWithToken]);
