@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import LanguageSwitcher from '../../components/LanguageSwitcher.js';
-import { getMobileMenuToggleA11yProps, storefrontMobileNavId } from './mobileMenuAccessibility.js';
+import MobileMenuPanel, { getMobileMenuToggleA11yProps } from './MobileMenuPanel.js';
 import { useHeaderProps } from './useHeaderProps.js';
 
 export default function ModernHeader() {
@@ -59,27 +59,21 @@ export default function ModernHeader() {
       </div>
 
       {mobileOpen && (
-        <div id={storefrontMobileNavId} className="md:hidden border-t border-gray-200/50 dark:border-gray-700/50 bg-white/90 dark:bg-gray-900/90 backdrop-blur-lg">
-          <div className="px-4 py-3 space-y-1">
-            {navLinks.map((link) => (
-              <Link key={link.to} to={link.to} onClick={() => setMobileOpen(false)} className={`block px-3 py-2 rounded-lg text-sm ${isActive(link.to) ? 'text-primary-600 bg-primary-50' : 'text-gray-600'}`}>{link.label}</Link>
-            ))}
-            <div className="px-3 py-2"><LanguageSwitcher /></div>
-            <div className="border-t border-gray-200/50 pt-3 mt-3">
-              {user ? (
-                <>
-                  <Link to="/account" onClick={() => setMobileOpen(false)} className="block px-3 py-2 text-sm text-gray-600">{t('nav.myAccount')}</Link>
-                  <button onClick={() => { logout(); setMobileOpen(false); }} className="block w-full text-left px-3 py-2 text-sm text-gray-500">{t('nav.logout')}</button>
-                </>
-              ) : (
-                <>
-                  <Link to="/login" onClick={() => setMobileOpen(false)} className="block px-3 py-2 text-sm text-gray-600">{t('nav.login')}</Link>
-                  <Link to="/register" onClick={() => setMobileOpen(false)} className="block px-3 py-2 text-sm text-primary-600">{t('nav.signUp')}</Link>
-                </>
-              )}
-            </div>
-          </div>
-        </div>
+        <MobileMenuPanel
+          navLinks={navLinks}
+          isActive={isActive}
+          isAuthenticated={Boolean(user)}
+          onClose={() => setMobileOpen(false)}
+          onLogout={logout}
+          t={t}
+          panelClassName="md:hidden border-t border-gray-200/50 dark:border-gray-700/50 bg-white/90 dark:bg-gray-900/90 backdrop-blur-lg"
+          navLinkClassName={(active) => `block px-3 py-2 rounded-lg text-sm ${active ? 'text-primary-600 bg-primary-50' : 'text-gray-600'}`}
+          separatorClassName="border-t border-gray-200/50 pt-3 mt-3"
+          accountLinkClassName="block px-3 py-2 text-sm text-gray-600"
+          logoutButtonClassName="block w-full text-left px-3 py-2 text-sm text-gray-500"
+          loginLinkClassName="block px-3 py-2 text-sm text-gray-600"
+          signupLinkClassName="block px-3 py-2 text-sm text-primary-600"
+        />
       )}
     </header>
   );

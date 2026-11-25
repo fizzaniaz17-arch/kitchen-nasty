@@ -8,7 +8,11 @@ export default defineConfig({
       provider: 'v8',
       reporter: ['lcov', 'text'],
       reportsDirectory: 'coverage/sonar',
-      include: ['src/context/AuthContext.tsx', 'src/pages/AuthCallback.tsx'],
+      include: [
+        'src/context/AuthContext.tsx',
+        'src/pages/AuthCallback.tsx',
+        'src/templates/headers/MobileMenuPanel.tsx',
+      ],
     },
   },
 });
