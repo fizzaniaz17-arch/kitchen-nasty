@@ -44,9 +44,10 @@ applications. The targeted single-worker Playwright security/navigation rerun
 passed 9/9 response-header, navigation, and social-auth callback tests. A
 subsequent full single-worker Playwright run against the isolated test database
 completed 142 tests: 138 passed and four Member 1 reservation cases failed.
-The response-header and social-auth cases passed in that full run; the four
-failures were confined to the existing Member 1 reservation tests and are
-documented in `evidence/tests/playwright-full-isolated-db-final.txt`.
+The response-header and social-auth cases passed in that local run; the four
+failures were confined to the existing Member 1 reservation tests. The latest
+GitHub Actions E2E run passed all 142 tests (run 45794682485). The local/CI
+discrepancy is documented in `evidence/tests/playwright-full-isolated-db-final.txt`.
 
 A production Nginx deployment was not tested. The CSP is intentionally limited to anti-framing because a complete resource allowlist was not established.
 
@@ -74,9 +75,10 @@ targeted Playwright tests passed on 2026-11-26.
 - Server production audit: 0 findings.
 - Security/navigation browser regressions: 9 passed in the targeted rerun.
 - Shared/server `npm test`: 421 passed (17 shared, 60 server unit, 344 server
-  integration); storefront Vitest coverage suite: 5 passed. The full
+  integration); storefront Vitest coverage suite: 18 passed. The local
   database-backed browser run completed with 138 passed and the four
-  out-of-scope reservation failures noted above.
+  out-of-scope reservation failures noted above; the latest GitHub Actions
+  E2E run passed 142/142.
 - Independent review found no confirmed exploitable vulnerability in the
   reviewed Student 3 code changes. The remaining high `image-size` advisory is
   a conditional Metro development/build-time denial-of-service risk; the CSP
@@ -118,9 +120,10 @@ cache observations are not representative of the built Nginx deployment.
   container uses a separate volume and localhost-only port 55432; the shared
   `kitchenasty-db` service and volume were not used or changed. The recovery
   database was preserved.
-- Local Sonar analysis still requires the scanner and token supplied by the
-  normal CI/Sonar environment. Both configured LCOV inputs exist, but no
-  Sonar result is claimed here.
+- Local Sonar analysis was not run because the scanner and token were not
+  available locally. The separate CI SonarCloud analysis passed its Quality
+  Gate (96.9% new-code coverage, 0.0% duplication); it is code-quality
+  evidence, not a security scan.
 - No production deployment or real customer credentials were used.
 - The remaining Expo dependency findings require coordinated compatibility work.
 
