@@ -6,7 +6,7 @@ const customer = { id: 'customer-m1', name: 'Synthetic Customer', email: 'm1@exa
 async function setup(page: import('@playwright/test').Page, options: { available?: boolean; createStatus?: number } = {}) {
   const created: Record<string, unknown>[] = [];
   await page.addInitScript(() => localStorage.setItem('token', 'synthetic-customer-token'));
-  await page.route('**/api/auth/me', (route) => route.fulfill({ json: { success: true, data: customer } }));
+  await page.route('**/api/auth/me', (route) => route.fulfill({ json: { success: true, data: { customer } } }));
   await page.route('**/api/locations', (route) => route.fulfill({ json: { success: true, data: [location] } }));
   await page.route('**/api/reservations/my-reservations*', (route) => route.fulfill({ json: { success: true, data: created } }));
   await page.route('**/api/reservations/availability*', (route) => route.fulfill({
@@ -34,6 +34,7 @@ async function selectBooking(page: import('@playwright/test').Page) {
 test('UC-M1-01-MAIN creates a reservation and records the submitted postcondition', async ({ page }) => {
   const created = await setup(page);
   await selectBooking(page);
+  await expect(page.getByRole('button', { name: 'Book Table' })).toBeEnabled();
   await page.getByRole('button', { name: 'Book Table' }).click();
   await expect(page.getByText('Reservation created!')).toBeVisible();
   expect(created).toHaveLength(1);
@@ -45,6 +46,7 @@ test('UC-M1-01-ALT-01 accepts an alternate party size and special request', asyn
   await selectBooking(page);
   await page.getByRole('main').locator('select').nth(1).selectOption('4');
   await page.locator('textarea').fill('Window table');
+  await expect(page.getByRole('button', { name: 'Book Table' })).toBeEnabled();
   await page.getByRole('button', { name: 'Book Table' }).click();
   expect(created[0]).toMatchObject({ partySize: 4, comment: 'Window table' });
 });
@@ -60,6 +62,7 @@ test('UC-M1-01-ALT-02 prevents selection of an unavailable slot', async ({ page 
 test('UC-M1-01-EX-01 rejects submission without location, date, and time', async ({ page }) => {
   const created = await setup(page);
   await page.goto('/reservations');
+  await expect(page.getByRole('button', { name: 'Book Table' })).toBeEnabled();
   await page.getByRole('button', { name: 'Book Table' }).click();
   await expect(page.getByText(/select.*date/i)).toBeVisible();
   expect(created).toHaveLength(0);
@@ -68,6 +71,7 @@ test('UC-M1-01-EX-01 rejects submission without location, date, and time', async
 test('UC-M1-01-EX-02 displays API rejection and stores nothing', async ({ page }) => {
   const created = await setup(page, { createStatus: 409 });
   await selectBooking(page);
+  await expect(page.getByRole('button', { name: 'Book Table' })).toBeEnabled();
   await page.getByRole('button', { name: 'Book Table' }).click();
   await expect(page.getByText('Synthetic booking rejected')).toBeVisible();
   expect(created).toHaveLength(0);
