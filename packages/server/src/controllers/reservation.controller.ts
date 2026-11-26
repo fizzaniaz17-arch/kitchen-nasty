@@ -3,10 +3,22 @@ import { z } from 'zod';
 import { Prisma } from '@prisma/client';
 import prisma from '../lib/db.js';
 
+// Reject impossible dates instead of allowing JavaScript to normalize them.
+const reservationDate = z.string().regex(/^\d{4}-\d{2}-\d{2}$/).refine((value) => {
+  const parsed = new Date(`${value}T00:00:00.000Z`);
+  return !Number.isNaN(parsed.getTime()) && parsed.toISOString().slice(0, 10) === value;
+}, 'Invalid calendar date');
+
+const reservationTime = z.string().regex(/^\d{2}:\d{2}$/).refine((value) => {
+  const hours = Number(value.slice(0, 2));
+  const minutes = Number(value.slice(3, 5));
+  return hours < 24 && minutes < 60;
+}, 'Invalid clock time');
+
 const createReservationSchema = z.object({
   locationId: z.string().min(1),
-  date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
-  time: z.string().regex(/^\d{2}:\d{2}$/),
+  date: reservationDate,
+  time: reservationTime,
   partySize: z.number().int().min(1).max(50),
   comment: z.string().optional(),
 });
@@ -14,8 +26,8 @@ const createReservationSchema = z.object({
 const updateReservationSchema = z.object({
   status: z.enum(['PENDING', 'CONFIRMED', 'SEATED', 'COMPLETED', 'CANCELLED']).optional(),
   tableId: z.string().nullable().optional(),
-  date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
-  time: z.string().regex(/^\d{2}:\d{2}$/).optional(),
+  date: reservationDate.optional(),
+  time: reservationTime.optional(),
   partySize: z.number().int().min(1).max(50).optional(),
   comment: z.string().nullable().optional(),
 });
@@ -153,6 +165,24 @@ export async function updateReservation(req: Request<{ id: string }>, res: Respo
   if (!existing) {
     res.status(404).json({ success: false, error: 'Reservation not found' });
     return;
+  }
+
+  const effectiveTableId = parsed.data.tableId === undefined ? existing.tableId : parsed.data.tableId;
+  const tableRelevantUpdate = parsed.data.tableId !== undefined || parsed.data.partySize !== undefined
+    || parsed.data.date !== undefined || parsed.data.time !== undefined;
+  if (effectiveTableId !== null && tableRelevantUpdate) {
+    const candidateTable = await prisma.table.findFirst({
+      where: {
+        id: effectiveTableId,
+        locationId: existing.locationId,
+        isActive: true,
+        capacity: { gte: parsed.data.partySize ?? existing.partySize },
+      },
+    });
+    if (!candidateTable) {
+      res.status(400).json({ success: false, error: 'Table is not eligible for this reservation' });
+      return;
+    }
   }
 
   const data: Record<string, unknown> = {};

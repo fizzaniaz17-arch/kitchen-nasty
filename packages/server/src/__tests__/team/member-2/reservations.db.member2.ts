@@ -259,6 +259,7 @@ describe('generated write path identifiers against PostgreSQL', () => {
 describe('generated reservation update cases against PostgreSQL', () => {
   const cases = generated.filter(c => !c.location && c.method === 'patch' && c.path === '/reservations/{id}' && !(c.field === 'tableId' && c.valid && !c.omitted && c.value !== null));
   it.each(cases.map(c => [c.id, c] as const))('%s', async (_id, c) => {
+    if (c.field === 'partySize') await db.table.update({ where: { id: tableId }, data: { capacity: 50 } });
     const initial = await db.reservation.create({ data: { ...base(), customerId, date: new Date(base().date), tableId } });
     const body: Record<string, unknown> = {};
     if (!c.omitted) body[c.field] = c.value;
@@ -510,12 +511,13 @@ describe('shared reservation workflow', () => {
     const mine = await request(app).get('/api/reservations/my-reservations').set('Authorization', auth(customer));
     expect(mine.body.data.map((r: { id: string }) => r.id)).toContain(row.id);
   });
-  it('characterizes acceptance of a table too small for the reservation', async () => {
+  it('rejects a table too small for the reservation (fixed behavior)', async () => {
     const row = await db.reservation.create({ data: { ...base(), date: new Date(base().date), customerId } });
     const small = await db.table.create({ data: { locationId, name: 'Small', capacity: 1 } });
     const response = await request(app).patch(`/api/reservations/${row.id}`).set('Authorization', auth(staff)).send({ tableId: small.id });
-    expect(response.status).toBe(200);
-    expect((await db.reservation.findUniqueOrThrow({ where: { id: row.id } })).tableId).toBe(small.id);
+    expect(response.status).toBe(400);
+    expect(response.body).toMatchObject({ success: false });
+    expect(await db.reservation.findUniqueOrThrow({ where: { id: row.id } })).toEqual(row);
   });
   it('characterizes an accepted conflicting table assignment', async () => {
     await db.reservation.create({ data: { ...base(), date: new Date(base().date), customerId, tableId } });
@@ -604,6 +606,83 @@ describe('documented reservation lifecycle', () => {
 });
 
 describe('business-rule regressions', () => {
+  it('accepts decreasing party size for an eligible assigned table', async () => {
+    const row = await db.reservation.create({ data: { ...base(), date: new Date(base().date), customerId, tableId } });
+    const response = await request(app).patch(`/api/reservations/${row.id}`).set('Authorization', auth(staff)).send({ partySize: 2 });
+    const stored = await db.reservation.findUniqueOrThrow({ where: { id: row.id } });
+    expect(response.status).toBe(200);
+    expect(stored).toEqual({ ...row, partySize: 2, updatedAt: stored.updatedAt });
+  });
+  it('accepts clearing an assigned table while increasing party size', async () => {
+    const row = await db.reservation.create({ data: { ...base(), date: new Date(base().date), customerId, tableId } });
+    const response = await request(app).patch(`/api/reservations/${row.id}`).set('Authorization', auth(staff)).send({ tableId: null, partySize: 5 });
+    const stored = await db.reservation.findUniqueOrThrow({ where: { id: row.id } });
+    expect(response.status).toBe(200);
+    expect(stored).toEqual({ ...row, tableId: null, partySize: 5, updatedAt: stored.updatedAt });
+  });
+  it('accepts an eligible table and party-size change together', async () => {
+    const row = await db.reservation.create({ data: { ...base(), date: new Date(base().date), customerId, partySize: 2 } });
+    const response = await request(app).patch(`/api/reservations/${row.id}`).set('Authorization', auth(staff)).send({ tableId, partySize: 4 });
+    const stored = await db.reservation.findUniqueOrThrow({ where: { id: row.id } });
+    expect(response.status).toBe(200);
+    expect(stored).toEqual({ ...row, tableId, partySize: 4, updatedAt: stored.updatedAt });
+  });
+  it.each([{ partySize: 3 }, { date: '2099-06-16' }, { time: '20:00' }])('rejects a relevant update %j with a deactivated assigned table', async body => {
+    const row = await db.reservation.create({ data: { ...base(), date: new Date(base().date), customerId, tableId } });
+    await db.table.update({ where: { id: tableId }, data: { isActive: false } });
+    const response = await request(app).patch(`/api/reservations/${row.id}`).set('Authorization', auth(staff)).send(body);
+    const stored = await db.reservation.findUniqueOrThrow({ where: { id: row.id } });
+    expect(response.status).toBe(400);
+    expect(stored).toEqual(row);
+  });
+  it('preserves a historical inactive assignment during an unrelated comment update', async () => {
+    const row = await db.reservation.create({ data: { ...base(), date: new Date(base().date), customerId, tableId } });
+    await db.table.update({ where: { id: tableId }, data: { isActive: false } });
+    const response = await request(app).patch(`/api/reservations/${row.id}`).set('Authorization', auth(staff)).send({ comment: 'Updated' });
+    const stored = await db.reservation.findUniqueOrThrow({ where: { id: row.id } });
+    expect(response.status).toBe(200);
+    expect(stored).toEqual({ ...row, comment: 'Updated', updatedAt: stored.updatedAt });
+  });
+  it('allows staff to clear a historical inactive table assignment', async () => {
+    const row = await db.reservation.create({ data: { ...base(), date: new Date(base().date), customerId, tableId } });
+    await db.table.update({ where: { id: tableId }, data: { isActive: false } });
+    const response = await request(app).patch(`/api/reservations/${row.id}`).set('Authorization', auth(staff)).send({ tableId: null });
+    const stored = await db.reservation.findUniqueOrThrow({ where: { id: row.id } });
+    expect(response.status).toBe(200);
+    expect(stored).toEqual({ ...row, tableId: null, updatedAt: stored.updatedAt });
+  });
+  it('rejects a party-size update when the existing table belongs to another location', async () => {
+    const otherLocationId = `m2-other-${randomUUID()}`;
+    await db.location.create({ data: { id: otherLocationId, name: 'Other test location', slug: otherLocationId, address: 'Test', city: 'Test', postalCode: '00000' } });
+    try {
+      const otherTable = await db.table.create({ data: { locationId: otherLocationId, name: 'Other table', capacity: 4 } });
+      const row = await db.reservation.create({ data: { ...base(), date: new Date(base().date), customerId, tableId: otherTable.id } });
+      const response = await request(app).patch(`/api/reservations/${row.id}`).set('Authorization', auth(staff)).send({ partySize: 3 });
+      const stored = await db.reservation.findUniqueOrThrow({ where: { id: row.id } });
+      expect(response.status).toBe(400);
+      expect(stored).toEqual(row);
+    } finally {
+      await db.reservation.deleteMany({ where: { customerId, locationId } });
+      await db.table.deleteMany({ where: { locationId: otherLocationId } });
+      await db.location.delete({ where: { id: otherLocationId } });
+    }
+  });
+  it('rejects assigning a table that cannot fit a simultaneously increased party size', async () => {
+    const row = await db.reservation.create({ data: { ...base(), date: new Date(base().date), customerId, partySize: 2 } });
+    const response = await request(app).patch(`/api/reservations/${row.id}`).set('Authorization', auth(staff)).send({ tableId, partySize: 5 });
+    const stored = await db.reservation.findUniqueOrThrow({ where: { id: row.id } });
+    console.log(JSON.stringify({ scenario: 'table assignment with increased party size', observedStatus: response.status, recordUnchanged: JSON.stringify(stored) === JSON.stringify(row) }));
+    expect(response.status).toBe(400);
+    expect(stored).toEqual(row);
+  });
+  it('rejects increasing party size beyond the capacity of the assigned table', async () => {
+    const row = await db.reservation.create({ data: { ...base(), date: new Date(base().date), customerId, tableId } });
+    const response = await request(app).patch(`/api/reservations/${row.id}`).set('Authorization', auth(staff)).send({ partySize: 5 });
+    const stored = await db.reservation.findUniqueOrThrow({ where: { id: row.id } });
+    console.log(JSON.stringify({ scenario: 'increase party size on assigned table', observedStatus: response.status, recordUnchanged: JSON.stringify(stored) === JSON.stringify(row) }));
+    expect.soft(response.status).toBe(400);
+    expect.soft(stored).toEqual(row);
+  });
   it.each(['inactive', 'other-location'] as const)('rejects assigning an %s table without mutation', async kind => {
     const otherLocationId = `m2-other-${randomUUID()}`;
     let otherCreated = false;
