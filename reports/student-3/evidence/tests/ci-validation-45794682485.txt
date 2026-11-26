@@ -1,0 +1,27 @@
+﻿KitchenAsty Student 3 CI evidence
+Branch: hamza-student3-main-sync
+Commit: 5bddf78a10b14fce38ee993fd749beefcf42f503
+
+CI run: https://github.com/fizzaniaz17-arch/kitchen-nasty/actions/runs/45794682485
+Conclusion: success
+Jobs:
+  Integration Tests: success
+  Security Audit: success
+  Unit Tests: success
+  E2E Tests: success
+  Lint: success
+  Build: success
+E2E summary: 142 passed (2.1m)
+
+Member 1 Quality Gates: https://github.com/fizzaniaz17-arch/kitchen-nasty/actions/runs/45794682540
+Conclusion: success
+SonarCloud Quality Gate: OK
+  new_reliability_rating: 1 (threshold GT 1), OK
+  new_security_rating: 1 (threshold GT 1), OK
+  new_maintainability_rating: 1 (threshold GT 1), OK
+  new_coverage: 96.9 (threshold LT 80), OK
+  new_duplicated_lines_density: 0.0 (threshold GT 3), OK
+  new_security_hotspots_reviewed: 100.0 (threshold LT 100), OK
+
+Mobile Builds: https://github.com/fizzaniaz17-arch/kitchen-nasty/actions/runs/45794682552
+Conclusion: success
