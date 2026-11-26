@@ -28,6 +28,7 @@ import prisma from '../../../lib/db.js';
 import {
   checkAvailability,
   createReservation,
+  listReservations,
   updateReservation,
 } from '../../../controllers/reservation.controller.js';
 import {
@@ -373,5 +374,168 @@ describe('table management rules', () => {
     await deleteTable(request({ params: { locationId: 'loc-1', tableId: 't-1' } }), res);
     expect(db.table.delete).toHaveBeenCalledWith({ where: { id: 't-1' } });
     expect(res.json).toHaveBeenCalledWith({ success: true, message: 'Table deleted' });
+  });
+});
+
+describe('Issue #25 reservation query filter validation and calendar policy', () => {
+  describe('listReservations query filter validation', () => {
+    it.each([
+      ['invalid status string', 'NOT_A_STATUS'],
+      ['repeated status array', ['PENDING', 'CONFIRMED']],
+    ])('rejects %s before database access', async (_scenario, status) => {
+      const res = response();
+      await listReservations(request({ query: { status: status as unknown as string } }), res);
+      expect(res.status).toHaveBeenCalledWith(400);
+      expect(res.json).toHaveBeenCalledWith({ success: false, error: 'Invalid status filter' });
+      expect(db.reservation.findMany).not.toHaveBeenCalled();
+      expect(db.reservation.count).not.toHaveBeenCalled();
+    });
+
+    it('rejects non-string or repeated locationId filter before database access', async () => {
+      const res = response();
+      await listReservations(request({ query: { locationId: ['loc-1', 'loc-2'] as unknown as string } }), res);
+      expect(res.status).toHaveBeenCalledWith(400);
+      expect(res.json).toHaveBeenCalledWith({ success: false, error: 'Invalid locationId filter' });
+      expect(db.reservation.findMany).not.toHaveBeenCalled();
+      expect(db.reservation.count).not.toHaveBeenCalled();
+    });
+
+    it.each([
+      ['impossible calendar date', '2099-02-30'],
+      ['repeated date array', ['2027-01-10', '2027-01-11']],
+      ['unrecognized format', 'not-a-date'],
+    ])('rejects %s filter before database access', async (_scenario, date) => {
+      const res = response();
+      await listReservations(request({ query: { date: date as unknown as string } }), res);
+      expect(res.status).toHaveBeenCalledWith(400);
+      expect(res.json).toHaveBeenCalledWith({ success: false, error: 'Invalid date filter' });
+      expect(db.reservation.findMany).not.toHaveBeenCalled();
+      expect(db.reservation.count).not.toHaveBeenCalled();
+    });
+
+    it('accepts valid combined status, locationId, and non-ISO date filters', async () => {
+      db.reservation.findMany.mockResolvedValue([{ id: 'r-1' }]);
+      db.reservation.count.mockResolvedValue(1);
+      const res = response();
+
+      await listReservations(request({
+        query: { status: 'CONFIRMED', locationId: 'loc-1', date: '02/28/2099', page: '2', limit: '10' },
+      }), res);
+
+      expect(db.reservation.findMany).toHaveBeenCalledWith(expect.objectContaining({
+        where: {
+          status: 'CONFIRMED',
+          locationId: 'loc-1',
+          date: new Date('02/28/2099'),
+        },
+        skip: 10,
+        take: 10,
+      }));
+      expect(db.reservation.count).toHaveBeenCalledWith({
+        where: {
+          status: 'CONFIRMED',
+          locationId: 'loc-1',
+          date: new Date('02/28/2099'),
+        },
+      });
+      expect(res.json).toHaveBeenCalledWith(expect.objectContaining({
+        success: true,
+        data: [{ id: 'r-1' }],
+        pagination: { page: 2, limit: 10, total: 1, totalPages: 1 },
+      }));
+    });
+  });
+
+  describe('checkAvailability query filter validation', () => {
+    it('rejects non-string or repeated locationId filter before database access', async () => {
+      const res = response();
+      await checkAvailability(request({
+        query: { locationId: ['loc-1', 'loc-2'] as unknown as string, date: '2027-01-10' },
+      }), res);
+      expect(res.status).toHaveBeenCalledWith(400);
+      expect(res.json).toHaveBeenCalledWith({ success: false, error: 'Invalid locationId filter' });
+      expect(db.table.findMany).not.toHaveBeenCalled();
+      expect(db.reservation.findMany).not.toHaveBeenCalled();
+    });
+
+    it.each([
+      ['impossible calendar date', '2099-02-30'],
+      ['repeated date array', ['2027-01-10', '2027-01-11']],
+      ['unrecognized date string', 'not-a-date'],
+    ])('rejects %s before database access', async (_scenario, date) => {
+      const res = response();
+      await checkAvailability(request({
+        query: { locationId: 'loc-1', date: date as unknown as string },
+      }), res);
+      expect(res.status).toHaveBeenCalledWith(400);
+      expect(res.json).toHaveBeenCalledWith({ success: false, error: 'Invalid date filter' });
+      expect(db.table.findMany).not.toHaveBeenCalled();
+      expect(db.reservation.findMany).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('queryDate calendar policy and format coverage', () => {
+    it.each([
+      ['year-first slash', '2027/01/10'],
+      ['year-first period', '2027.01.10'],
+      ['year-first space', '2027 01 10'],
+      ['year-first space-separated timestamp', '2027-01-10 12:00:00'],
+      ['year-first lowercase-t offset timestamp', '2027-01-10t12:00:00+01:00'],
+      ['month-first slash', '01/10/2027'],
+      ['month-first hyphen', '01-10-2027'],
+      ['month-first period', '01.10.2027'],
+      ['month-first space', '01 10 2027'],
+      ['named month-first with full name', 'February 28 2099'],
+      ['named month-first with comma', 'Feb 28, 2099'],
+      ['named month-first with weekday prefix', 'Wednesday, Feb 28, 2099'],
+      ['named day-first', '28 Feb 2099'],
+      ['named day-first with hyphen', '28-February-2099'],
+      ['named year-first', '2099 Feb 28'],
+      ['named year-first with hyphen', '2099-February-28'],
+      ['valid leap day in non-century leap year (2096)', '2096-02-29'],
+      ['valid leap day in 400-year century leap year (2000)', '2000-02-29'],
+      ['valid leap day in month-first format (2000)', '02/29/2000'],
+      ['valid leap day in named format (2000)', 'Feb 29 2000'],
+      ['ISO year below 100 with 4-digit notation', '0099-02-28'],
+    ])('accepts valid date format %s in availability query', async (_scenario, date) => {
+      db.table.findMany.mockResolvedValue([{ id: 't-1' }]);
+      db.reservation.findMany.mockResolvedValue([]);
+      const res = response();
+
+      await checkAvailability(request({ query: { locationId: 'loc-1', date } }), res);
+
+      expect(res.status).not.toHaveBeenCalledWith(400);
+      expect(db.table.findMany).toHaveBeenCalledWith(expect.objectContaining({
+        where: expect.objectContaining({ locationId: 'loc-1' }),
+      }));
+      expect(db.reservation.findMany).toHaveBeenCalledWith(expect.objectContaining({
+        where: expect.objectContaining({ locationId: 'loc-1', date: new Date(date) }),
+      }));
+    });
+
+    it.each([
+      ['two-digit year', '03/04/05'],
+      ['incomplete named date', 'Feb 3'],
+      ['incomplete numeric date', '01'],
+      ['unsupported non-ISO year below 100', '02/28/0099'],
+      ['non-leap century year (2100)', '2100-02-29'],
+      ['non-leap common year (2099)', '2099-02-29'],
+      ['month-first invalid February day', '02.30.2099'],
+      ['named-month invalid February day', 'Feb 30 2099'],
+      ['named-month unknown month name', 'Unknown 28, 2099'],
+      ['month outside 1-12', '2099-13-01'],
+      ['day is 0', '2099-01-00'],
+      ['day past 30-day month end (April 31)', '2099-04-31'],
+      ['valid calendar date paired with invalid time suffix', '2099-01-15T99:99:99Z'],
+    ])('rejects invalid or unsupported date %s in availability query before DB access', async (_scenario, date) => {
+      const res = response();
+
+      await checkAvailability(request({ query: { locationId: 'loc-1', date } }), res);
+
+      expect(res.status).toHaveBeenCalledWith(400);
+      expect(res.json).toHaveBeenCalledWith({ success: false, error: 'Invalid date filter' });
+      expect(db.table.findMany).not.toHaveBeenCalled();
+      expect(db.reservation.findMany).not.toHaveBeenCalled();
+    });
   });
 });
