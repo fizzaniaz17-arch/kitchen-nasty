@@ -203,7 +203,8 @@ describe('M1-BR-03 partial reservation update', () => {
   });
 
   it('maps every supplied optional field into the Prisma payload', async () => {
-    db.reservation.findUnique.mockResolvedValue({ id: 'r-1' });
+    db.reservation.findUnique.mockResolvedValue({ id: 'r-1', locationId: 'loc-1', partySize: 2 });
+    db.table.findFirst.mockResolvedValue({ id: 't-1', locationId: 'loc-1', capacity: 4, isActive: true });
     db.reservation.update.mockResolvedValue({ id: 'r-1' });
     const res = response();
     await updateReservation(request({
@@ -212,11 +213,58 @@ describe('M1-BR-03 partial reservation update', () => {
         status: 'CONFIRMED', tableId: 't-1', date: '2027-02-03', time: '20:30', partySize: 4, comment: 'Window',
       },
     }), res);
+    expect(db.table.findFirst).toHaveBeenCalledWith({
+      where: { id: 't-1', locationId: 'loc-1', isActive: true, capacity: { gte: 4 } },
+    });
     expect(db.reservation.update).toHaveBeenCalledWith(expect.objectContaining({
       data: {
         status: 'CONFIRMED', tableId: 't-1', date: new Date('2027-02-03'), time: '20:30', partySize: 4, comment: 'Window',
       },
     }));
+  });
+
+  it('uses the existing party size for an eligible table assignment when partySize is omitted', async () => {
+    db.reservation.findUnique.mockResolvedValue({ id: 'r-1', locationId: 'loc-1', partySize: 3 });
+    db.table.findFirst.mockResolvedValue({ id: 't-1', locationId: 'loc-1', capacity: 3, isActive: true });
+    db.reservation.update.mockResolvedValue({ id: 'r-1', tableId: 't-1' });
+    const res = response();
+    await updateReservation(request({ params: { id: 'r-1' }, body: { tableId: 't-1' } }), res);
+    expect(db.table.findFirst).toHaveBeenCalledWith({
+      where: { id: 't-1', locationId: 'loc-1', isActive: true, capacity: { gte: 3 } },
+    });
+    expect(db.reservation.update).toHaveBeenCalledWith(expect.objectContaining({ data: { tableId: 't-1' } }));
+    expect(res.json).toHaveBeenCalled();
+  });
+
+  it('rejects an ineligible table before the reservation update', async () => {
+    db.reservation.findUnique.mockResolvedValue({ id: 'r-1', locationId: 'loc-1', partySize: 3 });
+    db.table.findFirst.mockResolvedValue(null);
+    const res = response();
+    await updateReservation(request({ params: { id: 'r-1' }, body: { tableId: 't-1' } }), res);
+    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.json).toHaveBeenCalledWith({ success: false, error: 'Table is not eligible for this reservation' });
+    expect(db.reservation.update).not.toHaveBeenCalled();
+  });
+
+  it('validates an existing assigned table when partySize is updated', async () => {
+    db.reservation.findUnique.mockResolvedValue({ id: 'r-1', tableId: 't-1', locationId: 'loc-1', partySize: 2 });
+    db.table.findFirst.mockResolvedValue({ id: 't-1', locationId: 'loc-1', capacity: 4, isActive: true });
+    db.reservation.update.mockResolvedValue({ id: 'r-1' });
+    const res = response();
+    await updateReservation(request({ params: { id: 'r-1' }, body: { partySize: 4 } }), res);
+    expect(db.table.findFirst).toHaveBeenCalledWith({
+      where: { id: 't-1', locationId: 'loc-1', isActive: true, capacity: { gte: 4 } },
+    });
+    expect(db.reservation.update).toHaveBeenCalledWith(expect.objectContaining({ data: { partySize: 4 } }));
+  });
+
+  it('bypasses table eligibility lookup when no table is assigned or updated', async () => {
+    db.reservation.findUnique.mockResolvedValue({ id: 'r-1', tableId: null, locationId: 'loc-1', partySize: 2 });
+    db.reservation.update.mockResolvedValue({ id: 'r-1' });
+    const res = response();
+    await updateReservation(request({ params: { id: 'r-1' }, body: { status: 'CONFIRMED' } }), res);
+    expect(db.table.findFirst).not.toHaveBeenCalled();
+    expect(db.reservation.update).toHaveBeenCalledWith(expect.objectContaining({ data: { status: 'CONFIRMED' } }));
   });
 });
 
