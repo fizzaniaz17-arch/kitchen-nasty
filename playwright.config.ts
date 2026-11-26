@@ -34,6 +34,7 @@ export default defineConfig({
       command: 'npm run dev:server',
       url: 'http://localhost:3000/api/health',
       reuseExistingServer: !process.env.CI,
+      env: { NODE_ENV: 'test' },
       timeout: 30000,
     },
     {

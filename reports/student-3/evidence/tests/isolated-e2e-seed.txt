@@ -1,0 +1,22 @@
+
+> @kitchenasty/server@0.3.2 db:seed
+> prisma db seed
+
+Running seed command `tsx ../../prisma/seed.ts` ...
+Seeding database...
+Seed completed successfully!
+
+Admin seed account: seeded successfully; credential details omitted.
+Customer seed account: seeded successfully; credential details omitted.
+
+The seed command has been executed.
+
+│  Update available 5.22.0 -> 8.0.0-rc.35                 │
+│                                                         │
+│  This is a major update - please follow the guide at    │
+│  https://pris.ly/d/major-version-upgrade                │
+│                                                         │
+│  Run the following to update                            │
+│    npm i --save-dev prisma@latest                       │
+│    npm i @prisma/client@latest                          │
+└─────────────────────────────────────────────────────────┘

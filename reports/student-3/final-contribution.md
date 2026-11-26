@@ -10,17 +10,32 @@ The work was intended to evaluate the existing application and document findings
 
 ### 1. Browser automation and functional testing
 
-Reviewed and documented the existing reservation and table-assignment Playwright scenarios, including main, alternate, and exception flows.
+Recovered the local Docker engine and prepared a dedicated `student3_e2e`
+database inside the isolated `student3-recovery-pg` PostgreSQL container.
+Applied all seven migrations and seeded synthetic data without using the
+shared `kitchenasty-db` service or volume.
 
-The recorded full browser run completed with 135 passed and 5 failed tests. Four failures involved an existing reservation-test authentication mock mismatch. The footer test passed during an isolated rerun.
+The final single-worker Playwright run executed all 142 tests against that
+database: 138 passed and four existing Member 1 reservation tests failed
+after timing out on clicks of a disabled `Book Table` button. All admin tests
+and all other storefront tests passed. The
+four reservation tests and Member 1 functionality were not modified. The
+focused navigation rerun passed 6/6, including the Elegant mobile menu's
+keyboard/state behavior; the separate targeted security/navigation run passed
+9/9. Logs are retained under `evidence/tests/`.
 
 ### 2. Security evaluation
 
 Reviewed dependency audit findings and documented remediation decisions. Evaluated security headers and social-authentication token handling.
 
-The final audit reported 22 findings across the full dependency tree, 20 production-only findings, and zero findings in the server production workspace.
+The 2026-11-26 npm audit reported 23 findings in the full dependency tree
+(0 critical, 1 high, 22 moderate), 21 in the combined production dependency
+tree (0 critical, 1 high, 20 moderate), and zero in the server production
+workspace. The high `image-size` finding is a conditional Metro development
+and build-time denial-of-service risk. The audit's Expo 58 and i18next 27
+fixes are semver-major updates; no dependency upgrades were made.
 
-Three security browser regression tests passed.
+Nine targeted security/navigation Playwright browser tests passed.
 
 ### 3. Database recovery
 
@@ -32,20 +47,42 @@ Detailed results are in `recovery.md`.
 
 ### 4. Test execution and build validation
 
-Recorded successful unit/integration, coverage, security regression, mobile typecheck, Expo export, application build, and documentation build results.
-
-The final `npm test` run passed 421 tests. The full server coverage run passed 460 tests across 29 files.
-
-The full Playwright run was not completely green. Lint execution was blocked because ESLint was unavailable in the checkout.
+Shared tests passed 17/17, server unit tests 60/60, server integration tests
+344/344, and storefront Vitest coverage tests 5/5. The full server coverage
+run passed 463 tests across 29 files and generated the configured Sonar LCOV
+input. The storefront production build passed after the header accessibility
+updates. Shared/server/admin/storefront builds, mobile TypeScript checking,
+and Android/iOS Expo bundle exports passed. The admin build emitted a 904 kB
+minified JavaScript chunk warning. Fresh and historical logs are under
+`evidence/tests/`.
 
 ### 5. Documentation and evidence
 
 Prepared test plans, use-case documentation, repository analysis, security findings, recovery results, and final contribution records. Supporting logs, audit JSON files, screenshots, and recovery evidence are retained under `reports/student-3` and `docs/sqe/student-3`.
 
-## Outstanding evidence
+## Outstanding items
 
-The current report set does not contain verified Lighthouse/axe-core results, a keyboard-only accessibility comparison, or k6 performance results. These are explicitly recorded as outstanding rather than reported as completed.
+- Four existing Member 1 reservation E2E cases remain failing. They were not
+  changed because they belong to another member's scope; report the failures
+  rather than claiming the entire suite is green.
+- Sonar server analysis was not run because no local scanner or Sonar token
+  was available. Both configured LCOV inputs are generated; check the
+  branch's CI/Sonar result after pushing.
+- The configured `npm run lint` command could not start because ESLint is not
+  installed or available on PATH.
+- The npm audit reports 23 full-tree findings and 21 combined production
+  findings. Proposed Expo 58 and i18next 27 fixes are semver-major; npm 10's
+  audit-fix dry run failed internally, so no dependency changes were made.
+- Review the four medium CSP alerts against a production resource inventory
+  and deployment CSP. ZAP scanned Vite development mode, not the Nginx build.
+- ESLint was not yet rerun during this final verification.
 
 ## Conclusion
 
-The contribution provides documented test execution, security and dependency analysis, isolated database recovery evidence, browser-test evaluation, and build validation. Outstanding browser failures and missing dedicated accessibility/performance evidence remain visible for review and follow-up.
+The contribution provides measured accessibility and performance results,
+passive local security evidence, dependency analysis, isolated PostgreSQL
+recovery results, and a completed database-backed Playwright run. It is not
+fully green for final submission: four existing Member 1 reservation E2E tests
+still fail, and Sonar analysis must be checked in the configured CI/Sonar
+environment. The CSP policy and remaining dependency advisories are
+documented for review.

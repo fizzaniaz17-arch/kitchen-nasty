@@ -1,0 +1,385 @@
+
+Running 142 tests using 1 worker
+
+  ok   1 [admin] › e2e\admin\coupons.spec.ts:4:7 › Admin Coupon List › navigates to coupons page via sidebar (3.2s)
+  ok   2 [admin] › e2e\admin\coupons.spec.ts:11:7 › Admin Coupon List › has new coupon button (2.3s)
+  ok   3 [admin] › e2e\admin\coupons.spec.ts:16:7 › Admin Coupon List › shows empty state or coupon table (3.2s)
+  ok   4 [admin] › e2e\admin\coupons.spec.ts:28:7 › Admin Coupon Form › navigates to new coupon form (3.0s)
+  ok   5 [admin] › e2e\admin\coupons.spec.ts:35:7 › Admin Coupon Form › displays coupon form fields (2.2s)
+  ok   6 [admin] › e2e\admin\coupons.spec.ts:42:7 › Admin Coupon Form › back link navigates to coupon list (3.2s)
+  ok   7 [admin] › e2e\admin\coupons.spec.ts:48:7 › Admin Coupon Form › shows edit form for existing coupon (3.2s)
+  ok   8 [admin] › e2e\admin\dashboard.spec.ts:4:7 › Admin Dashboard › loads the admin dashboard page (2.1s)
+  ok   9 [admin] › e2e\admin\dashboard.spec.ts:9:7 › Admin Dashboard › displays sidebar with app name (2.2s)
+  ok  10 [admin] › e2e\admin\dashboard.spec.ts:15:7 › Admin Dashboard › displays the Dashboard heading (2.0s)
+  ok  11 [admin] › e2e\admin\dashboard.spec.ts:21:7 › Admin Dashboard › displays all four metric cards (2.2s)
+  ok  12 [admin] › e2e\admin\dashboard.spec.ts:32:7 › Admin Dashboard › metric cards show values or placeholders (2.0s)
+  ok  13 [admin] › e2e\admin\dashboard.spec.ts:39:7 › Admin Dashboard › sidebar has navigation links (2.1s)
+  ok  14 [admin] › e2e\admin\kitchen.spec.ts:4:7 › Kitchen Display › loads the kitchen display page (2.0s)
+node.exe : [WebServer] 1:37:18 AM [vite] ws proxy socket error:
+At line:1 char:1
++ & "C:\Program Files\nodejs/node.exe" "C:\Program Files\nodejs/node_mo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([WebServer]...ket error::String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+
+[WebServer] Error: write ECONNABORTED
+[WebServer]     at afterWriteDispatched (node:internal/stream_base_commons:159:15)
+[WebServer]     at writeGeneric (node:internal/stream_base_commons:150:3)
+[WebServer]     at Socket._writeGeneric (node:net:967:11)
+[WebServer]     at Socket._write (node:net:979:8)
+[WebServer]     at writeOrBuffer (node:internal/streams/writable:572:12)
+[WebServer]     at _write (node:internal/streams/writable:501:10)
+[WebServer]     at Writable.write (node:internal/streams/writable:510:10)
+[WebServer]     at Socket.ondata (node:internal/streams/readable:1009:22)
+[WebServer]     at Socket.emit (node:events:519:28)
+[WebServer]     at addChunk (node:internal/streams/readable:561:12)
+[WebServer]     at readableAddChunkPushByteMode (node:internal/streams/readable:512:3)
+[WebServer]     at Readable.push (node:internal/streams/readable:392:5)
+[WebServer]     at TCP.onStreamRead (node:internal/stream_base_commons:189:23)
+[WebServer] 1:37:20 AM [vite] ws proxy socket error:
+[WebServer] Error: write ECONNABORTED
+[WebServer]     at afterWriteDispatched (node:internal/stream_base_commons:159:15)
+[WebServer]     at writeGeneric (node:internal/stream_base_commons:150:3)
+[WebServer]     at Socket._writeGeneric (node:net:967:11)
+[WebServer]     at Socket._write (node:net:979:8)
+[WebServer]     at writeOrBuffer (node:internal/streams/writable:572:12)
+[WebServer]     at _write (node:internal/streams/writable:501:10)
+[WebServer]     at Writable.write (node:internal/streams/writable:510:10)
+[WebServer]     at Socket.ondata (node:internal/streams/readable:1009:22)
+[WebServer]     at Socket.emit (node:events:519:28)
+[WebServer]     at addChunk (node:internal/streams/readable:561:12)
+[WebServer]     at readableAddChunkPushByteMode (node:internal/streams/readable:512:3)
+[WebServer]     at Readable.push (node:internal/streams/readable:392:5)
+[WebServer]     at TCP.onStreamRead (node:internal/stream_base_commons:189:23)
+  ok  15 [admin] › e2e\admin\kitchen.spec.ts:9:7 › Kitchen Display › displays four status columns (2.6s)
+[WebServer] 1:37:23 AM [vite] ws proxy socket error:
+[WebServer] Error: write ECONNABORTED
+[WebServer]     at afterWriteDispatched (node:internal/stream_base_commons:159:15)
+[WebServer]     at writeGeneric (node:internal/stream_base_commons:150:3)
+[WebServer]     at Socket._writeGeneric (node:net:967:11)
+[WebServer]     at Socket._write (node:net:979:8)
+[WebServer]     at writeOrBuffer (node:internal/streams/writable:572:12)
+[WebServer]     at _write (node:internal/streams/writable:501:10)
+[WebServer]     at Writable.write (node:internal/streams/writable:510:10)
+[WebServer]     at Socket.ondata (node:internal/streams/readable:1009:22)
+[WebServer]     at Socket.emit (node:events:519:28)
+[WebServer]     at addChunk (node:internal/streams/readable:561:12)
+[WebServer]     at readableAddChunkPushByteMode (node:internal/streams/readable:512:3)
+[WebServer]     at Readable.push (node:internal/streams/readable:392:5)
+[WebServer]     at TCP.onStreamRead (node:internal/stream_base_commons:189:23)
+  ok  16 [admin] › e2e\admin\kitchen.spec.ts:17:7 › Kitchen Display › has refresh button (2.1s)
+  ok  17 [admin] › e2e\admin\kitchen.spec.ts:22:7 › Kitchen Display › shows connection status (2.3s)
+  ok  18 [admin] › e2e\admin\kitchen.spec.ts:29:7 › Kitchen Display › sidebar has kitchen link (2.0s)
+  ok  19 [admin] › e2e\admin\locations.spec.ts:4:7 › Admin Locations Page › navigates to locations page via sidebar (2.1s)
+  ok  20 [admin] › e2e\admin\locations.spec.ts:11:7 › Admin Locations Page › displays Add Location button (2.0s)
+  ok  21 [admin] › e2e\admin\locations.spec.ts:16:7 › Admin Locations Page › navigates to new location form (2.2s)
+  ok  22 [admin] › e2e\admin\locations.spec.ts:23:7 › Admin Locations Page › new location form has all sections (2.0s)
+  ok  23 [admin] › e2e\admin\locations.spec.ts:34:7 › Admin Locations Page › new location form has required fields (2.2s)
+  ok  24 [admin] › e2e\admin\locations.spec.ts:44:7 › Admin Locations Page › auto-generates slug from name (2.4s)
+  ok  25 [admin] › e2e\admin\locations.spec.ts:56:7 › Admin Locations Page › shows all days in operating hours (2.2s)
+  ok  26 [admin] › e2e\admin\locations.spec.ts:65:7 › Admin Locations Page › can add delivery zones (3.1s)
+  ok  27 [admin] › e2e\admin\locations.spec.ts:76:7 › Admin Locations Page › can remove delivery zones (3.5s)
+  ok  28 [admin] › e2e\admin\locations.spec.ts:86:7 › Admin Locations Page › back button navigates to location list (2.4s)
+  ok  29 [admin] › e2e\admin\locations.spec.ts:92:7 › Admin Locations Page › sidebar highlights active Locations link (2.4s)
+  ok  30 [admin] › e2e\admin\member1-table-assignment.spec.ts:24:5 › UC-M1-02-MAIN assigns a table and shows the persisted readback (1.2s)
+  ok  31 [admin] › e2e\admin\member1-table-assignment.spec.ts:32:5 › UC-M1-02-ALT-01 changes an assignment to another eligible table (1.1s)
+  ok  32 [admin] › e2e\admin\member1-table-assignment.spec.ts:40:5 › UC-M1-02-ALT-02 clears an existing assignment (1.5s)
+  ok  33 [admin] › e2e\admin\member1-table-assignment.spec.ts:49:5 › UC-M1-02-EX-01 keeps assignment unchanged when API rejects update (1.1s)
+  ok  34 [admin] › e2e\admin\member1-table-assignment.spec.ts:57:5 › UC-M1-02-EX-02 shows only unassigned when no tables exist (1.2s)
+  ok  35 [admin] › e2e\admin\menu.spec.ts:5:9 › Admin Menu Management › Categories › shows categories page with Add Category button (3.2s)
+  ok  36 [admin] › e2e\admin\menu.spec.ts:11:9 › Admin Menu Management › Categories › shows loading or empty state (5.7s)
+  ok  37 [admin] › e2e\admin\menu.spec.ts:17:9 › Admin Menu Management › Categories › navigates to new category form (3.4s)
+  ok  38 [admin] › e2e\admin\menu.spec.ts:24:9 › Admin Menu Management › Categories › category form has required fields (2.7s)
+  ok  39 [admin] › e2e\admin\menu.spec.ts:33:9 › Admin Menu Management › Categories › auto-generates slug from name (2.5s)
+  ok  40 [admin] › e2e\admin\menu.spec.ts:41:9 › Admin Menu Management › Categories › back button navigates to categories list (2.5s)
+  ok  41 [admin] › e2e\admin\menu.spec.ts:49:9 › Admin Menu Management › Menu Items › shows menu items page with filters (2.4s)
+  ok  42 [admin] › e2e\admin\menu.spec.ts:56:9 › Admin Menu Management › Menu Items › shows loading or empty state (2.1s)
+  ok  43 [admin] › e2e\admin\menu.spec.ts:62:9 › Admin Menu Management › Menu Items › navigates to new item form (2.4s)
+  ok  44 [admin] › e2e\admin\menu.spec.ts:69:9 › Admin Menu Management › Menu Items › item form has all sections (2.1s)
+  ok  45 [admin] › e2e\admin\menu.spec.ts:77:9 › Admin Menu Management › Menu Items › can add and remove option groups (2.6s)
+  ok  46 [admin] › e2e\admin\menu.spec.ts:89:9 › Admin Menu Management › Menu Items › auto-generates slug from name (2.2s)
+  ok  47 [admin] › e2e\admin\menu.spec.ts:99:9 › Admin Menu Management › Sidebar Navigation › Menu link expands to show Items and Categories (2.0s)
+  ok  48 [admin] › e2e\admin\menu.spec.ts:106:9 › Admin Menu Management › Sidebar Navigation › /menu redirects to /menu/items (2.4s)
+  ok  49 [admin] › e2e\admin\orders.spec.ts:4:7 › Admin Order List › navigates to orders page via sidebar (2.3s)
+  ok  50 [admin] › e2e\admin\orders.spec.ts:11:7 › Admin Order List › displays status filter dropdown (2.2s)
+  ok  51 [admin] › e2e\admin\orders.spec.ts:20:7 › Admin Order List › displays order type filter dropdown (2.1s)
+  ok  52 [admin] › e2e\admin\orders.spec.ts:29:7 › Admin Order List › shows loading spinner initially (2.0s)
+  ok  53 [admin] › e2e\admin\orders.spec.ts:36:7 › Admin Order List › shows empty state or order table (3.3s)
+  ok  54 [admin] › e2e\admin\orders.spec.ts:48:7 › Admin Order List › status filter changes URL params (2.1s)
+  ok  55 [admin] › e2e\admin\orders.spec.ts:56:7 › Admin Order List › type filter changes URL params (2.1s)
+  ok  56 [admin] › e2e\admin\orders.spec.ts:65:7 › Admin Order Detail › shows error or order when navigating to order detail (2.9s)
+  ok  57 [admin] › e2e\admin\orders.spec.ts:77:7 › Admin Order Detail › displays back navigation link (3.2s)
+  ok  58 [admin] › e2e\admin\orders.spec.ts:84:7 › Admin Order Detail › back link navigates to order list (3.1s)
+  ok  59 [admin] › e2e\admin\reservations.spec.ts:4:7 › Admin Reservation List › navigates to reservations page via sidebar (2.2s)
+  ok  60 [admin] › e2e\admin\reservations.spec.ts:11:7 › Admin Reservation List › displays status filter dropdown (2.0s)
+  ok  61 [admin] › e2e\admin\reservations.spec.ts:20:7 › Admin Reservation List › displays date filter input (2.0s)
+  ok  62 [admin] › e2e\admin\reservations.spec.ts:26:7 › Admin Reservation List › shows empty state or reservation table (3.0s)
+  ok  63 [admin] › e2e\admin\reservations.spec.ts:38:7 › Admin Reservation Detail › shows error for non-existent reservation (3.0s)
+  ok  64 [admin] › e2e\admin\reservations.spec.ts:47:7 › Admin Reservation Detail › back link navigates to reservation list (2.9s)
+  ok  65 [admin] › e2e\admin\reviews.spec.ts:4:7 › Admin Review List › navigates to reviews page (2.0s)
+  ok  66 [admin] › e2e\admin\reviews.spec.ts:10:7 › Admin Review List › displays approval filter dropdown (2.1s)
+  ok  67 [admin] › e2e\admin\reviews.spec.ts:19:7 › Admin Review List › shows empty state or review cards (3.0s)
+  ok  68 [admin] › e2e\admin\reviews.spec.ts:29:7 › Admin Review List › filter dropdown changes value (2.4s)
+  ok  69 [admin] › e2e\admin\security-headers.spec.ts:3:5 › admin development server returns security headers (41ms)
+  ok  70 [admin] › e2e\admin\tables.spec.ts:7:7 › Admin Table Management › tables page renders with heading and stats (1.9s)
+  ok  71 [admin] › e2e\admin\tables.spec.ts:14:7 › Admin Table Management › location list shows Tables link (2.0s)
+  ok  72 [storefront] › e2e\storefront\auth.spec.ts:5:9 › Storefront Authentication Pages › Login Page › displays login form (1.6s)
+  ok  73 [storefront] › e2e\storefront\auth.spec.ts:13:9 › Storefront Authentication Pages › Login Page › has link to register page (2.3s)
+  ok  74 [storefront] › e2e\storefront\auth.spec.ts:21:9 › Storefront Authentication Pages › Login Page › navigating to login from header (1.9s)
+  ok  75 [storefront] › e2e\storefront\auth.spec.ts:29:9 › Storefront Authentication Pages › Register Page › displays registration form (2.2s)
+  ok  76 [storefront] › e2e\storefront\auth.spec.ts:38:9 › Storefront Authentication Pages › Register Page › has link to login page (1.9s)
+  ok  77 [storefront] › e2e\storefront\auth.spec.ts:46:9 › Storefront Authentication Pages › Register Page › navigating to register from header (2.4s)
+  ok  78 [storefront] › e2e\storefront\auth.spec.ts:54:9 › Storefront Authentication Pages › Account Page › redirects to login when not authenticated (1.4s)
+  ok  79 [storefront] › e2e\storefront\cart.spec.ts:5:9 › Storefront Cart & Checkout › Cart › cart icon visible in header (1.1s)
+  ok  80 [storefront] › e2e\storefront\cart.spec.ts:10:9 › Storefront Cart & Checkout › Cart › cart drawer opens when clicking cart icon (1.5s)
+  ok  81 [storefront] › e2e\storefront\cart.spec.ts:16:9 › Storefront Cart & Checkout › Cart › empty cart shows empty message (2.3s)
+  ok  82 [storefront] › e2e\storefront\cart.spec.ts:23:9 › Storefront Cart & Checkout › Cart › cart drawer closes on close button (1.5s)
+  ok  83 [storefront] › e2e\storefront\cart.spec.ts:33:9 › Storefront Cart & Checkout › Checkout Page › shows empty cart message when no items (872ms)
+  ok  84 [storefront] › e2e\storefront\cart.spec.ts:39:9 › Storefront Cart & Checkout › Checkout Page › Browse Menu link on empty checkout goes to menu (1.5s)
+  ok  85 [storefront] › e2e\storefront\cart.spec.ts:47:9 › Storefront Cart & Checkout › Order Confirmation › shows order placed message (1.5s)
+  ok  86 [storefront] › e2e\storefront\home.spec.ts:4:7 › Storefront Home Page › loads the storefront home page (974ms)
+  ok  87 [storefront] › e2e\storefront\home.spec.ts:10:7 › Storefront Home Page › displays header with brand name (960ms)
+  ok  88 [storefront] › e2e\storefront\home.spec.ts:18:7 › Storefront Home Page › displays desktop navigation links (1.6s)
+  ok  89 [storefront] › e2e\storefront\home.spec.ts:27:7 › Storefront Home Page › displays hero section with heading (1.3s)
+  ok  90 [storefront] › e2e\storefront\home.spec.ts:40:7 › Storefront Home Page › displays hero CTA buttons (2.2s)
+  ok  91 [storefront] › e2e\storefront\home.spec.ts:47:7 › Storefront Home Page › displays feature cards (1.3s)
+  ok  92 [storefront] › e2e\storefront\home.spec.ts:55:7 › Storefront Home Page › displays footer with links (1.5s)
+  ok  93 [storefront] › e2e\storefront\home.spec.ts:64:7 › Storefront Home Page › displays sign up CTA section (1.5s)
+  ok  94 [storefront] › e2e\storefront\home.spec.ts:71:7 › Storefront Home Page › Login and Sign Up links visible when not authenticated (1.1s)
+  ok  95 [storefront] › e2e\storefront\locations.spec.ts:4:7 › Storefront Locations Page › displays locations page heading (1.0s)
+  ok  96 [storefront] › e2e\storefront\locations.spec.ts:9:7 › Storefront Locations Page › displays locations description (1.3s)
+  ok  97 [storefront] › e2e\storefront\locations.spec.ts:14:7 › Storefront Locations Page › navigating to locations from header (1.1s)
+  x   98 [storefront] › e2e\storefront\member1-reservation.spec.ts:34:5 › UC-M1-01-MAIN creates a reservation and records the submitted postcondition (30.1s)
+  x   99 [storefront] › e2e\storefront\member1-reservation.spec.ts:43:5 › UC-M1-01-ALT-01 accepts an alternate party size and special request (30.1s)
+  ok 100 [storefront] › e2e\storefront\member1-reservation.spec.ts:52:5 › UC-M1-01-ALT-02 prevents selection of an unavailable slot (2.5s)
+  x  101 [storefront] › e2e\storefront\member1-reservation.spec.ts:60:5 › UC-M1-01-EX-01 rejects submission without location, date, and time (30.1s)
+  x  102 [storefront] › e2e\storefront\member1-reservation.spec.ts:68:5 › UC-M1-01-EX-02 displays API rejection and stores nothing (30.1s)
+  ok 103 [storefront] › e2e\storefront\menu.spec.ts:4:7 › Storefront Menu Page › displays menu page heading (1.3s)
+  ok 104 [storefront] › e2e\storefront\menu.spec.ts:9:7 › Storefront Menu Page › displays search input (1.6s)
+  ok 105 [storefront] › e2e\storefront\menu.spec.ts:14:7 › Storefront Menu Page › displays All category button (956ms)
+  ok 106 [storefront] › e2e\storefront\menu.spec.ts:19:7 › Storefront Menu Page › displays category sidebar on desktop (954ms)
+  ok 107 [storefront] › e2e\storefront\menu.spec.ts:26:7 › Storefront Menu Page › navigating to menu from header (1.2s)
+  ok 108 [storefront] › e2e\storefront\menu.spec.ts:36:7 › Storefront Menu Page › navigating to menu from home hero (1.1s)
+  ok 109 [storefront] › e2e\storefront\menu.spec.ts:43:7 › Storefront Menu Page › search input accepts text (1.4s)
+  ok 110 [storefront] › e2e\storefront\menu.spec.ts:50:7 › Storefront Menu Page › URL updates with search param (3.1s)
+  ok 111 [storefront] › e2e\storefront\menu.spec.ts:59:7 › Storefront Menu Page › show categories toggle on mobile (853ms)
+  ok 112 [storefront] › e2e\storefront\menu.spec.ts:65:7 › Storefront Menu Page › mobile category toggle shows and hides categories (1.1s)
+  ok 113 [storefront] › e2e\storefront\menu.spec.ts:73:7 › Storefront Menu Page › displays description text (923ms)
+  ok 114 [storefront] › e2e\storefront\navigation.spec.ts:4:7 › Storefront Navigation › 404 page for unknown routes (817ms)
+  ok 115 [storefront] › e2e\storefront\navigation.spec.ts:11:7 › Storefront Navigation › back to home from 404 page (1.0s)
+  ok 116 [storefront] › e2e\storefront\navigation.spec.ts:17:7 › Storefront Navigation › header is sticky and visible on scroll (972ms)
+  ok 117 [storefront] › e2e\storefront\navigation.spec.ts:24:7 › Storefront Navigation › footer is visible at bottom of page (1.1s)
+  ok 118 [storefront] › e2e\storefront\navigation.spec.ts:33:7 › Storefront Navigation › home page headings follow a sequential hierarchy (1.4s)
+  ok 119 [storefront] › e2e\storefront\navigation.spec.ts:47:7 › Storefront Navigation › mobile menu exposes its state and supports keyboard navigation (1.6s)
+  ok 120 [storefront] › e2e\storefront\order-tracking.spec.ts:4:7 › Order History Page › redirects to login when not authenticated (821ms)
+  ok 121 [storefront] › e2e\storefront\order-tracking.spec.ts:9:7 › Order History Page › page renders with heading before auth check (751ms)
+[WebServer] 1:43:27 AM [vite] ws proxy socket error:
+[WebServer] Error: write ECONNABORTED
+[WebServer]     at afterWriteDispatched (node:internal/stream_base_commons:159:15)
+[WebServer]     at writeGeneric (node:internal/stream_base_commons:150:3)
+[WebServer]     at Socket._writeGeneric (node:net:967:11)
+[WebServer]     at Socket._write (node:net:979:8)
+[WebServer]     at writeOrBuffer (node:internal/streams/writable:572:12)
+[WebServer]     at _write (node:internal/streams/writable:501:10)
+[WebServer]     at Writable.write (node:internal/streams/writable:510:10)
+[WebServer]     at Socket.ondata (node:internal/streams/readable:1009:22)
+[WebServer]     at Socket.emit (node:events:519:28)
+[WebServer]     at addChunk (node:internal/streams/readable:561:12)
+[WebServer]     at readableAddChunkPushByteMode (node:internal/streams/readable:512:3)
+[WebServer]     at Readable.push (node:internal/streams/readable:392:5)
+[WebServer]     at TCP.onStreamRead (node:internal/stream_base_commons:189:23)
+  ok 122 [storefront] › e2e\storefront\order-tracking.spec.ts:18:7 › Order Status Page › shows error for non-existent order (2.1s)
+[WebServer] 1:43:29 AM [vite] ws proxy socket error:
+[WebServer] Error: write ECONNABORTED
+[WebServer]     at afterWriteDispatched (node:internal/stream_base_commons:159:15)
+[WebServer]     at writeGeneric (node:internal/stream_base_commons:150:3)
+[WebServer]     at Socket._writeGeneric (node:net:967:11)
+[WebServer]     at Socket._write (node:net:979:8)
+[WebServer]     at writeOrBuffer (node:internal/streams/writable:572:12)
+[WebServer]     at _write (node:internal/streams/writable:501:10)
+[WebServer]     at Writable.write (node:internal/streams/writable:510:10)
+[WebServer]     at Socket.ondata (node:internal/streams/readable:1009:22)
+[WebServer]     at Socket.emit (node:events:519:28)
+[WebServer]     at addChunk (node:internal/streams/readable:561:12)
+[WebServer]     at readableAddChunkPushByteMode (node:internal/streams/readable:512:3)
+[WebServer]     at Readable.push (node:internal/streams/readable:392:5)
+[WebServer]     at TCP.onStreamRead (node:internal/stream_base_commons:189:23)
+  ok 123 [storefront] › e2e\storefront\order-tracking.spec.ts:28:7 › Order Status Page › has back to order history link on error (2.0s)
+[WebServer] 1:43:31 AM [vite] ws proxy socket error:
+[WebServer] Error: write ECONNABORTED
+[WebServer]     at afterWriteDispatched (node:internal/stream_base_commons:159:15)
+[WebServer]     at writeGeneric (node:internal/stream_base_commons:150:3)
+[WebServer]     at Socket._writeGeneric (node:net:967:11)
+[WebServer]     at Socket._write (node:net:979:8)
+[WebServer]     at writeOrBuffer (node:internal/streams/writable:572:12)
+[WebServer]     at _write (node:internal/streams/writable:501:10)
+[WebServer]     at Writable.write (node:internal/streams/writable:510:10)
+[WebServer]     at Socket.ondata (node:internal/streams/readable:1009:22)
+[WebServer]     at Socket.emit (node:events:519:28)
+[WebServer]     at addChunk (node:internal/streams/readable:561:12)
+[WebServer]     at readableAddChunkPushByteMode (node:internal/streams/readable:512:3)
+[WebServer]     at Readable.push (node:internal/streams/readable:392:5)
+[WebServer]     at TCP.onStreamRead (node:internal/stream_base_commons:189:23)
+  ok 124 [storefront] › e2e\storefront\order-tracking.spec.ts:34:7 › Order Status Page › order status page has navigation links (2.2s)
+  ok 125 [storefront] › e2e\storefront\order-tracking.spec.ts:42:7 › Order Status Page › order confirmation page still works (651ms)
+  ok 126 [storefront] › e2e\storefront\order-tracking.spec.ts:49:7 › Account Page Order Link › account redirects to login when not authenticated (697ms)
+  ok 127 [storefront] › e2e\storefront\payment.spec.ts:8:7 › Storefront Payment › checkout page shows empty cart message (705ms)
+  ok 128 [storefront] › e2e\storefront\payment.spec.ts:13:7 › Storefront Payment › checkout page has Browse Menu link (662ms)
+  ok 129 [storefront] › e2e\storefront\payment.spec.ts:18:7 › Storefront Payment › order confirmation page shows success (786ms)
+  ok 130 [storefront] › e2e\storefront\payment.spec.ts:24:7 › Storefront Payment › order confirmation has navigation links (727ms)
+  ok 131 [storefront] › e2e\storefront\payment.spec.ts:30:7 › Storefront Payment › order more link goes to menu (869ms)
+  ok 132 [storefront] › e2e\storefront\reservations.spec.ts:4:7 › Storefront Reservations Page › displays reservations page heading (854ms)
+  ok 133 [storefront] › e2e\storefront\reservations.spec.ts:9:7 › Storefront Reservations Page › displays booking form (765ms)
+  ok 134 [storefront] › e2e\storefront\reservations.spec.ts:14:7 › Storefront Reservations Page › displays location selector (851ms)
+  ok 135 [storefront] › e2e\storefront\reservations.spec.ts:21:7 › Storefront Reservations Page › displays party size selector (744ms)
+  ok 136 [storefront] › e2e\storefront\reservations.spec.ts:28:7 › Storefront Reservations Page › displays date picker (757ms)
+  ok 137 [storefront] › e2e\storefront\reservations.spec.ts:34:7 › Storefront Reservations Page › shows login prompt when not authenticated (756ms)
+  ok 138 [storefront] › e2e\storefront\reservations.spec.ts:39:7 › Storefront Reservations Page › shows my reservations section (1.0s)
+  ok 139 [storefront] › e2e\storefront\reservations.spec.ts:44:7 › Storefront Reservations Page › has special requests textarea (1.6s)
+  ok 140 [storefront] › e2e\storefront\reservations.spec.ts:49:7 › Storefront Reservations Page › book table button is disabled without login (897ms)
+  ok 141 [storefront] › e2e\storefront\security-headers.spec.ts:3:5 › storefront development server returns security headers (99ms)
+  ok 142 [storefront] › e2e\storefront\social-auth-callback.spec.ts:3:5 › exchanges the social login code without retaining it in the browser URL (916ms)
+
+
+  1) [storefront] › e2e\storefront\member1-reservation.spec.ts:34:5 › UC-M1-01-MAIN creates a reservation and records the submitted postcondition
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for getByRole('button', { name: 'Book Table' })
+        - locator resolved to <button disabled type="submit" class="w-full bg-primary-600 text-white py-2.5 rounded-lg font-medium hover:bg-primary-700 transition-colors disabled:opacity-50">Book Table</button>
+      - attempting click action
+        2 × waiting for element to be visible, enabled and stable
+          - element is not enabled
+        - retrying click action
+        - waiting 20ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is not enabled
+        - retrying click action
+          - waiting 100ms
+        55 × waiting for element to be visible, enabled and stable
+           - element is not enabled
+         - retrying click action
+           - waiting 500ms
+
+
+      35 |   const created = await setup(page);
+      36 |   await selectBooking(page);
+    > 37 |   await page.getByRole('button', { name: 'Book Table' }).click();
+         |                                                          ^
+      38 |   await expect(page.getByText('Reservation created!')).toBeVisible();
+      39 |   expect(created).toHaveLength(1);
+      40 |   expect(created[0]).toMatchObject({ locationId: location.id, date: '2027-01-10', time: '19:00', partySize: 2 });
+        at D:\SQE\SQE Project\kitchen-nasty\e2e\storefront\member1-reservation.spec.ts:37:58
+
+    Error Context: test-results\storefront-member1-reserva-84d9b-the-submitted-postcondition-storefront\error-context.md
+
+  2) [storefront] › e2e\storefront\member1-reservation.spec.ts:43:5 › UC-M1-01-ALT-01 accepts an alternate party size and special request
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for getByRole('button', { name: 'Book Table' })
+        - locator resolved to <button disabled type="submit" class="w-full bg-primary-600 text-white py-2.5 rounded-lg font-medium hover:bg-primary-700 transition-colors disabled:opacity-50">Book Table</button>
+      - attempting click action
+        2 × waiting for element to be visible, enabled and stable
+          - element is not enabled
+        - retrying click action
+        - waiting 20ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is not enabled
+        - retrying click action
+          - waiting 100ms
+        51 × waiting for element to be visible, enabled and stable
+           - element is not enabled
+         - retrying click action
+           - waiting 500ms
+
+
+      46 |   await page.getByRole('main').locator('select').nth(1).selectOption('4');
+      47 |   await page.locator('textarea').fill('Window table');
+    > 48 |   await page.getByRole('button', { name: 'Book Table' }).click();
+         |                                                          ^
+      49 |   expect(created[0]).toMatchObject({ partySize: 4, comment: 'Window table' });
+      50 | });
+      51 |
+        at D:\SQE\SQE Project\kitchen-nasty\e2e\storefront\member1-reservation.spec.ts:48:58
+
+    Error Context: test-results\storefront-member1-reserva-4dc99-ty-size-and-special-request-storefront\error-context.md
+
+  3) [storefront] › e2e\storefront\member1-reservation.spec.ts:60:5 › UC-M1-01-EX-01 rejects submission without location, date, and time
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for getByRole('button', { name: 'Book Table' })
+        - locator resolved to <button disabled type="submit" class="w-full bg-primary-600 text-white py-2.5 rounded-lg font-medium hover:bg-primary-700 transition-colors disabled:opacity-50">Book Table</button>
+      - attempting click action
+        2 × waiting for element to be visible, enabled and stable
+          - element is not enabled
+        - retrying click action
+        - waiting 20ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is not enabled
+        - retrying click action
+          - waiting 100ms
+        55 × waiting for element to be visible, enabled and stable
+           - element is not enabled
+         - retrying click action
+           - waiting 500ms
+
+
+      61 |   const created = await setup(page);
+      62 |   await page.goto('/reservations');
+    > 63 |   await page.getByRole('button', { name: 'Book Table' }).click();
+         |                                                          ^
+      64 |   await expect(page.getByText(/select.*date/i)).toBeVisible();
+      65 |   expect(created).toHaveLength(0);
+      66 | });
+        at D:\SQE\SQE Project\kitchen-nasty\e2e\storefront\member1-reservation.spec.ts:63:58
+
+    Error Context: test-results\storefront-member1-reserva-4958f-hout-location-date-and-time-storefront\error-context.md
+
+  4) [storefront] › e2e\storefront\member1-reservation.spec.ts:68:5 › UC-M1-01-EX-02 displays API rejection and stores nothing
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for getByRole('button', { name: 'Book Table' })
+        - locator resolved to <button disabled type="submit" class="w-full bg-primary-600 text-white py-2.5 rounded-lg font-medium hover:bg-primary-700 transition-colors disabled:opacity-50">Book Table</button>
+      - attempting click action
+        2 × waiting for element to be visible, enabled and stable
+          - element is not enabled
+        - retrying click action
+        - waiting 20ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is not enabled
+        - retrying click action
+          - waiting 100ms
+        52 × waiting for element to be visible, enabled and stable
+           - element is not enabled
+         - retrying click action
+           - waiting 500ms
+
+
+      69 |   const created = await setup(page, { createStatus: 409 });
+      70 |   await selectBooking(page);
+    > 71 |   await page.getByRole('button', { name: 'Book Table' }).click();
+         |                                                          ^
+      72 |   await expect(page.getByText('Synthetic booking rejected')).toBeVisible();
+      73 |   expect(created).toHaveLength(0);
+      74 | });
+        at D:\SQE\SQE Project\kitchen-nasty\e2e\storefront\member1-reservation.spec.ts:71:58
+
+    Error Context: test-results\storefront-member1-reserva-b8186-ejection-and-stores-nothing-storefront\error-context.md
+
+  4 failed
+    [storefront] › e2e\storefront\member1-reservation.spec.ts:34:5 › UC-M1-01-MAIN creates a reservation and records the submitted postcondition
+    [storefront] › e2e\storefront\member1-reservation.spec.ts:43:5 › UC-M1-01-ALT-01 accepts an alternate party size and special request
+    [storefront] › e2e\storefront\member1-reservation.spec.ts:60:5 › UC-M1-01-EX-01 rejects submission without location, date, and time
+    [storefront] › e2e\storefront\member1-reservation.spec.ts:68:5 › UC-M1-01-EX-02 displays API rejection and stores nothing
+  138 passed (7.6m)

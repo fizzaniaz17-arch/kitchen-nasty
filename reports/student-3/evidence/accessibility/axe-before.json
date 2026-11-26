@@ -1,0 +1,113 @@
+{
+  "observedAt": "2026-11-22T14:28:18.269Z",
+  "url": "http://localhost:5174/",
+  "viewport": {
+    "width": 375,
+    "height": 812
+  },
+  "axeVersion": "4.14.1",
+  "violations": [
+    {
+      "id": "heading-order",
+      "impact": "moderate",
+      "description": "Ensure the order of headings is semantically correct",
+      "help": "Heading levels should only increase by one",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.14/heading-order?application=axeAPI",
+      "tags": [
+        "cat.semantics",
+        "best-practice"
+      ],
+      "nodes": [
+        {
+          "target": [
+            ".p-6.text-center:nth-child(1) > .mb-2.text-lg.text-gray-900"
+          ],
+          "html": "<h3 class=\"text-lg font-semibold text-gray-900 dark:text-white mb-2\">Fast Delivery</h3>",
+          "any": [
+            {
+              "id": "heading-order",
+              "message": "Heading order invalid",
+              "data": null
+            }
+          ],
+          "all": [],
+          "none": []
+        }
+      ]
+    }
+  ],
+  "passes": 31,
+  "incomplete": [
+    {
+      "id": "color-contrast",
+      "impact": "serious",
+      "help": "Elements must meet minimum color contrast ratio thresholds",
+      "nodes": [
+        {
+          "target": [
+            "h1"
+          ],
+          "html": "<h1 class=\"text-4xl lg:text-5xl font-bold mb-6 leading-tight\">Order Delicious Food Online</h1>",
+          "any": [
+            {
+              "id": "color-contrast",
+              "message": "Element's background color could not be determined due to a background gradient",
+              "data": {
+                "contrastRatio": 0,
+                "fontSize": "27.0pt (36px)",
+                "fontWeight": "bold",
+                "messageKey": "bgGradient",
+                "expectedContrastRatio": "3:1"
+              }
+            }
+          ],
+          "all": [],
+          "none": []
+        },
+        {
+          "target": [
+            ".text-primary-100"
+          ],
+          "html": "<p class=\"text-lg text-primary-100 mb-8\">Browse our menu, place your order for delivery or pickup, and enjoy fresh, made-to-order meals from KitchenAsty.</p>",
+          "any": [
+            {
+              "id": "color-contrast",
+              "message": "Element's background color could not be determined due to a background gradient",
+              "data": {
+                "contrastRatio": 0,
+                "fontSize": "13.5pt (18px)",
+                "fontWeight": "normal",
+                "messageKey": "bgGradient",
+                "expectedContrastRatio": "4.5:1"
+              }
+            }
+          ],
+          "all": [],
+          "none": []
+        },
+        {
+          "target": [
+            ".border-2"
+          ],
+          "html": "<a class=\"border-2 border-white text-white px-6 py-3 rounded-lg font-semibold hover:bg-white/10 transition-colors\" href=\"/locations\" data-discover=\"true\">Find a Location</a>",
+          "any": [
+            {
+              "id": "color-contrast",
+              "message": "Element's background color could not be determined due to a background gradient",
+              "data": {
+                "contrastRatio": 0,
+                "fontSize": "12.0pt (16px)",
+                "fontWeight": "normal",
+                "messageKey": "bgGradient",
+                "expectedContrastRatio": "4.5:1"
+              }
+            }
+          ],
+          "all": [],
+          "none": []
+        }
+      ]
+    }
+  ],
+  "inapplicable": 59
+}

@@ -1,0 +1,6 @@
+
+Running 1 test using 1 worker
+
+  ok 1 [admin] › e2e\admin\dashboard.spec.ts:15:7 › Admin Dashboard › displays the Dashboard heading (4.8s)
+
+  1 passed (47.0s)

@@ -1,0 +1,13 @@
+
+> @kitchenasty/storefront@0.3.2 test:coverage
+> vitest run --coverage --coverage.reporter=lcov --coverage.reportsDirectory=coverage/sonar
+
+
+ RUN  v4.1.12 D:/SQE/SQE Project/kitchen-nasty/packages/storefront
+      Coverage enabled with v8
+
+
+ Test Files  3 passed (3)
+      Tests  18 passed (18)
+   Start at  02:42:32
+   Duration  3.12s (transform 844ms, setup 0ms, import 3.47s, tests 391ms, environment 1ms)

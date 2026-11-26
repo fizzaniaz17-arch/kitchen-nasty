@@ -132,6 +132,8 @@ function ClassicHeader() {
             className="p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100"
             onClick={() => setMobileOpen(!mobileOpen)}
             aria-label={t('nav.toggleMenu')}
+            aria-expanded={mobileOpen}
+            aria-controls="storefront-mobile-nav"
           >
             {mobileOpen ? (
               <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -149,7 +151,7 @@ function ClassicHeader() {
 
       {/* Mobile menu */}
       {mobileOpen && (
-        <div className="md:hidden border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
+        <div id="storefront-mobile-nav" className="md:hidden border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
           <div className="px-4 py-3 space-y-1">
             {navLinks.map((link) => (
               <Link

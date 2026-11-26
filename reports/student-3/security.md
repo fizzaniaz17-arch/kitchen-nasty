@@ -8,13 +8,25 @@ Security evaluation covered dependency vulnerabilities, security response header
 
 | Audit scope | Initial findings | Final findings |
 |---|---:|---:|
-| Full dependency tree | 95 | 22 |
-| Production dependencies | 62 | 20 |
+| Full dependency tree | 95 | 23 (current recheck) |
+| Production dependencies | 62 | 21 (current recheck) |
 | Server production dependencies | Not recorded separately | 0 |
 
-The final full audit contains 0 critical, 1 high, and 21 moderate findings. The production-only audit contains 0 critical, 1 high, and 19 moderate findings.
+The current full audit contains 0 critical, 1 high, and 22 moderate findings.
+The combined production-only audit contains 0 critical, 1 high, and 20
+moderate findings. The server production workspace audit contains no findings.
+The audit includes all workspaces, including the Expo mobile dependency tree;
+the server production workspace result is separate.
 
-The remaining high finding is associated with image-size in the Expo 52 / Metro dependency chain. A direct upgrade was deferred because the patched major version changes the API expected by the installed Metro version. Remaining moderate findings are primarily transitive tooling dependencies.
+The remaining high finding is associated with `image-size` 1.2.1 in the Expo
+52 / Metro 0.81.5 dependency chain. The advisory concerns denial of service
+while Metro parses crafted images during development/build; it is not a
+production server-runtime path. The audited dependency metadata identifies
+`image-size` 2.0.3 as fixed, but Metro 0.81.5 expects the 1.x CommonJS API.
+The automated `npm audit fix --dry-run` attempt failed inside npm 10.9.8's
+Arborist (`Cannot read properties of null (reading 'edgesOut')`), so no
+dependency changes were attempted. The Expo 58 and i18next 27 fixes proposed
+by the audit are semver-major updates; they were not applied.
 
 Detailed advisory analysis and remediation decisions are documented in `../../docs/sqe/student-3/dependency-audit.md`.
 
@@ -27,7 +39,14 @@ The admin, storefront, and documentation Nginx configurations define:
 - X-Content-Type-Options: `nosniff`
 - Referrer-Policy: `no-referrer`
 
-Automated browser response-header checks passed for the admin and storefront applications. Local development responses were also inspected.
+Automated browser response-header checks passed for the admin and storefront
+applications. The targeted single-worker Playwright security/navigation rerun
+passed 9/9 response-header, navigation, and social-auth callback tests. A
+subsequent full single-worker Playwright run against the isolated test database
+completed 142 tests: 138 passed and four Member 1 reservation cases failed.
+The response-header and social-auth cases passed in that full run; the four
+failures were confined to the existing Member 1 reservation tests and are
+documented in `evidence/tests/playwright-full-isolated-db-final.txt`.
 
 A production Nginx deployment was not tested. The CSP is intentionally limited to anti-framing because a complete resource allowlist was not established.
 
@@ -43,20 +62,65 @@ The code and state stores are process-local. Multi-instance deployments require 
 
 The server integration suite includes authentication, reservation ownership/IDOR, and staff-role authorization regression coverage. These checks passed as part of the recorded server integration test suite.
 
-The separate security browser regression checks also passed: 3 tests.
+The response-header and social-auth browser cases account for 3 of the 9
+targeted Playwright tests passed on 2026-11-26.
 
 ## Overall validation
 
-- Full dependency audit: 22 findings.
-- Production dependency audit: 20 findings.
+- Full dependency audit (2026-11-26): 23 findings (0 critical, 1 high,
+  22 moderate).
+- Combined production dependency audit (2026-11-26): 21 findings (0 critical,
+  1 high, 20 moderate).
 - Server production audit: 0 findings.
-- Security browser regressions: 3 passed.
-- Server integration suite: 344 passed within the final 421-test `npm test` run.
+- Security/navigation browser regressions: 9 passed in the targeted rerun.
+- Shared/server `npm test`: 421 passed (17 shared, 60 server unit, 344 server
+  integration); storefront Vitest coverage suite: 5 passed. The full
+  database-backed browser run completed with 138 passed and the four
+  out-of-scope reservation failures noted above.
+- Independent review found no confirmed exploitable vulnerability in the
+  reviewed Student 3 code changes. The remaining high `image-size` advisory is
+  a conditional Metro development/build-time denial-of-service risk; the CSP
+  and other header gaps are hardening recommendations, not demonstrated
+  injection or authentication exploits.
+
+## Passive OWASP ZAP baseline
+
+A real Docker-based OWASP ZAP 2.17.0 baseline pass was executed against
+`http://192.168.100.72:5174/`. It crawled 7 URLs and reported zero failures.
+
+Retained report formats:
+
+- `evidence/security/zap-baseline-final.html`
+- `evidence/security/zap-baseline-final.json`
+- `evidence/security/zap-baseline-final.md`
+
+| Risk | Alerts | Assessment |
+|---|---:|---|
+| High | 0 | No high-risk alerts in the passive baseline. |
+| Medium | 4 | Four CSP checks flag the configured policy `frame-ancestors 'none'` as incomplete. This is a genuine limitation: it prevents framing but does not restrict scripts, styles, or other resource sources. ZAP's labels for wildcard/`unsafe-inline` are inferred from absent directives; those literal tokens are not present in the header evidence. |
+| Low | 4 | Missing Permissions Policy and COEP/COOP/CORP headers. These are defense-in-depth recommendations. COEP/COOP can affect cross-origin assets and popup-based OAuth; choose values only after deployment compatibility review. |
+| Informational | 2 | Vite's React-refresh bootstrap identifies a development server; `no-cache` responses are expected for development assets. Neither finding demonstrates a production vulnerability. |
+| Total | 10 | 63 passive rules passed; no active scan or destructive attack was performed. |
+
+The three Nginx configs were inspected: admin and storefront set only the same
+anti-framing CSP, while docs repeats it. These findings are therefore not
+dismissed as ZAP false positives for production; the source policy is
+intentionally limited and needs a resource-aware CSP before a production
+security claim. The ZAP run itself used Vite development mode, so its HMR and
+cache observations are not representative of the built Nginx deployment.
 
 ## Limitations
 
-- No post-remediation passive ZAP scan was performed.
-- Production Nginx behavior was not verified.
+- ZAP scanned only the local storefront development server, not production
+  Nginx or external systems.
+- Docker was started and database-backed E2E ran against the isolated
+  `student3_e2e` database in the `student3-recovery-pg` container. The
+  container uses a separate volume and localhost-only port 55432; the shared
+  `kitchenasty-db` service and volume were not used or changed. The recovery
+  database was preserved.
+- Local Sonar analysis still requires the scanner and token supplied by the
+  normal CI/Sonar environment. Both configured LCOV inputs exist, but no
+  Sonar result is claimed here.
 - No production deployment or real customer credentials were used.
 - The remaining Expo dependency findings require coordinated compatibility work.
 

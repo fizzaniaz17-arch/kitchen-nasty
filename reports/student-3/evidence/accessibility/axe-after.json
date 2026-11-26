@@ -1,0 +1,19 @@
+{
+  "observedAt": "2026-11-23T10:55:00.847Z",
+  "url": "http://127.0.0.1:5174/",
+  "viewport": {
+    "width": 375,
+    "height": 812
+  },
+  "axeVersion": "4.14.1",
+  "violations": [],
+  "passes": 31,
+  "incomplete": [
+    {
+      "id": "color-contrast",
+      "impact": "serious",
+      "nodes": 3
+    }
+  ],
+  "inapplicable": 59
+}
