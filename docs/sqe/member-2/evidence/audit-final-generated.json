@@ -1,0 +1,92 @@
+{
+  "generated": 296,
+  "representedExactlyOnce": 296,
+  "anomalies": [],
+  "generatedFailed": [
+    {
+      "id": "post:/reservations:business:date:impossible-calendar-date",
+      "count": 1,
+      "status": "failed"
+    },
+    {
+      "id": "post:/reservations:business:time:clock-above-max",
+      "count": 1,
+      "status": "failed"
+    },
+    {
+      "id": "post:/reservations:business:time:invalid-hour-minute",
+      "count": 1,
+      "status": "failed"
+    },
+    {
+      "id": "post:/reservations:business:time:invalid-minute",
+      "count": 1,
+      "status": "failed"
+    },
+    {
+      "id": "patch:/reservations/{id}:business:date:impossible-calendar-date",
+      "count": 1,
+      "status": "failed"
+    },
+    {
+      "id": "patch:/reservations/{id}:business:time:clock-above-max",
+      "count": 1,
+      "status": "failed"
+    },
+    {
+      "id": "patch:/reservations/{id}:business:time:invalid-hour-minute",
+      "count": 1,
+      "status": "failed"
+    },
+    {
+      "id": "patch:/reservations/{id}:business:time:invalid-minute",
+      "count": 1,
+      "status": "failed"
+    },
+    {
+      "id": "get:/reservations/availability:query:date:null-literal",
+      "count": 1,
+      "status": "failed"
+    },
+    {
+      "id": "get:/reservations/availability:query:date:invalid-format",
+      "count": 1,
+      "status": "failed"
+    },
+    {
+      "id": "get:/reservations/availability:query:time:ordinary",
+      "count": 1,
+      "status": "failed"
+    },
+    {
+      "id": "get:/reservations/availability:query:time:free-slot",
+      "count": 1,
+      "status": "failed"
+    },
+    {
+      "id": "get:/reservations:query:status:null-literal",
+      "count": 1,
+      "status": "failed"
+    },
+    {
+      "id": "get:/reservations:query:status:invalid-enum",
+      "count": 1,
+      "status": "failed"
+    },
+    {
+      "id": "get:/reservations:query:date:null-literal",
+      "count": 1,
+      "status": "failed"
+    },
+    {
+      "id": "get:/reservations:query:date:invalid-format",
+      "count": 1,
+      "status": "failed"
+    },
+    {
+      "id": "get:/reservations/{id}:path:id:malformed-escape",
+      "count": 1,
+      "status": "failed"
+    }
+  ]
+}

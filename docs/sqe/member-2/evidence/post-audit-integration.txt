@@ -1,0 +1,9 @@
+
+ RUN  v4.1.12 D:/5th Semester/SQE/Project/kitchen-nasty/packages/server
+
+
+ Test Files  4 passed (4)
+      Tests  75 passed (75)
+   Start at  17:54:57
+   Duration  5.49s (transform 3.54s, setup 0ms, import 16.67s, tests 1.52s, environment 2ms)
+
