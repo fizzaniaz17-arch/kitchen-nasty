@@ -10,7 +10,7 @@ const customer = {
 async function mockCustomerSession(page: Page) {
   await page.addInitScript(() => localStorage.setItem('token', 'test-token'));
   await page.route('**/api/auth/me', (route) =>
-    route.fulfill({ json: { success: true, data: customer } }),
+    route.fulfill({ json: { success: true, data: { customer } } }),
   );
   await page.route('**/api/reservations/my-reservations', (route) =>
     route.fulfill({ json: { success: true, data: [] } }),

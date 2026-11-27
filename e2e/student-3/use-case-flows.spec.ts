@@ -52,7 +52,7 @@ test.describe('UC-S3-01 Exception Flows', () => {
     await page.addInitScript(() => localStorage.setItem('token', 'test-token'));
     await page.route('**/api/auth/me', (route) =>
       route.fulfill({
-        json: { success: true, data: { id: 'test-cust', email: 'test@test.com', name: 'Test' } },
+        json: { success: true, data: { customer: { id: 'test-cust', email: 'test@test.com', name: 'Test' } } },
       }),
     );
     await page.route('**/api/reservations/my-reservations', (route) =>
