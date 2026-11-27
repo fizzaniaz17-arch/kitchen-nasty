@@ -1,11 +1,17 @@
 import type { Request, Response } from 'express';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { createHash } from 'node:crypto';
+import { Prisma } from '@prisma/client';
 
-vi.mock('../../../lib/db.js', () => ({
-  default: {
+vi.mock('../../../lib/db.js', () => {
+  const mockPrisma = {
+    $transaction: vi.fn(),
+    reservationCreateRequest: { findUnique: vi.fn(), create: vi.fn(), update: vi.fn() },
+    $queryRaw: vi.fn().mockResolvedValue([]),
     location: { findUnique: vi.fn() },
     reservation: {
       findUnique: vi.fn(),
+      findFirst: vi.fn().mockResolvedValue(null),
       findMany: vi.fn(),
       create: vi.fn(),
       update: vi.fn(),
@@ -19,8 +25,10 @@ vi.mock('../../../lib/db.js', () => ({
       update: vi.fn(),
       delete: vi.fn(),
     },
-  },
-}));
+  };
+  mockPrisma.$transaction.mockImplementation(async (callback: (tx: typeof mockPrisma) => Promise<unknown>) => callback(mockPrisma));
+  return { default: mockPrisma };
+});
 
 vi.mock('../../../lib/events.js', () => ({ appEvents: { emit: vi.fn() } }));
 
@@ -39,6 +47,9 @@ import {
 } from '../../../controllers/table.controller.js';
 
 const db = prisma as unknown as {
+  $queryRaw: ReturnType<typeof vi.fn>;
+  $transaction: ReturnType<typeof vi.fn>;
+  reservationCreateRequest: Record<string, ReturnType<typeof vi.fn>>;
   location: { findUnique: ReturnType<typeof vi.fn> };
   reservation: Record<string, ReturnType<typeof vi.fn>>;
   table: Record<string, ReturnType<typeof vi.fn>>;
@@ -54,7 +65,7 @@ function response() {
 }
 
 function request(value: Partial<Request>): Request {
-  return value as Request;
+  return { get: () => undefined, ...value } as Request;
 }
 
 beforeEach(() => vi.clearAllMocks());
@@ -191,7 +202,7 @@ describe('M1-BR-03 partial reservation update', () => {
   });
 
   it('preserves omitted fields and supports explicit null', async () => {
-    db.reservation.findUnique.mockResolvedValue({ id: 'r-1' });
+    db.reservation.findUnique.mockResolvedValue({ id: 'r-1', tableId: null });
     db.reservation.update.mockResolvedValue({ id: 'r-1', tableId: null, comment: null });
     const res = response();
     await updateReservation(request({
@@ -204,7 +215,7 @@ describe('M1-BR-03 partial reservation update', () => {
   });
 
   it('maps every supplied optional field into the Prisma payload', async () => {
-    db.reservation.findUnique.mockResolvedValue({ id: 'r-1', locationId: 'loc-1', partySize: 2 });
+    db.reservation.findUnique.mockResolvedValue({ id: 'r-1', tableId: null, locationId: 'loc-1', partySize: 2, status: 'PENDING' });
     db.table.findFirst.mockResolvedValue({ id: 't-1', locationId: 'loc-1', capacity: 4, isActive: true });
     db.reservation.update.mockResolvedValue({ id: 'r-1' });
     const res = response();
@@ -225,7 +236,7 @@ describe('M1-BR-03 partial reservation update', () => {
   });
 
   it('uses the existing party size for an eligible table assignment when partySize is omitted', async () => {
-    db.reservation.findUnique.mockResolvedValue({ id: 'r-1', locationId: 'loc-1', partySize: 3 });
+    db.reservation.findUnique.mockResolvedValue({ id: 'r-1', tableId: null, locationId: 'loc-1', partySize: 3 });
     db.table.findFirst.mockResolvedValue({ id: 't-1', locationId: 'loc-1', capacity: 3, isActive: true });
     db.reservation.update.mockResolvedValue({ id: 'r-1', tableId: 't-1' });
     const res = response();
@@ -238,7 +249,7 @@ describe('M1-BR-03 partial reservation update', () => {
   });
 
   it('rejects an ineligible table before the reservation update', async () => {
-    db.reservation.findUnique.mockResolvedValue({ id: 'r-1', locationId: 'loc-1', partySize: 3 });
+    db.reservation.findUnique.mockResolvedValue({ id: 'r-1', tableId: null, locationId: 'loc-1', partySize: 3 });
     db.table.findFirst.mockResolvedValue(null);
     const res = response();
     await updateReservation(request({ params: { id: 'r-1' }, body: { tableId: 't-1' } }), res);
@@ -260,7 +271,7 @@ describe('M1-BR-03 partial reservation update', () => {
   });
 
   it('bypasses table eligibility lookup when no table is assigned or updated', async () => {
-    db.reservation.findUnique.mockResolvedValue({ id: 'r-1', tableId: null, locationId: 'loc-1', partySize: 2 });
+    db.reservation.findUnique.mockResolvedValue({ id: 'r-1', tableId: null, locationId: 'loc-1', partySize: 2, status: 'PENDING' });
     db.reservation.update.mockResolvedValue({ id: 'r-1' });
     const res = response();
     await updateReservation(request({ params: { id: 'r-1' }, body: { status: 'CONFIRMED' } }), res);
@@ -537,5 +548,118 @@ describe('Issue #25 reservation query filter validation and calendar policy', ()
       expect(db.table.findMany).not.toHaveBeenCalled();
       expect(db.reservation.findMany).not.toHaveBeenCalled();
     });
+  });
+});
+
+describe('Issue #20 transactional reservation conflict checks', () => {
+  it('locks the reservation and table, excludes itself, and returns 409 without updating on a conflict', async () => {
+    const date = new Date('2099-06-15');
+    db.reservation.findUnique.mockResolvedValueOnce({ id: 'r-1', tableId: 't-1', locationId: 'loc-1', partySize: 2, date, time: '19:00', status: 'PENDING' });
+    db.reservation.findFirst.mockResolvedValueOnce({ id: 'other' });
+    const res = response();
+    await updateReservation(request({ params: { id: 'r-1' }, body: { status: 'CONFIRMED' } }), res);
+    expect(db.$transaction).toHaveBeenCalledTimes(1);
+    expect(db.$queryRaw).toHaveBeenCalledTimes(2);
+    expect(db.$queryRaw.mock.calls[0][0].join('')).toContain('FROM "reservations"');
+    expect(db.$queryRaw.mock.calls[1][0].join('')).toContain('FROM "tables"');
+    expect(db.reservation.findFirst).toHaveBeenCalledWith({ where: { id: { not: 'r-1' }, locationId: 'loc-1', tableId: 't-1', date, time: '19:00', status: { in: ['PENDING', 'CONFIRMED', 'SEATED'] } }, select: { id: true } });
+    expect(res.status).toHaveBeenCalledWith(409);
+    expect(res.json).toHaveBeenCalledWith({ success: false, error: 'Table is already reserved for this slot' });
+    expect(db.reservation.update).not.toHaveBeenCalled();
+  });
+  it('propagates a reservation lock failure without querying or updating a record', async () => {
+    db.$queryRaw.mockRejectedValueOnce(new Error('Synthetic lock failure'));
+    const res = response();
+    await expect(updateReservation(request({ params: { id: 'r-1' }, body: { status: 'CONFIRMED' } }), res)).rejects.toThrow('Synthetic lock failure');
+    expect(db.reservation.findUnique).not.toHaveBeenCalled();
+    expect(db.reservation.update).not.toHaveBeenCalled();
+  });
+  it('checks a rescheduled date and time and locks old and new tables in sorted order', async () => {
+    db.reservation.findUnique.mockResolvedValueOnce({ id: 'r-1', tableId: 'z-table', locationId: 'loc-1', partySize: 2, date: new Date('2099-06-15'), time: '19:00', status: 'PENDING' });
+    db.table.findFirst.mockResolvedValueOnce({ id: 'a-table' });
+    db.reservation.findFirst.mockResolvedValueOnce(null);
+    db.reservation.update.mockResolvedValueOnce({ id: 'r-1' });
+    const res = response();
+    await updateReservation(request({ params: { id: 'r-1' }, body: { tableId: 'a-table', date: '2099-06-16', time: '20:00' } }), res);
+    expect(db.$queryRaw.mock.calls[1][1].values).toEqual(['a-table', 'z-table']);
+    expect(db.reservation.findFirst).toHaveBeenCalledWith(expect.objectContaining({ where: expect.objectContaining({ date: new Date('2099-06-16'), time: '20:00', tableId: 'a-table' }) }));
+    expect(res.json).toHaveBeenCalledWith({ success: true, data: { id: 'r-1' } });
+  });
+});
+
+describe('approved reservation retry, transition and requested-time rules', () => {
+  const body = { locationId: 'loc-1', date: '2099-06-15', time: '19:00', partySize: 2, comment: 'synthetic' };
+  const hash = createHash('sha256').update(JSON.stringify({ ...body })).digest('hex');
+  const req = (key: string, user: unknown = { id: 'c-1', type: 'customer' }) => request({ body, user: user as Request['user'], get: (() => key) as Request['get'] });
+  beforeEach(() => {
+    db.reservationCreateRequest.findUnique.mockReset().mockResolvedValue(null);
+    db.reservationCreateRequest.create.mockReset().mockResolvedValue({ id: 'key-row' });
+    db.reservationCreateRequest.update.mockReset().mockResolvedValue({ id: 'key-row' });
+  });
+  it('rejects malformed retry keys and does not create a booking', async () => {
+    const res = response(); await createReservation(req('bad key'), res);
+    expect(res.status).toHaveBeenCalledWith(400); expect(db.reservation.create).not.toHaveBeenCalled();
+  });
+  it('requires a customer for a keyed request', async () => {
+    const res = response(); await createReservation(req('key', null), res);
+    expect(res.status).toHaveBeenCalledWith(401); expect(db.reservationCreateRequest.findUnique).not.toHaveBeenCalled();
+  });
+  it('atomically stores the response for a first keyed request', async () => {
+    db.location.findUnique.mockResolvedValueOnce({ id: 'loc-1', isActive: true });
+    db.reservation.create.mockResolvedValueOnce({ id: 'r-1' });
+    const res = response(); await createReservation(req('key'), res);
+    expect(db.reservationCreateRequest.create).toHaveBeenCalled();
+    expect(db.reservationCreateRequest.update).toHaveBeenCalled();
+    expect(res.status).toHaveBeenCalledWith(201);
+  });
+  it('accepts a keyed reservation with an omitted optional comment', async () => {
+    db.location.findUnique.mockResolvedValueOnce({ id: 'loc-1', isActive: true });
+    db.reservation.create.mockResolvedValueOnce({ id: 'r-1' });
+    const res = response();
+    await createReservation(request({ body: { locationId: 'loc-1', date: '2099-06-15', time: '19:00', partySize: 2 }, user: { id: 'c-1', type: 'customer' }, get: (() => 'key') as Request['get'] }), res);
+    expect(res.status).toHaveBeenCalledWith(201);
+    expect(db.reservationCreateRequest.update).toHaveBeenCalled();
+  });
+  it('replays the saved response for the same key and payload', async () => {
+    db.reservationCreateRequest.findUnique.mockResolvedValueOnce({ payloadHash: hash, response: { id: 'r-1' } });
+    const res = response(); await createReservation(req('key'), res);
+    expect(res.status).toHaveBeenCalledWith(201); expect(res.json).toHaveBeenCalledWith({ success: true, data: { id: 'r-1' } });
+    expect(db.reservation.create).not.toHaveBeenCalled();
+  });
+  it('rejects a changed payload for an existing key', async () => {
+    db.reservationCreateRequest.findUnique.mockResolvedValueOnce({ payloadHash: 'other', response: { id: 'r-1' } });
+    const res = response(); await createReservation(req('key'), res);
+    expect(res.status).toHaveBeenCalledWith(409); expect(db.reservation.create).not.toHaveBeenCalled();
+  });
+  it('fails closed if a stored retry response is missing', async () => {
+    db.reservationCreateRequest.findUnique.mockResolvedValueOnce({ payloadHash: hash, response: null });
+    await expect(createReservation(req('key'), response())).rejects.toThrow('Stored idempotency response is unavailable');
+  });
+  it('replays a unique-key race after a competing transaction commits', async () => {
+    db.reservationCreateRequest.findUnique.mockResolvedValueOnce(null).mockResolvedValueOnce({ payloadHash: hash, response: { id: 'r-1' } });
+    db.location.findUnique.mockResolvedValueOnce({ id: 'loc-1', isActive: true });
+    db.reservationCreateRequest.create.mockRejectedValueOnce(new Prisma.PrismaClientKnownRequestError('duplicate', { code: 'P2002', clientVersion: '5.22.0' }));
+    const res = response(); await createReservation(req('key'), res);
+    expect(res.status).toHaveBeenCalledWith(201); expect(res.json).toHaveBeenCalledWith({ success: true, data: { id: 'r-1' } });
+  });
+  it('propagates unrelated transaction errors', async () => {
+    db.location.findUnique.mockResolvedValueOnce({ id: 'loc-1', isActive: true });
+    db.reservationCreateRequest.create.mockRejectedValueOnce(new Error('Synthetic transaction failure'));
+    await expect(createReservation(req('key'), response())).rejects.toThrow('Synthetic transaction failure');
+  });
+  it('rejects a disallowed lifecycle jump without an update', async () => {
+    db.reservation.findUnique.mockResolvedValueOnce({ id: 'r-1', status: 'PENDING', tableId: null });
+    const res = response(); await updateReservation(request({ params: { id: 'r-1' }, body: { status: 'COMPLETED' } }), res);
+    expect(res.status).toHaveBeenCalledWith(409); expect(db.reservation.update).not.toHaveBeenCalled();
+  });
+  it('rejects a malformed requested availability time before database access', async () => {
+    const res = response(); await checkAvailability(request({ query: { locationId: 'loc-1', date: '2099-06-15', time: '24:00' } }), res);
+    expect(res.status).toHaveBeenCalledWith(400); expect(db.table.findMany).not.toHaveBeenCalled();
+  });
+  it('returns requested-time table details and retains the daily slots', async () => {
+    db.table.findMany.mockResolvedValueOnce([{ id: 't-1', name: 'T1', capacity: 2 }, { id: 't-2', name: 'T2', capacity: 4 }]);
+    db.reservation.findMany.mockResolvedValueOnce([{ time: '19:00', tableId: 't-1' }]);
+    const res = response(); await checkAvailability(request({ query: { locationId: 'loc-1', date: '2099-06-15', time: '19:00' } }), res);
+    expect(res.json).toHaveBeenCalledWith(expect.objectContaining({ data: expect.objectContaining({ available: true, tables: [{ id: 't-2', name: 'T2', capacity: 4 }], slots: expect.any(Array) }) }));
   });
 });
