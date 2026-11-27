@@ -89,6 +89,5 @@ async function main() {
 }
 
 main().catch(() => {
-  console.error('Failed to summarize ZAP results.');
   process.exitCode = 1;
 });
