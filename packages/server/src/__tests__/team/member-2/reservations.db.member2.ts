@@ -374,20 +374,18 @@ describe('availability time from the API guide', () => {
     const stored = await db.reservation.findUniqueOrThrow({ where: { id: row.id } });
     expect(stored).toEqual(row);
     console.log(JSON.stringify({ caseId: c.id, http: result.status, body: result.body, recordUnchanged: true }));
-    if (c.partition === 'free-slot') {
-      expect(result.status).toBe(200);
-      expect(result.body).toMatchObject({ success: true, data: { available: true, tables: [{ id: tableId, name: 'T1', capacity: 4 }] } });
-    } else if (c.partition === 'ordinary') {
-      // The guide lists HTTP 400 when there is no table for the requested time.
+    if (['empty', 'null-literal', 'invalid-format'].includes(c.partition)) {
       expect(result.status).toBe(400);
+      expect(result.body).toEqual({ success: false, error: 'Invalid time filter' });
       checkResponse('get', c.path, result.status, result.body);
     } else {
-      // The guide specifies no invalid-time policy. Record the daily-slot behavior.
       expect(result.status).toBe(200);
       checkResponse('get', c.path, result.status, result.body);
       expect(result.body.data.slots).toEqual(expect.arrayContaining([
         { time: row.time, available: false }, { time: '19:30', available: true },
       ]));
+      if (c.partition === 'free-slot') expect(result.body.data).toMatchObject({ available: true, tables: [{ id: tableId, name: 'T1', capacity: 4 }] });
+      if (c.partition === 'ordinary') expect(result.body.data).toMatchObject({ available: false, tables: [] });
     }
   });
 });
@@ -417,7 +415,9 @@ describe('generated reservation update cases against PostgreSQL', () => {
   const cases = generated.filter(c => !c.location && c.method === 'patch' && c.path === '/reservations/{id}' && !(c.field === 'tableId' && c.valid && !c.omitted && c.value !== null));
   it.each(cases.map(c => [c.id, c] as const))('%s', async (_id, c) => {
     if (c.field === 'partySize') await db.table.update({ where: { id: tableId }, data: { capacity: 50 } });
-    const initial = await db.reservation.create({ data: { ...base(), customerId, date: new Date(base().date), tableId } });
+    const status = c.field === 'status' && c.value === 'SEATED' ? 'CONFIRMED'
+      : c.field === 'status' && c.value === 'COMPLETED' ? 'SEATED' : 'PENDING';
+    const initial = await db.reservation.create({ data: { ...base(), customerId, date: new Date(base().date), tableId, status } });
     const body: Record<string, unknown> = {};
     if (!c.omitted) body[c.field] = c.value;
     const response = await request(app).patch(`/api/reservations/${initial.id}`).set('Authorization', auth(staff)).send(body);
@@ -676,18 +676,26 @@ describe('shared reservation workflow', () => {
     expect(response.body).toMatchObject({ success: false });
     expect(await db.reservation.findUniqueOrThrow({ where: { id: row.id } })).toEqual(row);
   });
-  it('characterizes an accepted conflicting table assignment', async () => {
-    await db.reservation.create({ data: { ...base(), date: new Date(base().date), customerId, tableId } });
-    const row = await db.reservation.create({ data: { ...base(), date: new Date(base().date), customerId } });
-    const result = await request(app).patch(`/api/reservations/${row.id}`).set('Authorization', auth(staff)).send({ tableId });
-    expect(result.status).toBe(200);
-    expect(await db.reservation.count({ where: { locationId, tableId, time: base().time, date: new Date(base().date) } })).toBe(2);
+  it('rejects a second conflicting table assignment without changing either reservation', async () => {
+    const first = await db.reservation.create({ data: { ...base(), date: new Date(base().date), customerId } });
+    const second = await db.reservation.create({ data: { ...base(), date: new Date(base().date), customerId } });
+    const assigned = await request(app).patch(`/api/reservations/${first.id}`).set('Authorization', auth(staff)).send({ tableId });
+    expect(assigned.status).toBe(200);
+    const beforeFirst = await db.reservation.findUniqueOrThrow({ where: { id: first.id } });
+    const beforeSecond = await db.reservation.findUniqueOrThrow({ where: { id: second.id } });
+    expect(beforeFirst.tableId).toBe(tableId);
+    expect(beforeSecond.tableId).toBeNull();
+    const result = await request(app).patch(`/api/reservations/${second.id}`).set('Authorization', auth(staff)).send({ tableId });
+    expect(result.status).toBe(409);
+    expect(await db.reservation.findUniqueOrThrow({ where: { id: first.id } })).toEqual(beforeFirst);
+    expect(await db.reservation.findUniqueOrThrow({ where: { id: second.id } })).toEqual(beforeSecond);
+    expect(await db.reservation.count({ where: { locationId, tableId, time: base().time, date: new Date(base().date), status: { in: ['PENDING', 'CONFIRMED', 'SEATED'] } } })).toBe(1);
   });
-  it('characterizes a transition from CANCELLED to CONFIRMED', async () => {
+  it('rejects reopening a cancelled reservation without mutation', async () => {
     const row = await db.reservation.create({ data: { ...base(), date: new Date(base().date), customerId, status: 'CANCELLED' } });
     const result = await request(app).patch(`/api/reservations/${row.id}`).set('Authorization', auth(staff)).send({ status: 'CONFIRMED' });
-    expect(result.status).toBe(200);
-    expect((await db.reservation.findUniqueOrThrow({ where: { id: row.id } })).status).toBe('CONFIRMED');
+    expect(result.status).toBe(409);
+    expect(await db.reservation.findUniqueOrThrow({ where: { id: row.id } })).toEqual(row);
   });
   it.each([[0, 1], [1, 1], [2, 1], [50, 0], [51, 0], ['2.5', 1], ['abc', 1]])('availability parses party size %s and yields %s eligible tables', async (input, expected) => {
     const response = await request(app).get('/api/reservations/availability').query({ locationId, date: base().date, partySize: input });
@@ -878,11 +886,14 @@ describe('business-rule regressions', () => {
     expect.soft(stored).toEqual(row);
   });
   it('does not create duplicate records for a repeated identical booking', async () => {
-    const first = await request(app).post('/api/reservations').set('Authorization', auth(customer)).send(base());
-    const second = await request(app).post('/api/reservations').set('Authorization', auth(customer)).send(base());
+    const key = `retry-${randomUUID()}`;
+    const first = await request(app).post('/api/reservations').set('Authorization', auth(customer)).set('Idempotency-Key', key).send(base());
+    const second = await request(app).post('/api/reservations').set('Authorization', auth(customer)).set('Idempotency-Key', key).send(base());
     const rows = await db.reservation.findMany({ where: { customerId } });
-    console.log(JSON.stringify({ scenario: 'repeated booking', observedStatuses: [first.status, second.status], recordCount: rows.length }));
+    console.log(JSON.stringify({ scenario: 'idempotent repeated booking', observedStatuses: [first.status, second.status], recordCount: rows.length }));
     expect(first.status).toBe(201);
+    expect(second.status).toBe(201);
+    expect(second.body.data.id).toBe(first.body.data.id);
     expect(rows).toHaveLength(1);
   });
   it('rejects assigning an undersized table without changing the reservation', async () => {

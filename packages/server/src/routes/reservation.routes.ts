@@ -25,7 +25,9 @@ router.get('/my-reservations', authenticate, listCustomerReservations);
 router.get('/analytics', authenticate, requireStaff, getReservationAnalytics);
 
 // Customer: create reservation
-router.post('/', authenticate, createReservation);
+router.post('/', authenticate, (req, res, next) => {
+  void createReservation(req, res).catch(next);
+});
 
 // Staff: manage reservations
 router.get('/', authenticate, requireStaff, (req, res, next) => {
@@ -34,7 +36,9 @@ router.get('/', authenticate, requireStaff, (req, res, next) => {
 // Not staff-only: customers may read their own booking. Ownership is enforced
 // inside getReservation, so this route must stay authenticated.
 router.get('/:id', authenticate, getReservation);
-router.patch('/:id', authenticate, requireStaff, updateReservation);
+router.patch<{ id: string }>('/:id', authenticate, requireStaff, (req, res, next) => {
+  void updateReservation(req, res).catch(next);
+});
 router.delete('/:id', authenticate, requireStaff, deleteReservation);
 
 export default router;

@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { z } from 'zod';
 import { Prisma } from '@prisma/client';
+import { createHash } from 'node:crypto';
 import prisma from '../lib/db.js';
 
 // Reject impossible dates instead of allowing JavaScript to normalize them.
@@ -66,17 +67,37 @@ export async function createReservation(req: Request, res: Response): Promise<vo
     return;
   }
 
-  if (parsed.data.date < new Date().toISOString().slice(0, 10)) {
+  const key = req.get('Idempotency-Key');
+  if (key !== undefined && !/^[A-Za-z0-9._~-]{1,128}$/.test(key)) {
+    res.status(400).json({ success: false, error: 'Invalid idempotency key' });
+    return;
+  }
+  const user = req.user;
+  const customerId = user?.type === 'customer' ? user.id : null;
+  const { locationId, date, time, partySize, comment } = parsed.data;
+  const keyHash = key === undefined ? undefined : createHash('sha256').update(key).digest('hex');
+  const payloadHash = keyHash === undefined ? undefined : createHash('sha256')
+    .update(JSON.stringify({ locationId, date, time, partySize, comment: comment ?? null })).digest('hex');
+
+  // Replay an already committed result before time/location checks change over time.
+  const replay = async (): Promise<boolean> => {
+    if (!customerId || !keyHash || !payloadHash) return false;
+    const previous = await prisma.reservationCreateRequest.findUnique({ where: { customerId_keyHash: { customerId, keyHash } } });
+    if (!previous) return false;
+    if (previous.payloadHash !== payloadHash) {
+      res.status(409).json({ success: false, error: 'Idempotency key already used for different reservation details' });
+      return true;
+    }
+    if (previous.response === null) throw new Error('Stored idempotency response is unavailable');
+    res.status(201).json({ success: true, data: previous.response });
+    return true;
+  };
+  if (await replay()) return;
+
+  if (date < new Date().toISOString().slice(0, 10)) {
     res.status(400).json({ success: false, error: 'Cannot reserve in the past' });
     return;
   }
-
-  const { locationId, date, time, partySize, comment } = parsed.data;
-  // Only a customer principal can own a reservation: customerId is an FK to Customer.id,
-  // and a staff token carries a User.id from a different table. Matches createOrder.
-  const user = req.user;
-  const customerId = user?.type === 'customer' ? user.id : null;
-
   if (!customerId) {
     if (user) {
       res.status(400).json({ success: false, error: 'Reservations can only be created by a customer account' });
@@ -85,36 +106,34 @@ export async function createReservation(req: Request, res: Response): Promise<vo
     res.status(401).json({ success: false, error: 'Authentication required for reservations' });
     return;
   }
-
-  // Verify location exists and is active
   const location = await prisma.location.findUnique({ where: { id: locationId } });
   if (!location || !location.isActive) {
     res.status(400).json({ success: false, error: 'Location not found or inactive' });
     return;
   }
+  const data = { customerId, locationId, date: new Date(date), time, partySize, comment };
+  const include = { location: { select: { id: true, name: true } }, customer: { select: { id: true, name: true, email: true } }, table: true } as const;
+  let reservation;
+  if (keyHash && payloadHash) {
+    try {
+      reservation = await prisma.$transaction(async (tx) => {
+        await tx.reservationCreateRequest.create({ data: { customerId, keyHash, payloadHash } });
+        const created = await tx.reservation.create({ data, include });
+        await tx.reservationCreateRequest.update({ where: { customerId_keyHash: { customerId, keyHash } }, data: { response: JSON.parse(JSON.stringify(created)) } });
+        return created;
+      });
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002' && await replay()) return;
+      throw error;
+    }
+  } else {
+    reservation = await prisma.reservation.create({ data, include });
+  }
 
-  const reservation = await prisma.reservation.create({
-    data: {
-      customerId,
-      locationId,
-      date: new Date(date),
-      time,
-      partySize,
-      comment,
-    },
-    include: {
-      location: { select: { id: true, name: true } },
-      customer: { select: { id: true, name: true, email: true } },
-      table: true,
-    },
-  });
-
-  // Emit event for automation rules
   try {
     const { appEvents } = await import('../lib/events.js');
     appEvents.emit('reservation.created', { reservation });
   } catch {}
-
   res.status(201).json({ success: true, data: reservation });
 }
 
@@ -191,6 +210,16 @@ export async function getReservation(req: Request<{ id: string }>, res: Response
   res.json({ success: true, data: reservation });
 }
 
+// Proposed Issue #20 contract: completed and cancelled reservations release the slot.
+const occupyingStatuses = ['PENDING', 'CONFIRMED', 'SEATED'] as const;
+const allowedStatusTransitions: Record<string, readonly string[]> = {
+  PENDING: ['CONFIRMED', 'CANCELLED'],
+  CONFIRMED: ['SEATED', 'CANCELLED'],
+  SEATED: ['COMPLETED', 'CANCELLED'],
+  COMPLETED: ['CANCELLED'],
+  CANCELLED: [],
+};
+
 export async function updateReservation(req: Request<{ id: string }>, res: Response): Promise<void> {
   const { id } = req.params;
   const parsed = updateReservationSchema.safeParse(req.body);
@@ -199,49 +228,82 @@ export async function updateReservation(req: Request<{ id: string }>, res: Respo
     return;
   }
 
-  const existing = await prisma.reservation.findUnique({ where: { id } });
-  if (!existing) {
-    res.status(404).json({ success: false, error: 'Reservation not found' });
-    return;
-  }
+  const result = await prisma.$transaction(async (tx) => {
+    // Serialize concurrent changes to the same reservation before reading its effective state.
+    await tx.$queryRaw`SELECT "id" FROM "reservations" WHERE "id" = ${id} FOR UPDATE`;
+    const existing = await tx.reservation.findUnique({ where: { id } });
+    if (!existing) return { error: 'Reservation not found', status: 404 } as const;
+    if (parsed.data.status !== undefined && parsed.data.status !== existing.status
+      && !allowedStatusTransitions[existing.status].includes(parsed.data.status)) {
+      return { error: 'Invalid reservation status transition', status: 409 } as const;
+    }
 
-  const effectiveTableId = parsed.data.tableId === undefined ? existing.tableId : parsed.data.tableId;
-  const tableRelevantUpdate = parsed.data.tableId !== undefined || parsed.data.partySize !== undefined
-    || parsed.data.date !== undefined || parsed.data.time !== undefined;
-  if (effectiveTableId !== null && tableRelevantUpdate) {
-    const candidateTable = await prisma.table.findFirst({
-      where: {
-        id: effectiveTableId,
-        locationId: existing.locationId,
-        isActive: true,
-        capacity: { gte: parsed.data.partySize ?? existing.partySize },
+    const effectiveTableId = parsed.data.tableId === undefined ? existing.tableId : parsed.data.tableId;
+    const effectiveStatus = parsed.data.status ?? existing.status;
+    const tableRelevantUpdate = parsed.data.tableId !== undefined || parsed.data.partySize !== undefined
+      || parsed.data.date !== undefined || parsed.data.time !== undefined;
+    const occupancyRelevantUpdate = parsed.data.tableId !== undefined || parsed.data.date !== undefined
+      || parsed.data.time !== undefined || parsed.data.status !== undefined;
+
+    // Every reservation writer in this path locks affected table rows in the same order.
+    // This makes the subsequent conflict read and update atomic against competing requests.
+    const affectedTableIds = [...new Set([existing.tableId, effectiveTableId].filter((value): value is string => value !== null))].sort();
+    if ((tableRelevantUpdate || occupancyRelevantUpdate) && affectedTableIds.length > 0) {
+      await tx.$queryRaw`SELECT "id" FROM "tables" WHERE "id" IN (${Prisma.join(affectedTableIds)}) ORDER BY "id" FOR UPDATE`;
+    }
+
+    if (effectiveTableId !== null && tableRelevantUpdate) {
+      const candidateTable = await tx.table.findFirst({
+        where: {
+          id: effectiveTableId,
+          locationId: existing.locationId,
+          isActive: true,
+          capacity: { gte: parsed.data.partySize ?? existing.partySize },
+        },
+      });
+      if (!candidateTable) return { error: 'Table is not eligible for this reservation', status: 400 } as const;
+    }
+
+    if (effectiveTableId !== null && occupancyRelevantUpdate && occupyingStatuses.some((status) => status === effectiveStatus)) {
+      const conflict = await tx.reservation.findFirst({
+        where: {
+          id: { not: id },
+          locationId: existing.locationId,
+          tableId: effectiveTableId,
+          date: parsed.data.date === undefined ? existing.date : new Date(parsed.data.date),
+          time: parsed.data.time ?? existing.time,
+          status: { in: [...occupyingStatuses] },
+        },
+        select: { id: true },
+      });
+      if (conflict) return { error: 'Table is already reserved for this slot', status: 409 } as const;
+    }
+
+    const data: Record<string, unknown> = {};
+    if (parsed.data.status !== undefined) data.status = parsed.data.status;
+    if (parsed.data.tableId !== undefined) data.tableId = parsed.data.tableId;
+    if (parsed.data.date !== undefined) data.date = new Date(parsed.data.date);
+    if (parsed.data.time !== undefined) data.time = parsed.data.time;
+    if (parsed.data.partySize !== undefined) data.partySize = parsed.data.partySize;
+    if (parsed.data.comment !== undefined) data.comment = parsed.data.comment;
+
+    const reservation = await tx.reservation.update({
+      where: { id },
+      data,
+      include: {
+        customer: { select: { id: true, name: true, email: true, phone: true } },
+        location: { select: { id: true, name: true } },
+        table: { select: { id: true, name: true, capacity: true } },
       },
     });
-    if (!candidateTable) {
-      res.status(400).json({ success: false, error: 'Table is not eligible for this reservation' });
-      return;
-    }
+    return { reservation } as const;
+  }, { isolationLevel: Prisma.TransactionIsolationLevel.ReadCommitted });
+
+  if ('error' in result && result.status !== undefined) {
+    res.status(result.status).json({ success: false, error: result.error });
+    return;
   }
-
-  const data: Record<string, unknown> = {};
-  if (parsed.data.status !== undefined) data.status = parsed.data.status;
-  if (parsed.data.tableId !== undefined) data.tableId = parsed.data.tableId;
-  if (parsed.data.date !== undefined) data.date = new Date(parsed.data.date);
-  if (parsed.data.time !== undefined) data.time = parsed.data.time;
-  if (parsed.data.partySize !== undefined) data.partySize = parsed.data.partySize;
-  if (parsed.data.comment !== undefined) data.comment = parsed.data.comment;
-
-  const reservation = await prisma.reservation.update({
-    where: { id },
-    data,
-    include: {
-      customer: { select: { id: true, name: true, email: true, phone: true } },
-      location: { select: { id: true, name: true } },
-      table: { select: { id: true, name: true, capacity: true } },
-    },
-  });
-
-  res.json({ success: true, data: reservation });
+  res.json({ success: true, data: result.reservation });
 }
 
 export async function deleteReservation(req: Request<{ id: string }>, res: Response): Promise<void> {
@@ -441,7 +503,7 @@ export async function getReservationAnalytics(req: Request, res: Response): Prom
 }
 
 export async function checkAvailability(req: Request, res: Response): Promise<void> {
-  const { locationId, date, partySize } = req.query;
+  const { locationId, date, partySize, time: requestedTime } = req.query;
 
   if (!locationId || !date) {
     res.status(400).json({ success: false, error: 'locationId and date are required' });
@@ -454,6 +516,11 @@ export async function checkAvailability(req: Request, res: Response): Promise<vo
   }
   if (!queryDate.safeParse(date).success) {
     res.status(400).json({ success: false, error: 'Invalid date filter' });
+    return;
+  }
+
+  if (requestedTime !== undefined && !reservationTime.safeParse(requestedTime).success) {
+    res.status(400).json({ success: false, error: 'Invalid time filter' });
     return;
   }
 
@@ -474,7 +541,7 @@ export async function checkAvailability(req: Request, res: Response): Promise<vo
     where: {
       locationId: locationId as string,
       date: new Date(date as string),
-      status: { not: 'CANCELLED' },
+      status: { in: [...occupyingStatuses] },
     },
     select: { time: true, tableId: true },
   });
@@ -493,5 +560,11 @@ export async function checkAvailability(req: Request, res: Response): Promise<vo
     }
   }
 
-  res.json({ success: true, data: { slots, totalTables: tables.length } });
+  const requestedTables = requestedTime === undefined ? undefined : tables
+    .filter((table) => !existingReservations.some((reservation) => reservation.time === requestedTime && reservation.tableId === table.id))
+    .map(({ id, name, capacity }) => ({ id, name, capacity }));
+  res.json({ success: true, data: {
+    slots, totalTables: tables.length,
+    ...(requestedTables === undefined ? {} : { available: requestedTables.length > 0, tables: requestedTables }),
+  } });
 }
