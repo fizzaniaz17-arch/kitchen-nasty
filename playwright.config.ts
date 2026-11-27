@@ -28,6 +28,19 @@ export default defineConfig({
       },
       testMatch: 'storefront/**/*.spec.ts',
     },
+    {
+      name: 'student-3',
+      use: {
+        ...devices['Desktop Chrome'],
+        baseURL: process.env.STUDENT3_STOREFRONT_URL || 'http://localhost:5174',
+        ...(process.env.STUDENT3_ZAP_PROXY
+          ? { proxy: { server: process.env.STUDENT3_ZAP_PROXY } }
+          : {}),
+        screenshot: 'only-on-failure',
+        trace: 'retain-on-failure',
+      },
+      testMatch: 'student-3/**/*.spec.ts',
+    },
   ],
   webServer: [
     {
