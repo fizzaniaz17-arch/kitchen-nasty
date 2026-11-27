@@ -1,0 +1,1343 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "KitchenAsty reservation workflow",
+    "version": "1.0.0",
+    "description": "Scoped description of current HTTP behavior; cross-record business rules are documented separately."
+  },
+  "servers": [
+    {
+      "url": "/api"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "schemas": {
+      "CreateReservation": {
+        "type": "object",
+        "required": [
+          "locationId",
+          "date",
+          "time",
+          "partySize"
+        ],
+        "properties": {
+          "locationId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "date": {
+            "type": "string",
+            "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+            "x-business-scenarios": [
+              {
+                "name": "impossible-calendar-date",
+                "value": "2099-02-30",
+                "valid": false
+              }
+            ],
+            "x-minimum-days-from-today": 0
+          },
+          "time": {
+            "type": "string",
+            "pattern": "^[0-9]{2}:[0-9]{2}$",
+            "x-business-scenarios": [
+              {
+                "name": "clock-below-min",
+                "value": "-1:59",
+                "valid": false
+              },
+              {
+                "name": "clock-min",
+                "value": "00:00",
+                "valid": true
+              },
+              {
+                "name": "clock-above-min",
+                "value": "00:01",
+                "valid": true
+              },
+              {
+                "name": "clock-below-max",
+                "value": "23:58",
+                "valid": true
+              },
+              {
+                "name": "clock-max",
+                "value": "23:59",
+                "valid": true
+              },
+              {
+                "name": "clock-above-max",
+                "value": "24:00",
+                "valid": false
+              },
+              {
+                "name": "invalid-hour-minute",
+                "value": "99:99",
+                "valid": false
+              },
+              {
+                "name": "invalid-minute",
+                "value": "19:99",
+                "valid": false
+              }
+            ]
+          },
+          "partySize": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 50
+          },
+          "comment": {
+            "type": "string"
+          }
+        },
+        "x-object-samples": [
+          {
+            "name": "empty-object",
+            "value": {},
+            "valid": false
+          },
+          {
+            "name": "extra-field",
+            "extendValidBody": true,
+            "value": {
+              "status": "SEATED"
+            },
+            "valid": true
+          }
+        ]
+      },
+      "UpdateReservation": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "PENDING",
+              "CONFIRMED",
+              "SEATED",
+              "COMPLETED",
+              "CANCELLED"
+            ]
+          },
+          "tableId": {
+            "type": "string",
+            "nullable": true
+          },
+          "date": {
+            "type": "string",
+            "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+            "x-business-scenarios": [
+              {
+                "name": "impossible-calendar-date",
+                "value": "2099-02-30",
+                "valid": false
+              }
+            ]
+          },
+          "time": {
+            "type": "string",
+            "pattern": "^[0-9]{2}:[0-9]{2}$",
+            "x-business-scenarios": [
+              {
+                "name": "clock-below-min",
+                "value": "-1:59",
+                "valid": false
+              },
+              {
+                "name": "clock-min",
+                "value": "00:00",
+                "valid": true
+              },
+              {
+                "name": "clock-above-min",
+                "value": "00:01",
+                "valid": true
+              },
+              {
+                "name": "clock-below-max",
+                "value": "23:58",
+                "valid": true
+              },
+              {
+                "name": "clock-max",
+                "value": "23:59",
+                "valid": true
+              },
+              {
+                "name": "clock-above-max",
+                "value": "24:00",
+                "valid": false
+              },
+              {
+                "name": "invalid-hour-minute",
+                "value": "99:99",
+                "valid": false
+              },
+              {
+                "name": "invalid-minute",
+                "value": "19:99",
+                "valid": false
+              }
+            ]
+          },
+          "partySize": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 50
+          },
+          "comment": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "CreateTable": {
+        "type": "object",
+        "required": [
+          "name",
+          "capacity"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "capacity": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "isActive": {
+            "type": "boolean",
+            "default": true
+          }
+        }
+      },
+      "UpdateTable": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "capacity": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "isActive": {
+            "type": "boolean"
+          }
+        }
+      },
+      "Reservation": {
+        "type": "object",
+        "required": [
+          "id",
+          "customerId",
+          "locationId",
+          "date",
+          "time",
+          "partySize",
+          "status",
+          "tableId",
+          "comment",
+          "location",
+          "table"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "customerId": {
+            "type": "string"
+          },
+          "locationId": {
+            "type": "string"
+          },
+          "tableId": {
+            "type": "string",
+            "nullable": true
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "time": {
+            "type": "string"
+          },
+          "partySize": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "PENDING",
+              "CONFIRMED",
+              "SEATED",
+              "COMPLETED",
+              "CANCELLED"
+            ]
+          },
+          "comment": {
+            "type": "string",
+            "nullable": true
+          },
+          "location": {
+            "type": "object",
+            "required": [
+              "id",
+              "name"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              }
+            }
+          },
+          "table": {
+            "type": "object",
+            "required": [
+              "id",
+              "name",
+              "capacity"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "capacity": {
+                "type": "integer"
+              }
+            },
+            "nullable": true
+          }
+        }
+      },
+      "Table": {
+        "type": "object",
+        "required": [
+          "id",
+          "locationId",
+          "name",
+          "capacity",
+          "isActive"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "locationId": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "capacity": {
+            "type": "integer"
+          },
+          "isActive": {
+            "type": "boolean"
+          }
+        }
+      },
+      "Pagination": {
+        "type": "object",
+        "required": [
+          "page",
+          "limit",
+          "total",
+          "totalPages"
+        ],
+        "properties": {
+          "page": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 50
+          },
+          "total": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "totalPages": {
+            "type": "integer",
+            "minimum": 0
+          }
+        }
+      },
+      "Availability": {
+        "type": "object",
+        "required": [
+          "slots",
+          "totalTables"
+        ],
+        "properties": {
+          "slots": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "time",
+                "available"
+              ],
+              "properties": {
+                "time": {
+                  "type": "string"
+                },
+                "available": {
+                  "type": "boolean"
+                }
+              }
+            }
+          },
+          "totalTables": {
+            "type": "integer"
+          },
+          "available": {
+            "type": "boolean",
+            "description": "Present when a valid time is supplied"
+          },
+          "tables": {
+            "type": "array",
+            "description": "Available tables when a valid time is supplied",
+            "items": {
+              "type": "object",
+              "required": ["id", "name", "capacity"],
+              "properties": {
+                "id": { "type": "string" },
+                "name": { "type": "string" },
+                "capacity": { "type": "integer" }
+              }
+            }
+          }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "required": [
+          "success",
+          "error"
+        ],
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "enum": [
+              false
+            ]
+          },
+          "error": {
+            "oneOf": [
+              {
+                "type": "string",
+                "minLength": 1
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "code",
+                    "path",
+                    "message"
+                  ],
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "message": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "path": {
+                      "type": "array",
+                      "items": {
+                        "oneOf": [
+                          {
+                            "type": "integer"
+                          },
+                          {
+                            "type": "string"
+                          }
+                        ]
+                      }
+                    }
+                  }
+                },
+                "minItems": 1
+              }
+            ]
+          }
+        }
+      }
+    },
+    "parameters": {
+      "id": {
+        "in": "path",
+        "name": "id",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "locationId": {
+        "in": "path",
+        "name": "locationId",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "tableId": {
+        "in": "path",
+        "name": "tableId",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "page": {
+        "in": "query",
+        "name": "page",
+        "schema": {
+          "type": "string"
+        },
+        "description": "parseInt; defaults to 1 and clamps to at least 1.",
+        "x-clamp-boundaries": [
+          1
+        ]
+      },
+      "limit": {
+        "in": "query",
+        "name": "limit",
+        "schema": {
+          "type": "string"
+        },
+        "description": "parseInt; defaults to 20 and clamps to 1..50.",
+        "x-clamp-boundaries": [
+          1,
+          50
+        ]
+      }
+    }
+  },
+  "paths": {
+    "/reservations/availability": {
+      "get": {
+        "parameters": [
+          {
+            "in": "query",
+            "name": "locationId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "date",
+            "required": true,
+            "description": "Valid four-digit-year calendar date: YYYY-MM-DD, month/day/year using runtime-supported separators, named-month or supported year-first legacy formats; supported timestamps preserve their runtime instant. Two-digit years, incomplete dates, impossible dates and repeated values are rejected.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "partySize",
+            "schema": {
+              "type": "string"
+            },
+            "description": "parseInt or default 2",
+            "x-business-boundaries": [
+              1,
+              50
+            ]
+          },
+          {
+            "in": "query",
+            "name": "time",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "pattern": "^(?:[01][0-9]|2[0-3]):[0-5][0-9]$"
+            },
+            "example": "19:00",
+            "description": "Optional HH:MM clock time; adds requested-time availability and eligible tables while retaining the daily slots. Malformed time returns 400.",
+            "x-free-slot": "19:30"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "22 slots and eligible table count; optional requested-time availability and tables",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "success",
+                    "data"
+                  ],
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "enum": [
+                        true
+                      ]
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Availability"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Required query missing or invalid date/locationId/time filter",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/reservations": {
+      "post": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": false,
+            "description": "Optional customer-scoped retry key. For 24 hours identical retries replay the original 201 response and reuse with different validated details returns 409. At or after expiry the key can create a new booking. Requests without a key create separate bookings.",
+            "schema": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[A-Za-z0-9._~-]+$" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateReservation"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "success",
+                    "data"
+                  ],
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "enum": [
+                        true
+                      ]
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Reservation"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Idempotency key reused with different reservation details",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/page"
+          },
+          {
+            "$ref": "#/components/parameters/limit"
+          },
+          {
+            "in": "query",
+            "name": "status",
+            "description": "Optional reservation status enum; an empty value is treated as omitted.",
+            "schema": {
+              "type": "string",
+              "enum": ["", "PENDING", "CONFIRMED", "SEATED", "COMPLETED", "CANCELLED"]
+            }
+          },
+          {
+            "in": "query",
+            "name": "locationId",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "date",
+            "description": "Optional valid four-digit-year calendar date: YYYY-MM-DD, month/day/year using runtime-supported separators, named-month or supported year-first legacy formats; supported timestamps preserve their runtime instant. Two-digit years, incomplete dates and impossible dates are rejected. An empty value is treated as omitted.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Staff list",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "success",
+                    "data",
+                    "pagination"
+                  ],
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "enum": [
+                        true
+                      ]
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Reservation"
+                      }
+                    },
+                    "pagination": {
+                      "$ref": "#/components/schemas/Pagination"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid status, date, or locationId filter",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Not staff",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/reservations/my-reservations": {
+      "get": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/page"
+          },
+          {
+            "$ref": "#/components/parameters/limit"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Principal's reservations",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "success",
+                    "data",
+                    "pagination"
+                  ],
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "enum": [
+                        true
+                      ]
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Reservation"
+                      }
+                    },
+                    "pagination": {
+                      "$ref": "#/components/schemas/Pagination"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/reservations/{id}": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/id"
+        }
+      ],
+      "get": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Reservation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "success",
+                    "data"
+                  ],
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "enum": [
+                        true
+                      ]
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Reservation"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Not owner or staff",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Observed generic Express error handler for malformed percent encoding. A malformed client identifier should receive a 4xx.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "x-path-samples": {
+          "id": {
+            "encoded-known": "$encodedKnown",
+            "malformed-escape": "%ZZ"
+          }
+        }
+      },
+      "patch": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateReservation"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "success",
+                    "data"
+                  ],
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "enum": [
+                        true
+                      ]
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Reservation"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid body",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Not staff",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "An occupying reservation already uses the table at this exact date and time (proposed Issue 20 status policy)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/locations/{locationId}/tables": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/locationId"
+        }
+      ],
+      "get": {
+        "responses": {
+          "200": {
+            "description": "Tables",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "success",
+                    "data"
+                  ],
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "enum": [
+                        true
+                      ]
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Table"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Location not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "description": "Manager or super admin",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateTable"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "success",
+                    "data"
+                  ],
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "enum": [
+                        true
+                      ]
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Table"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid body",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Insufficient role",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Location not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Duplicate name",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/locations/{locationId}/tables/{tableId}": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/locationId"
+        },
+        {
+          "$ref": "#/components/parameters/tableId"
+        }
+      ],
+      "get": {
+        "responses": {
+          "200": {
+            "description": "Table",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "success",
+                    "data"
+                  ],
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "enum": [
+                        true
+                      ]
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Table"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "description": "Manager or super admin",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateTable"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "success",
+                    "data"
+                  ],
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "enum": [
+                        true
+                      ]
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Table"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid body",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Insufficient role",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Duplicate name",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

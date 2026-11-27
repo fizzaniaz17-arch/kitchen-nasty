@@ -1,0 +1,17 @@
+
+> kitchenasty@0.3.2 test:member1
+> npm run test:member1 -w packages/server
+
+
+> @kitchenasty/server@0.3.2 test:member1
+> vitest run --config vitest.member1.config.ts
+
+
+ RUN  v4.1.12 D:/5th Semester/SQE/Project/kitchen-nasty/packages/server
+
+
+ Test Files  2 passed (2)
+      Tests  59 passed (59)
+   Start at  17:54:55
+   Duration  1.84s (transform 657ms, setup 0ms, import 2.08s, tests 242ms, environment 0ms)
+

@@ -130,12 +130,15 @@ export function createApp() {
     });
   });
 
-  // Error handler
-  app.use((err: Error, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
+  // Error handler: keep client-side URI decoding errors out of the 500 bucket.
+  app.use((err: Error & { status?: number; statusCode?: number }, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
     logger.error({ err }, 'Unhandled error');
-    res.status(500).json({
+    const reportedStatus = err.statusCode ?? err.status;
+    const clientError = Number.isInteger(reportedStatus) && reportedStatus! >= 400 && reportedStatus! < 500;
+    const status = clientError ? reportedStatus! : 500;
+    res.status(status).json({
       success: false,
-      error: process.env.NODE_ENV === 'production' ? 'Internal Server Error' : err.message,
+      error: clientError ? 'Invalid request' : process.env.NODE_ENV === 'production' ? 'Internal Server Error' : err.message,
     });
   });
 

@@ -1,0 +1,1584 @@
+
+ RUN  v4.1.12 D:/5th Semester/SQE/Project/kitchen-nasty/packages/server
+
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation creation cases against PostgreSQL > post:/reservations:date:missing 131ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation creation cases against PostgreSQL > post:/reservations:date:null 21ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation creation cases against PostgreSQL > post:/reservations:date:wrong-type-array 17ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation creation cases against PostgreSQL > post:/reservations:date:wrong-type 18ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation creation cases against PostgreSQL > post:/reservations:date:wrong-type-boolean 18ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation creation cases against PostgreSQL > post:/reservations:date:wrong-type-object 20ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation creation cases against PostgreSQL > post:/reservations:date:pattern-valid 50ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation creation cases against PostgreSQL > post:/reservations:date:pattern-invalid 18ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation creation cases against PostgreSQL > post:/reservations:time:missing 18ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation creation cases against PostgreSQL > post:/reservations:time:null 16ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation creation cases against PostgreSQL > post:/reservations:time:wrong-type-array 14ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation creation cases against PostgreSQL > post:/reservations:time:wrong-type 16ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation creation cases against PostgreSQL > post:/reservations:time:wrong-type-boolean 14ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation creation cases against PostgreSQL > post:/reservations:time:wrong-type-object 15ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation creation cases against PostgreSQL > post:/reservations:time:pattern-valid 55ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation creation cases against PostgreSQL > post:/reservations:time:pattern-invalid 23ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation creation cases against PostgreSQL > post:/reservations:partySize:missing 15ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation creation cases against PostgreSQL > post:/reservations:partySize:null 16ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation creation cases against PostgreSQL > post:/reservations:partySize:wrong-type-array 15ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation creation cases against PostgreSQL > post:/reservations:partySize:wrong-type 15ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation creation cases against PostgreSQL > post:/reservations:partySize:wrong-type-boolean 15ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation creation cases against PostgreSQL > post:/reservations:partySize:wrong-type-object 14ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation creation cases against PostgreSQL > post:/reservations:partySize:fraction 75ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation creation cases against PostgreSQL > post:/reservations:partySize:min-1 16ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation creation cases against PostgreSQL > post:/reservations:partySize:min 41ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation creation cases against PostgreSQL > post:/reservations:partySize:min+1 31ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation creation cases against PostgreSQL > post:/reservations:partySize:max-1 31ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation creation cases against PostgreSQL > post:/reservations:partySize:max 29ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation creation cases against PostgreSQL > post:/reservations:partySize:max+1 15ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation creation cases against PostgreSQL > post:/reservations:comment:omitted 33ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation creation cases against PostgreSQL > post:/reservations:comment:null 17ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation creation cases against PostgreSQL > post:/reservations:comment:wrong-type-array 15ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation creation cases against PostgreSQL > post:/reservations:comment:wrong-type 21ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation creation cases against PostgreSQL > post:/reservations:comment:wrong-type-boolean 21ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation creation cases against PostgreSQL > post:/reservations:comment:wrong-type-object 19ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation creation cases against PostgreSQL > post:/reservations:comment:empty 35ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation creation cases against PostgreSQL > post:/reservations:comment:ordinary 38ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation creation cases against PostgreSQL > post:/reservations:comment:whitespace 33ms
+stdout | src/__tests__/team/member-2/reservations.db.member2.ts > generated calendar and clock business boundaries > post:/reservations:business:date:impossible-calendar-date
+{"caseId":"post:/reservations:business:date:impossible-calendar-date","expected":"4xx and no mutation","observedStatus":201,"rows":1,"persistedValue":"2099-03-02T00:00:00.000Z"}
+
+stdout | src/__tests__/team/member-2/reservations.db.member2.ts > generated calendar and clock business boundaries > post:/reservations:business:time:clock-below-min
+{"caseId":"post:/reservations:business:time:clock-below-min","expected":"4xx and no mutation","observedStatus":400,"rows":0,"persistedValue":null}
+
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation creation cases against PostgreSQL > post:/reservations:comment:long 32ms
+ × src/__tests__/team/member-2/reservations.db.member2.ts > generated calendar and clock business boundaries > post:/reservations:business:date:impossible-calendar-date 48ms
+   → expected 201 to be greater than or equal to 400
+   → expected [ { …(11) } ] to have a length of +0 but got 1
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated calendar and clock business boundaries > post:/reservations:business:time:clock-below-min 16ms
+stdout | src/__tests__/team/member-2/reservations.db.member2.ts > generated calendar and clock business boundaries > post:/reservations:business:time:clock-min
+{"caseId":"post:/reservations:business:time:clock-min","expected":"success","observedStatus":201,"rows":1,"persistedValue":"00:00"}
+
+stdout | src/__tests__/team/member-2/reservations.db.member2.ts > generated calendar and clock business boundaries > post:/reservations:business:time:clock-above-min
+{"caseId":"post:/reservations:business:time:clock-above-min","expected":"success","observedStatus":201,"rows":1,"persistedValue":"00:01"}
+
+stdout | src/__tests__/team/member-2/reservations.db.member2.ts > generated calendar and clock business boundaries > post:/reservations:business:time:clock-below-max
+{"caseId":"post:/reservations:business:time:clock-below-max","expected":"success","observedStatus":201,"rows":1,"persistedValue":"23:58"}
+
+stdout | src/__tests__/team/member-2/reservations.db.member2.ts > generated calendar and clock business boundaries > post:/reservations:business:time:clock-max
+{"caseId":"post:/reservations:business:time:clock-max","expected":"success","observedStatus":201,"rows":1,"persistedValue":"23:59"}
+
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated calendar and clock business boundaries > post:/reservations:business:time:clock-min 32ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated calendar and clock business boundaries > post:/reservations:business:time:clock-above-min 28ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated calendar and clock business boundaries > post:/reservations:business:time:clock-below-max 28ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated calendar and clock business boundaries > post:/reservations:business:time:clock-max 28ms
+stdout | src/__tests__/team/member-2/reservations.db.member2.ts > generated calendar and clock business boundaries > post:/reservations:business:time:clock-above-max
+{"caseId":"post:/reservations:business:time:clock-above-max","expected":"4xx and no mutation","observedStatus":201,"rows":1,"persistedValue":"24:00"}
+
+stdout | src/__tests__/team/member-2/reservations.db.member2.ts > generated calendar and clock business boundaries > post:/reservations:business:time:invalid-hour-minute
+{"caseId":"post:/reservations:business:time:invalid-hour-minute","expected":"4xx and no mutation","observedStatus":201,"rows":1,"persistedValue":"99:99"}
+
+stdout | src/__tests__/team/member-2/reservations.db.member2.ts > generated calendar and clock business boundaries > post:/reservations:business:time:invalid-minute
+{"caseId":"post:/reservations:business:time:invalid-minute","expected":"4xx and no mutation","observedStatus":201,"rows":1,"persistedValue":"19:99"}
+
+ × src/__tests__/team/member-2/reservations.db.member2.ts > generated calendar and clock business boundaries > post:/reservations:business:time:clock-above-max 30ms
+   → expected 201 to be greater than or equal to 400
+   → expected [ { …(11) } ] to have a length of +0 but got 1
+ × src/__tests__/team/member-2/reservations.db.member2.ts > generated calendar and clock business boundaries > post:/reservations:business:time:invalid-hour-minute 28ms
+   → expected 201 to be greater than or equal to 400
+   → expected [ { …(11) } ] to have a length of +0 but got 1
+ × src/__tests__/team/member-2/reservations.db.member2.ts > generated calendar and clock business boundaries > post:/reservations:business:time:invalid-minute 28ms
+   → expected 201 to be greater than or equal to 400
+   → expected [ { …(11) } ] to have a length of +0 but got 1
+stdout | src/__tests__/team/member-2/reservations.db.member2.ts > generated calendar and clock business boundaries > patch:/reservations/{id}:business:date:impossible-calendar-date
+{"caseId":"patch:/reservations/{id}:business:date:impossible-calendar-date","expected":"4xx and no mutation","observedStatus":200,"rows":1,"persistedValue":"2099-03-02T00:00:00.000Z"}
+
+stdout | src/__tests__/team/member-2/reservations.db.member2.ts > generated calendar and clock business boundaries > patch:/reservations/{id}:business:time:clock-below-min
+{"caseId":"patch:/reservations/{id}:business:time:clock-below-min","expected":"4xx and no mutation","observedStatus":400,"rows":1,"persistedValue":"19:00"}
+
+stdout | src/__tests__/team/member-2/reservations.db.member2.ts > generated calendar and clock business boundaries > patch:/reservations/{id}:business:time:clock-min
+{"caseId":"patch:/reservations/{id}:business:time:clock-min","expected":"success","observedStatus":200,"rows":1,"persistedValue":"00:00"}
+
+ × src/__tests__/team/member-2/reservations.db.member2.ts > generated calendar and clock business boundaries > patch:/reservations/{id}:business:date:impossible-calendar-date 45ms
+   → expected 200 to be greater than or equal to 400
+   → expected { …(11) } to deeply equal { …(11) }
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated calendar and clock business boundaries > patch:/reservations/{id}:business:time:clock-below-min 22ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated calendar and clock business boundaries > patch:/reservations/{id}:business:time:clock-min 42ms
+stdout | src/__tests__/team/member-2/reservations.db.member2.ts > generated calendar and clock business boundaries > patch:/reservations/{id}:business:time:clock-above-min
+{"caseId":"patch:/reservations/{id}:business:time:clock-above-min","expected":"success","observedStatus":200,"rows":1,"persistedValue":"00:01"}
+
+stdout | src/__tests__/team/member-2/reservations.db.member2.ts > generated calendar and clock business boundaries > patch:/reservations/{id}:business:time:clock-below-max
+{"caseId":"patch:/reservations/{id}:business:time:clock-below-max","expected":"success","observedStatus":200,"rows":1,"persistedValue":"23:58"}
+
+stdout | src/__tests__/team/member-2/reservations.db.member2.ts > generated calendar and clock business boundaries > patch:/reservations/{id}:business:time:clock-max
+{"caseId":"patch:/reservations/{id}:business:time:clock-max","expected":"success","observedStatus":200,"rows":1,"persistedValue":"23:59"}
+
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated calendar and clock business boundaries > patch:/reservations/{id}:business:time:clock-above-min 38ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated calendar and clock business boundaries > patch:/reservations/{id}:business:time:clock-below-max 42ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated calendar and clock business boundaries > patch:/reservations/{id}:business:time:clock-max 45ms
+stdout | src/__tests__/team/member-2/reservations.db.member2.ts > generated calendar and clock business boundaries > patch:/reservations/{id}:business:time:clock-above-max
+{"caseId":"patch:/reservations/{id}:business:time:clock-above-max","expected":"4xx and no mutation","observedStatus":200,"rows":1,"persistedValue":"24:00"}
+
+stdout | src/__tests__/team/member-2/reservations.db.member2.ts > generated calendar and clock business boundaries > patch:/reservations/{id}:business:time:invalid-hour-minute
+{"caseId":"patch:/reservations/{id}:business:time:invalid-hour-minute","expected":"4xx and no mutation","observedStatus":200,"rows":1,"persistedValue":"99:99"}
+
+stdout | src/__tests__/team/member-2/reservations.db.member2.ts > generated calendar and clock business boundaries > patch:/reservations/{id}:business:time:invalid-minute
+{"caseId":"patch:/reservations/{id}:business:time:invalid-minute","expected":"4xx and no mutation","observedStatus":200,"rows":1,"persistedValue":"19:99"}
+
+ × src/__tests__/team/member-2/reservations.db.member2.ts > generated calendar and clock business boundaries > patch:/reservations/{id}:business:time:clock-above-max 45ms
+   → expected 200 to be greater than or equal to 400
+   → expected { …(11) } to deeply equal { …(11) }
+ × src/__tests__/team/member-2/reservations.db.member2.ts > generated calendar and clock business boundaries > patch:/reservations/{id}:business:time:invalid-hour-minute 34ms
+   → expected 200 to be greater than or equal to 400
+   → expected { …(11) } to deeply equal { …(11) }
+ × src/__tests__/team/member-2/reservations.db.member2.ts > generated calendar and clock business boundaries > patch:/reservations/{id}:business:time:invalid-minute 38ms
+   → expected 200 to be greater than or equal to 400
+   → expected { …(11) } to deeply equal { …(11) }
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated location identifier body cases > post:/reservations:locationId:missing 16ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated location identifier body cases > post:/reservations:locationId:null 17ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated location identifier body cases > post:/reservations:locationId:wrong-type-array 14ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated location identifier body cases > post:/reservations:locationId:wrong-type 20ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated location identifier body cases > post:/reservations:locationId:wrong-type-boolean 13ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated location identifier body cases > post:/reservations:locationId:wrong-type-object 16ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated location identifier body cases > post:/reservations:locationId:minLength-1 15ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated location identifier body cases > post:/reservations:locationId:minLength 61ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated location identifier body cases > post:/reservations:locationId:minLength+1 59ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated schema-valid table IDs > patch:/reservations/{id}:tableId:empty 46ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated schema-valid table IDs > patch:/reservations/{id}:tableId:ordinary 38ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations/availability:query:locationId:missing 29ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations/availability:query:locationId:empty 20ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations/availability:query:locationId:ordinary 37ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations/availability:query:locationId:null-literal 25ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations/availability:query:locationId:unknown 24ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations/availability:query:date:missing 21ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations/availability:query:date:empty 19ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations/availability:query:date:ordinary 25ms
+stdout | src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations/availability:query:date:null-literal
+{"caseId":"get:/reservations/availability:query:date:null-literal","status":null,"timedOut":true,"rejection":"PrismaClientValidationError: \nInvalid `prisma.reservation.findMany()` invocation in\nD:\\5th Semester\\SQE\\Project\\kitchen-nasty\\packages\\server\\src\\controllers\\reservation.controller.ts:396:57\n\n  393 });\n  394 \n  395 // Get existing reservations for that date at that location (non-cancelled)\n→ 396 const existingReservations = await prisma.reservation.findMany({\n        where: {\n          locationId: \"m2-location-062be879-d41c-449b-95a0-49805344ae61\",\n          date: new Date(\"Invalid Date\"),\n                ~~~~~~~~~~~~~~~~~~~~~~~~\n          status: {\n            not: \"CANCELLED\"\n          }\n        },\n        select: {\n          time: true,\n          tableId: true\n        }\n      })\n\nInvalid value for argument `date`: Provided Date object is invalid. Expected Date.","storedStatus":"PENDING","tableId":null,"recordUnchanged":true}
+
+ × src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations/availability:query:date:null-literal 4476ms
+   → expected true to be false // Object.is equality
+   → expected null not to be null
+stdout | src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations/availability:query:date:invalid-format
+{"caseId":"get:/reservations/availability:query:date:invalid-format","status":null,"timedOut":true,"rejection":"PrismaClientValidationError: \nInvalid `prisma.reservation.findMany()` invocation in\nD:\\5th Semester\\SQE\\Project\\kitchen-nasty\\packages\\server\\src\\controllers\\reservation.controller.ts:396:57\n\n  393 });\n  394 \n  395 // Get existing reservations for that date at that location (non-cancelled)\n→ 396 const existingReservations = await prisma.reservation.findMany({\n        where: {\n          locationId: \"m2-location-062be879-d41c-449b-95a0-49805344ae61\",\n          date: new Date(\"Invalid Date\"),\n                ~~~~~~~~~~~~~~~~~~~~~~~~\n          status: {\n            not: \"CANCELLED\"\n          }\n        },\n        select: {\n          time: true,\n          tableId: true\n        }\n      })\n\nInvalid value for argument `date`: Provided Date object is invalid. Expected Date.","storedStatus":"PENDING","tableId":null,"recordUnchanged":true}
+
+ × src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations/availability:query:date:invalid-format 4154ms
+   → expected true to be false // Object.is equality
+   → expected null not to be null
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations/availability:query:partySize:omitted 28ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations/availability:query:partySize:empty 21ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations/availability:query:partySize:ordinary 23ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations/availability:query:partySize:null-literal 22ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations/availability:query:partySize:boundary-1-1 22ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations/availability:query:partySize:boundary-1 25ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations/availability:query:partySize:boundary-1+1 23ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations/availability:query:partySize:boundary-50-1 22ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations/availability:query:partySize:boundary-50 21ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations/availability:query:partySize:boundary-50+1 23ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations/availability:query:partySize:negative 26ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations/availability:query:partySize:fraction 25ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations/availability:query:partySize:text 23ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations:query:page:omitted 52ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations:query:page:empty 27ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations:query:page:ordinary 21ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations:query:page:null-literal 23ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations:query:page:boundary-1-1 23ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations:query:page:boundary-1 23ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations:query:page:boundary-1+1 20ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations:query:page:negative 22ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations:query:page:fraction 20ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations:query:page:text 25ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations:query:limit:omitted 31ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations:query:limit:empty 27ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations:query:limit:ordinary 29ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations:query:limit:null-literal 28ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations:query:limit:boundary-1-1 35ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations:query:limit:boundary-1 38ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations:query:limit:boundary-1+1 32ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations:query:limit:boundary-50-1 30ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations:query:limit:boundary-50 26ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations:query:limit:boundary-50+1 27ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations:query:limit:negative 27ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations:query:limit:fraction 27ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations:query:limit:text 26ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations:query:status:omitted 25ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations:query:status:empty 29ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations:query:status:ordinary 32ms
+stdout | src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations:query:status:null-literal
+{"caseId":"get:/reservations:query:status:null-literal","status":null,"timedOut":true,"rejection":"PrismaClientValidationError: \nInvalid `prisma.reservation.count()` invocation in\nD:\\5th Semester\\SQE\\Project\\kitchen-nasty\\packages\\server\\src\\controllers\\reservation.controller.ts:107:24\n\n  104     table: { select: { id: true, name: true, capacity: true } },\n  105   },\n  106 }),\n→ 107 prisma.reservation.count({\n        select: {\n          _count: {\n            select: {\n              _all: true\n            }\n          }\n        },\n        where: {\n          status: \"null\"\n                  ~~~~~~\n        }\n      })\n\nInvalid value for argument `status`. Expected ReservationStatus.","storedStatus":"PENDING","tableId":null,"recordUnchanged":true}
+
+ × src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations:query:status:null-literal 5552ms
+   → expected true to be false // Object.is equality
+   → expected null not to be null
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations:query:status:enum-CONFIRMED 25ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations:query:status:enum-SEATED 19ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations:query:status:enum-COMPLETED 22ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations:query:status:enum-CANCELLED 24ms
+stdout | src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations:query:status:invalid-enum
+{"caseId":"get:/reservations:query:status:invalid-enum","status":null,"timedOut":true,"rejection":"PrismaClientValidationError: \nInvalid `prisma.reservation.count()` invocation in\nD:\\5th Semester\\SQE\\Project\\kitchen-nasty\\packages\\server\\src\\controllers\\reservation.controller.ts:107:24\n\n  104     table: { select: { id: true, name: true, capacity: true } },\n  105   },\n  106 }),\n→ 107 prisma.reservation.count({\n        select: {\n          _count: {\n            select: {\n              _all: true\n            }\n          }\n        },\n        where: {\n          status: \"NOT_A_STATUS\"\n                  ~~~~~~~~~~~~~~\n        }\n      })\n\nInvalid value for argument `status`. Expected ReservationStatus.","storedStatus":"PENDING","tableId":null,"recordUnchanged":true}
+
+ × src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations:query:status:invalid-enum 4142ms
+   → expected true to be false // Object.is equality
+   → expected null not to be null
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations:query:locationId:omitted 40ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations:query:locationId:empty 33ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations:query:locationId:ordinary 31ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations:query:locationId:null-literal 32ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations:query:locationId:unknown 23ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations:query:date:omitted 25ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations:query:date:empty 27ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations:query:date:ordinary 24ms
+stdout | src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations:query:date:null-literal
+{"caseId":"get:/reservations:query:date:null-literal","status":null,"timedOut":true,"rejection":"PrismaClientValidationError: \nInvalid `prisma.reservation.findMany()` invocation in\nD:\\5th Semester\\SQE\\Project\\kitchen-nasty\\packages\\server\\src\\controllers\\reservation.controller.ts:96:24\n\n  93 if (date) where.date = new Date(date);\n  94 \n  95 const [reservations, total] = await Promise.all([\n→ 96   prisma.reservation.findMany({\n         where: {\n           date: new Date(\"Invalid Date\")\n                 ~~~~~~~~~~~~~~~~~~~~~~~~\n         },\n         skip: 0,\n         take: 20,\n         orderBy: [\n           {\n             date: \"asc\"\n           },\n           {\n             time: \"asc\"\n           }\n         ],\n         include: {\n           customer: {\n             select: {\n               id: true,\n               name: true,\n               email: true,\n               phone: true\n             }\n           },\n           location: {\n             select: {\n               id: true,\n               name: true\n             }\n           },\n           table: {\n             select: {\n               id: true,\n               name: true,\n               capacity: true\n             }\n           }\n         }\n       })\n\nInvalid value for argument `date`: Provided Date object is invalid. Expected Date.","storedStatus":"PENDING","tableId":null,"recordUnchanged":true}
+
+stdout | src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations:query:date:invalid-format
+{"caseId":"get:/reservations:query:date:invalid-format","status":null,"timedOut":true,"rejection":"PrismaClientValidationError: \nInvalid `prisma.reservation.findMany()` invocation in\nD:\\5th Semester\\SQE\\Project\\kitchen-nasty\\packages\\server\\src\\controllers\\reservation.controller.ts:96:24\n\n  93 if (date) where.date = new Date(date);\n  94 \n  95 const [reservations, total] = await Promise.all([\n→ 96   prisma.reservation.findMany({\n         where: {\n           date: new Date(\"Invalid Date\")\n                 ~~~~~~~~~~~~~~~~~~~~~~~~\n         },\n         skip: 0,\n         take: 20,\n         orderBy: [\n           {\n             date: \"asc\"\n           },\n           {\n             time: \"asc\"\n           }\n         ],\n         include: {\n           customer: {\n             select: {\n               id: true,\n               name: true,\n               email: true,\n               phone: true\n             }\n           },\n           location: {\n             select: {\n               id: true,\n               name: true\n             }\n           },\n           table: {\n             select: {\n               id: true,\n               name: true,\n               capacity: true\n             }\n           }\n         }\n       })\n\nInvalid value for argument `date`: Provided Date object is invalid. Expected Date.","storedStatus":"PENDING","tableId":null,"recordUnchanged":true}
+
+ × src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations:query:date:null-literal 4474ms
+   → expected true to be false // Object.is equality
+   → expected null not to be null
+ × src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations:query:date:invalid-format 4359ms
+   → expected true to be false // Object.is equality
+   → expected null not to be null
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations/my-reservations:query:page:omitted 35ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations/my-reservations:query:page:empty 27ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations/my-reservations:query:page:ordinary 23ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations/my-reservations:query:page:null-literal 23ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations/my-reservations:query:page:boundary-1-1 22ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations/my-reservations:query:page:boundary-1 25ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations/my-reservations:query:page:boundary-1+1 22ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations/my-reservations:query:page:negative 25ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations/my-reservations:query:page:fraction 22ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations/my-reservations:query:page:text 23ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations/my-reservations:query:limit:omitted 22ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations/my-reservations:query:limit:empty 23ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations/my-reservations:query:limit:ordinary 22ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations/my-reservations:query:limit:null-literal 22ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations/my-reservations:query:limit:boundary-1-1 22ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations/my-reservations:query:limit:boundary-1 23ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations/my-reservations:query:limit:boundary-1+1 23ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations/my-reservations:query:limit:boundary-50-1 24ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations/my-reservations:query:limit:boundary-50 24ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations/my-reservations:query:limit:boundary-50+1 22ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations/my-reservations:query:limit:negative 22ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations/my-reservations:query:limit:fraction 25ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations/my-reservations:query:limit:text 22ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations/{id}:path:id:known 30ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations/{id}:path:id:unknown 26ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations/{id}:path:id:encoded-known 27ms
+stdout | src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations/{id}:path:id:malformed-escape
+{"caseId":"get:/reservations/{id}:path:id:malformed-escape","http":500,"body":{"success":false,"error":"Failed to decode param '%ZZ'"},"recordUnchanged":true}
+
+ × src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations/{id}:path:id:malformed-escape 21ms
+   → expected 500 to be less than 500
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/locations/{locationId}/tables:path:locationId:known 32ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/locations/{locationId}/tables:path:locationId:unknown 34ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/locations/{locationId}/tables/{tableId}:path:locationId:known 34ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/locations/{locationId}/tables/{tableId}:path:locationId:unknown 41ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/locations/{locationId}/tables/{tableId}:path:tableId:known 34ms
+stdout | src/__tests__/team/member-2/reservations.db.member2.ts > availability time from the API guide > get:/reservations/availability:query:time:omitted
+{"caseId":"get:/reservations/availability:query:time:omitted","http":200,"body":{"success":true,"data":{"slots":[{"time":"11:00","available":true},{"time":"11:30","available":true},{"time":"12:00","available":true},{"time":"12:30","available":true},{"time":"13:00","available":true},{"time":"13:30","available":true},{"time":"14:00","available":true},{"time":"14:30","available":true},{"time":"15:00","available":true},{"time":"15:30","available":true},{"time":"16:00","available":true},{"time":"16:30","available":true},{"time":"17:00","available":true},{"time":"17:30","available":true},{"time":"18:00","available":true},{"time":"18:30","available":true},{"time":"19:00","available":false},{"time":"19:30","available":true},{"time":"20:00","available":true},{"time":"20:30","available":true},{"time":"21:00","available":true},{"time":"21:30","available":true}],"totalTables":1}},"recordUnchanged":true}
+
+stdout | src/__tests__/team/member-2/reservations.db.member2.ts > availability time from the API guide > get:/reservations/availability:query:time:empty
+{"caseId":"get:/reservations/availability:query:time:empty","http":200,"body":{"success":true,"data":{"slots":[{"time":"11:00","available":true},{"time":"11:30","available":true},{"time":"12:00","available":true},{"time":"12:30","available":true},{"time":"13:00","available":true},{"time":"13:30","available":true},{"time":"14:00","available":true},{"time":"14:30","available":true},{"time":"15:00","available":true},{"time":"15:30","available":true},{"time":"16:00","available":true},{"time":"16:30","available":true},{"time":"17:00","available":true},{"time":"17:30","available":true},{"time":"18:00","available":true},{"time":"18:30","available":true},{"time":"19:00","available":false},{"time":"19:30","available":true},{"time":"20:00","available":true},{"time":"20:30","available":true},{"time":"21:00","available":true},{"time":"21:30","available":true}],"totalTables":1}},"recordUnchanged":true}
+
+stdout | src/__tests__/team/member-2/reservations.db.member2.ts > availability time from the API guide > get:/reservations/availability:query:time:ordinary
+{"caseId":"get:/reservations/availability:query:time:ordinary","http":200,"body":{"success":true,"data":{"slots":[{"time":"11:00","available":true},{"time":"11:30","available":true},{"time":"12:00","available":true},{"time":"12:30","available":true},{"time":"13:00","available":true},{"time":"13:30","available":true},{"time":"14:00","available":true},{"time":"14:30","available":true},{"time":"15:00","available":true},{"time":"15:30","available":true},{"time":"16:00","available":true},{"time":"16:30","available":true},{"time":"17:00","available":true},{"time":"17:30","available":true},{"time":"18:00","available":true},{"time":"18:30","available":true},{"time":"19:00","available":false},{"time":"19:30","available":true},{"time":"20:00","available":true},{"time":"20:30","available":true},{"time":"21:00","available":true},{"time":"21:30","available":true}],"totalTables":1}},"recordUnchanged":true}
+
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/locations/{locationId}/tables/{tableId}:path:tableId:unknown 41ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > availability time from the API guide > get:/reservations/availability:query:time:omitted 42ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > availability time from the API guide > get:/reservations/availability:query:time:empty 25ms
+stdout | src/__tests__/team/member-2/reservations.db.member2.ts > availability time from the API guide > get:/reservations/availability:query:time:null-literal
+{"caseId":"get:/reservations/availability:query:time:null-literal","http":200,"body":{"success":true,"data":{"slots":[{"time":"11:00","available":true},{"time":"11:30","available":true},{"time":"12:00","available":true},{"time":"12:30","available":true},{"time":"13:00","available":true},{"time":"13:30","available":true},{"time":"14:00","available":true},{"time":"14:30","available":true},{"time":"15:00","available":true},{"time":"15:30","available":true},{"time":"16:00","available":true},{"time":"16:30","available":true},{"time":"17:00","available":true},{"time":"17:30","available":true},{"time":"18:00","available":true},{"time":"18:30","available":true},{"time":"19:00","available":false},{"time":"19:30","available":true},{"time":"20:00","available":true},{"time":"20:30","available":true},{"time":"21:00","available":true},{"time":"21:30","available":true}],"totalTables":1}},"recordUnchanged":true}
+
+stdout | src/__tests__/team/member-2/reservations.db.member2.ts > availability time from the API guide > get:/reservations/availability:query:time:free-slot
+{"caseId":"get:/reservations/availability:query:time:free-slot","http":200,"body":{"success":true,"data":{"slots":[{"time":"11:00","available":true},{"time":"11:30","available":true},{"time":"12:00","available":true},{"time":"12:30","available":true},{"time":"13:00","available":true},{"time":"13:30","available":true},{"time":"14:00","available":true},{"time":"14:30","available":true},{"time":"15:00","available":true},{"time":"15:30","available":true},{"time":"16:00","available":true},{"time":"16:30","available":true},{"time":"17:00","available":true},{"time":"17:30","available":true},{"time":"18:00","available":true},{"time":"18:30","available":true},{"time":"19:00","available":false},{"time":"19:30","available":true},{"time":"20:00","available":true},{"time":"20:30","available":true},{"time":"21:00","available":true},{"time":"21:30","available":true}],"totalTables":1}},"recordUnchanged":true}
+
+stdout | src/__tests__/team/member-2/reservations.db.member2.ts > availability time from the API guide > get:/reservations/availability:query:time:invalid-format
+{"caseId":"get:/reservations/availability:query:time:invalid-format","http":200,"body":{"success":true,"data":{"slots":[{"time":"11:00","available":true},{"time":"11:30","available":true},{"time":"12:00","available":true},{"time":"12:30","available":true},{"time":"13:00","available":true},{"time":"13:30","available":true},{"time":"14:00","available":true},{"time":"14:30","available":true},{"time":"15:00","available":true},{"time":"15:30","available":true},{"time":"16:00","available":true},{"time":"16:30","available":true},{"time":"17:00","available":true},{"time":"17:30","available":true},{"time":"18:00","available":true},{"time":"18:30","available":true},{"time":"19:00","available":false},{"time":"19:30","available":true},{"time":"20:00","available":true},{"time":"20:30","available":true},{"time":"21:00","available":true},{"time":"21:30","available":true}],"totalTables":1}},"recordUnchanged":true}
+
+ × src/__tests__/team/member-2/reservations.db.member2.ts > availability time from the API guide > get:/reservations/availability:query:time:ordinary 28ms
+   → expected 200 to be 400 // Object.is equality
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > availability time from the API guide > get:/reservations/availability:query:time:null-literal 26ms
+ × src/__tests__/team/member-2/reservations.db.member2.ts > availability time from the API guide > get:/reservations/availability:query:time:free-slot 28ms
+   → expected { success: true, data: { …(2) } } to match object { success: true, data: { …(2) } }
+(2 matching properties omitted from actual)
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > availability time from the API guide > get:/reservations/availability:query:time:invalid-format 25ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated write path identifiers against PostgreSQL > patch:/reservations/{id}:path:id:known 40ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated write path identifiers against PostgreSQL > patch:/reservations/{id}:path:id:unknown 27ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated write path identifiers against PostgreSQL > post:/locations/{locationId}/tables:path:locationId:known 38ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated write path identifiers against PostgreSQL > post:/locations/{locationId}/tables:path:locationId:unknown 29ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated write path identifiers against PostgreSQL > patch:/locations/{locationId}/tables/{tableId}:path:locationId:known 33ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated write path identifiers against PostgreSQL > patch:/locations/{locationId}/tables/{tableId}:path:locationId:unknown 27ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated write path identifiers against PostgreSQL > patch:/locations/{locationId}/tables/{tableId}:path:tableId:known 25ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated write path identifiers against PostgreSQL > patch:/locations/{locationId}/tables/{tableId}:path:tableId:unknown 23ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation update cases against PostgreSQL > patch:/reservations/{id}:status:omitted 35ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation update cases against PostgreSQL > patch:/reservations/{id}:status:null 23ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation update cases against PostgreSQL > patch:/reservations/{id}:status:wrong-type-array 19ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation update cases against PostgreSQL > patch:/reservations/{id}:status:enum-PENDING 33ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation update cases against PostgreSQL > patch:/reservations/{id}:status:enum-CONFIRMED 32ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation update cases against PostgreSQL > patch:/reservations/{id}:status:enum-SEATED 33ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation update cases against PostgreSQL > patch:/reservations/{id}:status:enum-COMPLETED 33ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation update cases against PostgreSQL > patch:/reservations/{id}:status:enum-CANCELLED 36ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation update cases against PostgreSQL > patch:/reservations/{id}:status:invalid-enum 20ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation update cases against PostgreSQL > patch:/reservations/{id}:status:wrong-type 18ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation update cases against PostgreSQL > patch:/reservations/{id}:status:wrong-type-boolean 19ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation update cases against PostgreSQL > patch:/reservations/{id}:status:wrong-type-object 20ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation update cases against PostgreSQL > patch:/reservations/{id}:tableId:omitted 29ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation update cases against PostgreSQL > patch:/reservations/{id}:tableId:null 30ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation update cases against PostgreSQL > patch:/reservations/{id}:tableId:wrong-type-array 18ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation update cases against PostgreSQL > patch:/reservations/{id}:tableId:wrong-type 18ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation update cases against PostgreSQL > patch:/reservations/{id}:tableId:wrong-type-boolean 19ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation update cases against PostgreSQL > patch:/reservations/{id}:tableId:wrong-type-object 18ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation update cases against PostgreSQL > patch:/reservations/{id}:date:omitted 34ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation update cases against PostgreSQL > patch:/reservations/{id}:date:null 18ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation update cases against PostgreSQL > patch:/reservations/{id}:date:wrong-type-array 19ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation update cases against PostgreSQL > patch:/reservations/{id}:date:wrong-type 17ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation update cases against PostgreSQL > patch:/reservations/{id}:date:wrong-type-boolean 24ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation update cases against PostgreSQL > patch:/reservations/{id}:date:wrong-type-object 19ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation update cases against PostgreSQL > patch:/reservations/{id}:date:pattern-valid 32ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation update cases against PostgreSQL > patch:/reservations/{id}:date:pattern-invalid 18ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation update cases against PostgreSQL > patch:/reservations/{id}:time:omitted 30ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation update cases against PostgreSQL > patch:/reservations/{id}:time:null 17ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation update cases against PostgreSQL > patch:/reservations/{id}:time:wrong-type-array 19ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation update cases against PostgreSQL > patch:/reservations/{id}:time:wrong-type 18ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation update cases against PostgreSQL > patch:/reservations/{id}:time:wrong-type-boolean 18ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation update cases against PostgreSQL > patch:/reservations/{id}:time:wrong-type-object 18ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation update cases against PostgreSQL > patch:/reservations/{id}:time:pattern-valid 39ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation update cases against PostgreSQL > patch:/reservations/{id}:time:pattern-invalid 18ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation update cases against PostgreSQL > patch:/reservations/{id}:partySize:omitted 31ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation update cases against PostgreSQL > patch:/reservations/{id}:partySize:null 19ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation update cases against PostgreSQL > patch:/reservations/{id}:partySize:wrong-type-array 17ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation update cases against PostgreSQL > patch:/reservations/{id}:partySize:wrong-type 19ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation update cases against PostgreSQL > patch:/reservations/{id}:partySize:wrong-type-boolean 17ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation update cases against PostgreSQL > patch:/reservations/{id}:partySize:wrong-type-object 19ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation update cases against PostgreSQL > patch:/reservations/{id}:partySize:fraction 19ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation update cases against PostgreSQL > patch:/reservations/{id}:partySize:min-1 19ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation update cases against PostgreSQL > patch:/reservations/{id}:partySize:min 33ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation update cases against PostgreSQL > patch:/reservations/{id}:partySize:min+1 32ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation update cases against PostgreSQL > patch:/reservations/{id}:partySize:max-1 31ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation update cases against PostgreSQL > patch:/reservations/{id}:partySize:max 31ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation update cases against PostgreSQL > patch:/reservations/{id}:partySize:max+1 19ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation update cases against PostgreSQL > patch:/reservations/{id}:comment:omitted 34ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation update cases against PostgreSQL > patch:/reservations/{id}:comment:null 33ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation update cases against PostgreSQL > patch:/reservations/{id}:comment:wrong-type-array 19ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation update cases against PostgreSQL > patch:/reservations/{id}:comment:wrong-type 20ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation update cases against PostgreSQL > patch:/reservations/{id}:comment:wrong-type-boolean 19ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation update cases against PostgreSQL > patch:/reservations/{id}:comment:wrong-type-object 19ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation update cases against PostgreSQL > patch:/reservations/{id}:comment:empty 40ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation update cases against PostgreSQL > patch:/reservations/{id}:comment:ordinary 33ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation update cases against PostgreSQL > patch:/reservations/{id}:comment:whitespace 31ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated reservation update cases against PostgreSQL > patch:/reservations/{id}:comment:long 31ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated table create and update cases against PostgreSQL > post:/locations/{locationId}/tables:name:missing 26ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated table create and update cases against PostgreSQL > post:/locations/{locationId}/tables:name:null 17ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated table create and update cases against PostgreSQL > post:/locations/{locationId}/tables:name:wrong-type-array 19ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated table create and update cases against PostgreSQL > post:/locations/{locationId}/tables:name:wrong-type 18ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated table create and update cases against PostgreSQL > post:/locations/{locationId}/tables:name:wrong-type-boolean 19ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated table create and update cases against PostgreSQL > post:/locations/{locationId}/tables:name:wrong-type-object 19ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated table create and update cases against PostgreSQL > post:/locations/{locationId}/tables:name:minLength-1 19ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated table create and update cases against PostgreSQL > post:/locations/{locationId}/tables:name:minLength 29ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated table create and update cases against PostgreSQL > post:/locations/{locationId}/tables:name:minLength+1 29ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated table create and update cases against PostgreSQL > post:/locations/{locationId}/tables:capacity:missing 19ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated table create and update cases against PostgreSQL > post:/locations/{locationId}/tables:capacity:null 17ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated table create and update cases against PostgreSQL > post:/locations/{locationId}/tables:capacity:wrong-type-array 23ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated table create and update cases against PostgreSQL > post:/locations/{locationId}/tables:capacity:wrong-type 29ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated table create and update cases against PostgreSQL > post:/locations/{locationId}/tables:capacity:wrong-type-boolean 29ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated table create and update cases against PostgreSQL > post:/locations/{locationId}/tables:capacity:wrong-type-object 25ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated table create and update cases against PostgreSQL > post:/locations/{locationId}/tables:capacity:fraction 24ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated table create and update cases against PostgreSQL > post:/locations/{locationId}/tables:capacity:min-1 19ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated table create and update cases against PostgreSQL > post:/locations/{locationId}/tables:capacity:min 27ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated table create and update cases against PostgreSQL > post:/locations/{locationId}/tables:capacity:min+1 28ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated table create and update cases against PostgreSQL > post:/locations/{locationId}/tables:isActive:omitted 25ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated table create and update cases against PostgreSQL > post:/locations/{locationId}/tables:isActive:null 19ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated table create and update cases against PostgreSQL > post:/locations/{locationId}/tables:isActive:wrong-type-array 20ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated table create and update cases against PostgreSQL > post:/locations/{locationId}/tables:isActive:true 27ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated table create and update cases against PostgreSQL > post:/locations/{locationId}/tables:isActive:false 26ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated table create and update cases against PostgreSQL > post:/locations/{locationId}/tables:isActive:wrong-type 20ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated table create and update cases against PostgreSQL > post:/locations/{locationId}/tables:isActive:wrong-type-number 17ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated table create and update cases against PostgreSQL > post:/locations/{locationId}/tables:isActive:wrong-type-object 18ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated table create and update cases against PostgreSQL > patch:/locations/{locationId}/tables/{tableId}:name:omitted 22ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated table create and update cases against PostgreSQL > patch:/locations/{locationId}/tables/{tableId}:name:null 21ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated table create and update cases against PostgreSQL > patch:/locations/{locationId}/tables/{tableId}:name:wrong-type-array 19ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated table create and update cases against PostgreSQL > patch:/locations/{locationId}/tables/{tableId}:name:wrong-type 18ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated table create and update cases against PostgreSQL > patch:/locations/{locationId}/tables/{tableId}:name:wrong-type-boolean 18ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated table create and update cases against PostgreSQL > patch:/locations/{locationId}/tables/{tableId}:name:wrong-type-object 20ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated table create and update cases against PostgreSQL > patch:/locations/{locationId}/tables/{tableId}:name:minLength-1 18ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated table create and update cases against PostgreSQL > patch:/locations/{locationId}/tables/{tableId}:name:minLength 28ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated table create and update cases against PostgreSQL > patch:/locations/{locationId}/tables/{tableId}:name:minLength+1 25ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated table create and update cases against PostgreSQL > patch:/locations/{locationId}/tables/{tableId}:capacity:omitted 18ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated table create and update cases against PostgreSQL > patch:/locations/{locationId}/tables/{tableId}:capacity:null 19ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated table create and update cases against PostgreSQL > patch:/locations/{locationId}/tables/{tableId}:capacity:wrong-type-array 19ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated table create and update cases against PostgreSQL > patch:/locations/{locationId}/tables/{tableId}:capacity:wrong-type 18ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated table create and update cases against PostgreSQL > patch:/locations/{locationId}/tables/{tableId}:capacity:wrong-type-boolean 17ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated table create and update cases against PostgreSQL > patch:/locations/{locationId}/tables/{tableId}:capacity:wrong-type-object 18ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated table create and update cases against PostgreSQL > patch:/locations/{locationId}/tables/{tableId}:capacity:fraction 18ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated table create and update cases against PostgreSQL > patch:/locations/{locationId}/tables/{tableId}:capacity:min-1 16ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated table create and update cases against PostgreSQL > patch:/locations/{locationId}/tables/{tableId}:capacity:min 22ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated table create and update cases against PostgreSQL > patch:/locations/{locationId}/tables/{tableId}:capacity:min+1 23ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated table create and update cases against PostgreSQL > patch:/locations/{locationId}/tables/{tableId}:isActive:omitted 20ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated table create and update cases against PostgreSQL > patch:/locations/{locationId}/tables/{tableId}:isActive:null 19ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated table create and update cases against PostgreSQL > patch:/locations/{locationId}/tables/{tableId}:isActive:wrong-type-array 17ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated table create and update cases against PostgreSQL > patch:/locations/{locationId}/tables/{tableId}:isActive:true 25ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated table create and update cases against PostgreSQL > patch:/locations/{locationId}/tables/{tableId}:isActive:false 24ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated table create and update cases against PostgreSQL > patch:/locations/{locationId}/tables/{tableId}:isActive:wrong-type 17ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated table create and update cases against PostgreSQL > patch:/locations/{locationId}/tables/{tableId}:isActive:wrong-type-number 19ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > generated table create and update cases against PostgreSQL > patch:/locations/{locationId}/tables/{tableId}:isActive:wrong-type-object 16ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > shared reservation workflow > rejects post /reservations missing credential 29ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > shared reservation workflow > rejects post /reservations invalid credential 24ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > shared reservation workflow > rejects get /reservations/my-reservations missing credential 29ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > shared reservation workflow > rejects get /reservations/my-reservations invalid credential 24ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > shared reservation workflow > rejects get /reservations missing credential 30ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > shared reservation workflow > rejects get /reservations invalid credential 30ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > shared reservation workflow > rejects get /reservations/{id} missing credential 36ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > shared reservation workflow > rejects get /reservations/{id} invalid credential 29ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > shared reservation workflow > rejects patch /reservations/{id} missing credential 30ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > shared reservation workflow > rejects patch /reservations/{id} invalid credential 27ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > shared reservation workflow > rejects post /locations/{locationId}/tables missing credential 30ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > shared reservation workflow > rejects post /locations/{locationId}/tables invalid credential 27ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > shared reservation workflow > rejects patch /locations/{locationId}/tables/{tableId} missing credential 30ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > shared reservation workflow > rejects patch /locations/{locationId}/tables/{tableId} invalid credential 27ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > shared reservation workflow > does not expose or modify a table under the wrong location path 36ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > shared reservation workflow > table create role customer 15ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > shared reservation workflow > table create role staff 15ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > shared reservation workflow > table create role manager 22ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > shared reservation workflow > table create role super-admin 24ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > shared reservation workflow > table update role customer 16ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > shared reservation workflow > table update role staff 17ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > shared reservation workflow > table update role manager 21ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > shared reservation workflow > table update role super-admin 20ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > shared reservation workflow > parses limit 0 as 20 15ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > shared reservation workflow > parses limit 1 as 1 15ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > shared reservation workflow > parses limit 2 as 2 14ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > shared reservation workflow > parses limit 49 as 49 15ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > shared reservation workflow > parses limit 50 as 50 14ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > shared reservation workflow > parses limit 51 as 50 15ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > shared reservation workflow > parses limit -1 as 1 13ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > shared reservation workflow > parses limit abc as 20 15ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > shared reservation workflow > parses limit 2.5 as 2 15ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > shared reservation workflow > parses page 0 as 1 14ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > shared reservation workflow > parses page 1 as 1 16ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > shared reservation workflow > parses page 2 as 2 14ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > shared reservation workflow > parses page -1 as 1 15ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > shared reservation workflow > parses page abc as 1 14ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > shared reservation workflow > parses page 2.5 as 2 16ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > shared reservation workflow > does not leak another customer reservation 42ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > shared reservation workflow > rejects nonexistent reservations and table-management permissions 43ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > shared reservation workflow > uses staff filters and customer-scoped reads 98ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > shared reservation workflow > post:/reservations:date:utc-offset--1 23ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > shared reservation workflow > post:/reservations:date:utc-offset-0 28ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > shared reservation workflow > post:/reservations:date:utc-offset-1 30ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > shared reservation workflow > post:/reservations:body:empty-object 14ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > shared reservation workflow > post:/reservations:body:extra-field 27ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > shared reservation workflow > requires availability query parameters and exposes public table reads 39ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > shared reservation workflow > rejects a duplicate table name without changing stored tables 24ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > shared reservation workflow > rejects invalid locations and credentials without creating records 37ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > shared reservation workflow > rejects an inactive location without creating a reservation 27ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > shared reservation workflow > rejects duplicate table renames without changing the stored table 26ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > shared reservation workflow > reflects an assigned table in availability and paginated lists 47ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > shared reservation workflow > characterizes acceptance of a table too small for the reservation 40ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > shared reservation workflow > characterizes an accepted conflicting table assignment 42ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > shared reservation workflow > characterizes a transition from CANCELLED to CONFIRMED 31ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > shared reservation workflow > availability parses party size 0 and yields 1 eligible tables 17ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > shared reservation workflow > availability parses party size 1 and yields 1 eligible tables 14ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > shared reservation workflow > availability parses party size 2 and yields 1 eligible tables 18ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > shared reservation workflow > availability parses party size 50 and yields 0 eligible tables 14ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > shared reservation workflow > availability parses party size 51 and yields 0 eligible tables 16ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > shared reservation workflow > availability parses party size 2.5 and yields 1 eligible tables 15ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > shared reservation workflow > availability parses party size abc and yields 1 eligible tables 16ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > shared reservation workflow > creates and assigns the same reservation, preserving other data, then rejects a customer update without mutation 70ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > shared reservation workflow > records duplicate requests as actually observed 51ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > shared reservation workflow > enforces table creation role and keeps database unchanged on rejection 32ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > documented reservation lifecycle > allows PENDING to CONFIRMED 33ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > documented reservation lifecycle > allows PENDING to CANCELLED 33ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > documented reservation lifecycle > allows CONFIRMED to SEATED 33ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > documented reservation lifecycle > allows CONFIRMED to CANCELLED 39ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > documented reservation lifecycle > allows SEATED to COMPLETED 34ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > documented reservation lifecycle > allows SEATED to CANCELLED 35ms
+ ✓ src/__tests__/team/member-2/reservations.db.member2.ts > documented reservation lifecycle > allows COMPLETED to CANCELLED 38ms
+stdout | src/__tests__/team/member-2/reservations.db.member2.ts > documented reservation lifecycle > rejects PENDING to SEATED without changing the record
+{"transition":"PENDING->SEATED","expected":"4xx and unchanged record","observedStatus":200,"storedStatus":"SEATED","recordUnchanged":false}
+
+stdout | src/__tests__/team/member-2/reservations.db.member2.ts > documented reservation lifecycle > rejects PENDING to COMPLETED without changing the record
+{"transition":"PENDING->COMPLETED","expected":"4xx and unchanged record","observedStatus":200,"storedStatus":"COMPLETED","recordUnchanged":false}
+
+stdout | src/__tests__/team/member-2/reservations.db.member2.ts > documented reservation lifecycle > rejects CONFIRMED to PENDING without changing the record
+{"transition":"CONFIRMED->PENDING","expected":"4xx and unchanged record","observedStatus":200,"storedStatus":"PENDING","recordUnchanged":false}
+
+ × src/__tests__/team/member-2/reservations.db.member2.ts > documented reservation lifecycle > rejects PENDING to SEATED without changing the record 41ms
+   → expected 200 to be greater than or equal to 400
+   → expected { …(11) } to deeply equal { …(11) }
+ × src/__tests__/team/member-2/reservations.db.member2.ts > documented reservation lifecycle > rejects PENDING to COMPLETED without changing the record 35ms
+   → expected 200 to be greater than or equal to 400
+   → expected { …(11) } to deeply equal { …(11) }
+ × src/__tests__/team/member-2/reservations.db.member2.ts > documented reservation lifecycle > rejects CONFIRMED to PENDING without changing the record 35ms
+   → expected 200 to be greater than or equal to 400
+   → expected { …(11) } to deeply equal { …(11) }
+stdout | src/__tests__/team/member-2/reservations.db.member2.ts > documented reservation lifecycle > rejects CONFIRMED to COMPLETED without changing the record
+{"transition":"CONFIRMED->COMPLETED","expected":"4xx and unchanged record","observedStatus":200,"storedStatus":"COMPLETED","recordUnchanged":false}
+
+stdout | src/__tests__/team/member-2/reservations.db.member2.ts > documented reservation lifecycle > rejects SEATED to PENDING without changing the record
+{"transition":"SEATED->PENDING","expected":"4xx and unchanged record","observedStatus":200,"storedStatus":"PENDING","recordUnchanged":false}
+
+stdout | src/__tests__/team/member-2/reservations.db.member2.ts > documented reservation lifecycle > rejects SEATED to CONFIRMED without changing the record
+{"transition":"SEATED->CONFIRMED","expected":"4xx and unchanged record","observedStatus":200,"storedStatus":"CONFIRMED","recordUnchanged":false}
+
+ × src/__tests__/team/member-2/reservations.db.member2.ts > documented reservation lifecycle > rejects CONFIRMED to COMPLETED without changing the record 35ms
+   → expected 200 to be greater than or equal to 400
+   → expected { …(11) } to deeply equal { …(11) }
+ × src/__tests__/team/member-2/reservations.db.member2.ts > documented reservation lifecycle > rejects SEATED to PENDING without changing the record 33ms
+   → expected 200 to be greater than or equal to 400
+   → expected { …(11) } to deeply equal { …(11) }
+ × src/__tests__/team/member-2/reservations.db.member2.ts > documented reservation lifecycle > rejects SEATED to CONFIRMED without changing the record 36ms
+   → expected 200 to be greater than or equal to 400
+   → expected { …(11) } to deeply equal { …(11) }
+stdout | src/__tests__/team/member-2/reservations.db.member2.ts > documented reservation lifecycle > rejects COMPLETED to PENDING without changing the record
+{"transition":"COMPLETED->PENDING","expected":"4xx and unchanged record","observedStatus":200,"storedStatus":"PENDING","recordUnchanged":false}
+
+stdout | src/__tests__/team/member-2/reservations.db.member2.ts > documented reservation lifecycle > rejects COMPLETED to CONFIRMED without changing the record
+{"transition":"COMPLETED->CONFIRMED","expected":"4xx and unchanged record","observedStatus":200,"storedStatus":"CONFIRMED","recordUnchanged":false}
+
+stdout | src/__tests__/team/member-2/reservations.db.member2.ts > documented reservation lifecycle > rejects COMPLETED to SEATED without changing the record
+{"transition":"COMPLETED->SEATED","expected":"4xx and unchanged record","observedStatus":200,"storedStatus":"SEATED","recordUnchanged":false}
+
+ × src/__tests__/team/member-2/reservations.db.member2.ts > documented reservation lifecycle > rejects COMPLETED to PENDING without changing the record 36ms
+   → expected 200 to be greater than or equal to 400
+   → expected { …(11) } to deeply equal { …(11) }
+ × src/__tests__/team/member-2/reservations.db.member2.ts > documented reservation lifecycle > rejects COMPLETED to CONFIRMED without changing the record 41ms
+   → expected 200 to be greater than or equal to 400
+   → expected { …(11) } to deeply equal { …(11) }
+stdout | src/__tests__/team/member-2/reservations.db.member2.ts > documented reservation lifecycle > rejects CANCELLED to PENDING without changing the record
+{"transition":"CANCELLED->PENDING","expected":"4xx and unchanged record","observedStatus":200,"storedStatus":"PENDING","recordUnchanged":false}
+
+stdout | src/__tests__/team/member-2/reservations.db.member2.ts > documented reservation lifecycle > rejects CANCELLED to CONFIRMED without changing the record
+{"transition":"CANCELLED->CONFIRMED","expected":"4xx and unchanged record","observedStatus":200,"storedStatus":"CONFIRMED","recordUnchanged":false}
+
+ × src/__tests__/team/member-2/reservations.db.member2.ts > documented reservation lifecycle > rejects COMPLETED to SEATED without changing the record 35ms
+   → expected 200 to be greater than or equal to 400
+   → expected { …(11) } to deeply equal { …(11) }
+ × src/__tests__/team/member-2/reservations.db.member2.ts > documented reservation lifecycle > rejects CANCELLED to PENDING without changing the record 37ms
+   → expected 200 to be greater than or equal to 400
+   → expected { …(11) } to deeply equal { …(11) }
+ × src/__tests__/team/member-2/reservations.db.member2.ts > documented reservation lifecycle > rejects CANCELLED to CONFIRMED without changing the record 35ms
+   → expected 200 to be greater than or equal to 400
+   → expected { …(11) } to deeply equal { …(11) }
+stdout | src/__tests__/team/member-2/reservations.db.member2.ts > documented reservation lifecycle > rejects CANCELLED to SEATED without changing the record
+{"transition":"CANCELLED->SEATED","expected":"4xx and unchanged record","observedStatus":200,"storedStatus":"SEATED","recordUnchanged":false}
+
+stdout | src/__tests__/team/member-2/reservations.db.member2.ts > documented reservation lifecycle > rejects CANCELLED to COMPLETED without changing the record
+{"transition":"CANCELLED->COMPLETED","expected":"4xx and unchanged record","observedStatus":200,"storedStatus":"COMPLETED","recordUnchanged":false}
+
+stdout | src/__tests__/team/member-2/reservations.db.member2.ts > business-rule regressions > rejects assigning an inactive table without mutation
+{"scenario":"inactive","observedStatus":200,"assigned":true}
+
+ × src/__tests__/team/member-2/reservations.db.member2.ts > documented reservation lifecycle > rejects CANCELLED to SEATED without changing the record 34ms
+   → expected 200 to be greater than or equal to 400
+   → expected { …(11) } to deeply equal { …(11) }
+ × src/__tests__/team/member-2/reservations.db.member2.ts > documented reservation lifecycle > rejects CANCELLED to COMPLETED without changing the record 34ms
+   → expected 200 to be greater than or equal to 400
+   → expected { …(11) } to deeply equal { …(11) }
+ × src/__tests__/team/member-2/reservations.db.member2.ts > business-rule regressions > rejects assigning an inactive table without mutation 38ms
+   → expected 200 to be greater than or equal to 400
+   → expected { …(11) } to deeply equal { …(11) }
+stdout | src/__tests__/team/member-2/reservations.db.member2.ts > business-rule regressions > rejects assigning an other-location table without mutation
+{"scenario":"other-location","observedStatus":200,"assigned":true}
+
+ × src/__tests__/team/member-2/reservations.db.member2.ts > business-rule regressions > rejects assigning an other-location table without mutation 57ms
+   → expected 200 to be greater than or equal to 400
+   → expected { …(11) } to deeply equal { …(11) }
+stdout | src/__tests__/team/member-2/reservations.db.member2.ts > business-rule regressions > rejects assigning a nonexistent table without an unexpected server error
+{"scenario":"unknown table","status":null,"timedOut":true,"rejection":"PrismaClientKnownRequestError: \nInvalid `prisma.reservation.update()` invocation in\nD:\\5th Semester\\SQE\\Project\\kitchen-nasty\\packages\\server\\src\\controllers\\reservation.controller.ts:166:48\n\n  163 if (parsed.data.partySize !== undefined) data.partySize = parsed.data.partySize;\n  164 if (parsed.data.comment !== undefined) data.comment = parsed.data.comment;\n  165 \n→ 166 const reservation = await prisma.reservation.update(\nForeign key constraint violated: `reservations_tableId_fkey (index)`","storedStatus":"PENDING","tableId":null,"recordUnchanged":true}
+
+stdout | src/__tests__/team/member-2/reservations.db.member2.ts > business-rule regressions > does not create duplicate records for a repeated identical booking
+{"scenario":"repeated booking","observedStatuses":[201,201],"recordCount":2}
+
+ × src/__tests__/team/member-2/reservations.db.member2.ts > business-rule regressions > rejects assigning a nonexistent table without an unexpected server error 4418ms
+   → expected true to be false // Object.is equality
+   → expected null not to be null
+ × src/__tests__/team/member-2/reservations.db.member2.ts > business-rule regressions > does not create duplicate records for a repeated identical booking 64ms
+   → expected [ { …(11) }, { …(11) } ] to have a length of 1 but got 2
+stdout | src/__tests__/team/member-2/reservations.db.member2.ts > business-rule regressions > rejects assigning an undersized table without changing the reservation
+{"scenario":"undersized table","observedStatus":200,"assigned":true}
+
+stdout | src/__tests__/team/member-2/reservations.db.member2.ts > business-rule regressions > rejects assigning a table already booked for the same slot
+{"scenario":"conflicting table","observedStatus":200,"assigned":true}
+
+ × src/__tests__/team/member-2/reservations.db.member2.ts > business-rule regressions > rejects assigning an undersized table without changing the reservation 56ms
+   → expected 200 to be greater than or equal to 400
+   → expected { …(11) } to deeply equal { …(11) }
+ × src/__tests__/team/member-2/reservations.db.member2.ts > business-rule regressions > rejects assigning a table already booked for the same slot 45ms
+   → expected 200 to be greater than or equal to 400
+   → expected { …(11) } to deeply equal { …(11) }
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 36 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/__tests__/team/member-2/reservations.db.member2.ts > generated calendar and clock business boundaries > post:/reservations:business:date:impossible-calendar-date
+ FAIL  src/__tests__/team/member-2/reservations.db.member2.ts > generated calendar and clock business boundaries > post:/reservations:business:time:clock-above-max
+ FAIL  src/__tests__/team/member-2/reservations.db.member2.ts > generated calendar and clock business boundaries > post:/reservations:business:time:invalid-hour-minute
+ FAIL  src/__tests__/team/member-2/reservations.db.member2.ts > generated calendar and clock business boundaries > post:/reservations:business:time:invalid-minute
+AssertionError: expected 201 to be greater than or equal to 400
+ ❯ src/__tests__/team/member-2/reservations.db.member2.ts:94:34
+     92|       expect((rows[0] as unknown as Record<string, unknown>)[c.field])…
+     93|     } else {
+     94|       expect.soft(result.status).toBeGreaterThanOrEqual(400);
+       |                                  ^
+     95|       expect.soft(result.status).toBeLessThan(500);
+     96|       if (initial) expect.soft(rows[0]).toEqual(initial); else expect.…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/68]⎯
+
+ FAIL  src/__tests__/team/member-2/reservations.db.member2.ts > generated calendar and clock business boundaries > post:/reservations:business:date:impossible-calendar-date
+ FAIL  src/__tests__/team/member-2/reservations.db.member2.ts > generated calendar and clock business boundaries > post:/reservations:business:time:clock-above-max
+ FAIL  src/__tests__/team/member-2/reservations.db.member2.ts > generated calendar and clock business boundaries > post:/reservations:business:time:invalid-hour-minute
+ FAIL  src/__tests__/team/member-2/reservations.db.member2.ts > generated calendar and clock business boundaries > post:/reservations:business:time:invalid-minute
+AssertionError: expected [ { …(11) } ] to have a length of +0 but got 1
+
+- Expected
++ Received
+
+- 0
++ 1
+
+ ❯ src/__tests__/team/member-2/reservations.db.member2.ts:96:82
+     94|       expect.soft(result.status).toBeGreaterThanOrEqual(400);
+     95|       expect.soft(result.status).toBeLessThan(500);
+     96|       if (initial) expect.soft(rows[0]).toEqual(initial); else expect.…
+       |                                                                                  ^
+     97|     }
+     98|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/68]⎯
+
+ FAIL  src/__tests__/team/member-2/reservations.db.member2.ts > generated calendar and clock business boundaries > patch:/reservations/{id}:business:date:impossible-calendar-date
+ FAIL  src/__tests__/team/member-2/reservations.db.member2.ts > generated calendar and clock business boundaries > patch:/reservations/{id}:business:time:clock-above-max
+ FAIL  src/__tests__/team/member-2/reservations.db.member2.ts > generated calendar and clock business boundaries > patch:/reservations/{id}:business:time:invalid-hour-minute
+ FAIL  src/__tests__/team/member-2/reservations.db.member2.ts > generated calendar and clock business boundaries > patch:/reservations/{id}:business:time:invalid-minute
+AssertionError: expected 200 to be greater than or equal to 400
+ ❯ src/__tests__/team/member-2/reservations.db.member2.ts:94:34
+     92|       expect((rows[0] as unknown as Record<string, unknown>)[c.field])…
+     93|     } else {
+     94|       expect.soft(result.status).toBeGreaterThanOrEqual(400);
+       |                                  ^
+     95|       expect.soft(result.status).toBeLessThan(500);
+     96|       if (initial) expect.soft(rows[0]).toEqual(initial); else expect.…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/68]⎯
+
+ FAIL  src/__tests__/team/member-2/reservations.db.member2.ts > generated calendar and clock business boundaries > patch:/reservations/{id}:business:date:impossible-calendar-date
+AssertionError: expected { …(11) } to deeply equal { …(11) }
+
+- Expected
++ Received
+
+  {
+    "comment": "synthetic",
+    "createdAt": 2026-11-25T12:56:53.097Z,
+    "customerId": "m2-customer-062be879-d41c-449b-95a0-49805344ae61",
+-   "date": 2099-06-15T00:00:00.000Z,
++   "date": 2099-03-02T00:00:00.000Z,
+    "id": "cmww4o9k900134dbp9mdtcbrl",
+    "locationId": "m2-location-062be879-d41c-449b-95a0-49805344ae61",
+    "partySize": 4,
+    "status": "PENDING",
+    "tableId": null,
+    "time": "19:00",
+-   "updatedAt": 2026-11-25T12:56:53.097Z,
++   "updatedAt": 2026-11-25T12:56:53.112Z,
+  }
+
+ ❯ src/__tests__/team/member-2/reservations.db.member2.ts:96:41
+     94|       expect.soft(result.status).toBeGreaterThanOrEqual(400);
+     95|       expect.soft(result.status).toBeLessThan(500);
+     96|       if (initial) expect.soft(rows[0]).toEqual(initial); else expect.…
+       |                                         ^
+     97|     }
+     98|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/68]⎯
+
+ FAIL  src/__tests__/team/member-2/reservations.db.member2.ts > generated calendar and clock business boundaries > patch:/reservations/{id}:business:time:clock-above-max
+AssertionError: expected { …(11) } to deeply equal { …(11) }
+
+- Expected
++ Received
+
+@@ -6,8 +6,8 @@
+    "id": "cmww4o9qu001f4dbp087xkdse",
+    "locationId": "m2-location-062be879-d41c-449b-95a0-49805344ae61",
+    "partySize": 4,
+    "status": "PENDING",
+    "tableId": null,
+-   "time": "19:00",
+-   "updatedAt": 2026-11-25T12:56:53.335Z,
++   "time": "24:00",
++   "updatedAt": 2026-11-25T12:56:53.349Z,
+  }
+
+ ❯ src/__tests__/team/member-2/reservations.db.member2.ts:96:41
+     94|       expect.soft(result.status).toBeGreaterThanOrEqual(400);
+     95|       expect.soft(result.status).toBeLessThan(500);
+     96|       if (initial) expect.soft(rows[0]).toEqual(initial); else expect.…
+       |                                         ^
+     97|     }
+     98|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/68]⎯
+
+ FAIL  src/__tests__/team/member-2/reservations.db.member2.ts > generated calendar and clock business boundaries > patch:/reservations/{id}:business:time:invalid-hour-minute
+AssertionError: expected { …(11) } to deeply equal { …(11) }
+
+- Expected
++ Received
+
+@@ -6,8 +6,8 @@
+    "id": "cmww4o9s0001h4dbpi82h2imc",
+    "locationId": "m2-location-062be879-d41c-449b-95a0-49805344ae61",
+    "partySize": 4,
+    "status": "PENDING",
+    "tableId": null,
+-   "time": "19:00",
+-   "updatedAt": 2026-11-25T12:56:53.376Z,
++   "time": "99:99",
++   "updatedAt": 2026-11-25T12:56:53.385Z,
+  }
+
+ ❯ src/__tests__/team/member-2/reservations.db.member2.ts:96:41
+     94|       expect.soft(result.status).toBeGreaterThanOrEqual(400);
+     95|       expect.soft(result.status).toBeLessThan(500);
+     96|       if (initial) expect.soft(rows[0]).toEqual(initial); else expect.…
+       |                                         ^
+     97|     }
+     98|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/68]⎯
+
+ FAIL  src/__tests__/team/member-2/reservations.db.member2.ts > generated calendar and clock business boundaries > patch:/reservations/{id}:business:time:invalid-minute
+AssertionError: expected { …(11) } to deeply equal { …(11) }
+
+- Expected
++ Received
+
+@@ -6,8 +6,8 @@
+    "id": "cmww4o9sx001j4dbp9msryn0m",
+    "locationId": "m2-location-062be879-d41c-449b-95a0-49805344ae61",
+    "partySize": 4,
+    "status": "PENDING",
+    "tableId": null,
+-   "time": "19:00",
+-   "updatedAt": 2026-11-25T12:56:53.410Z,
++   "time": "19:99",
++   "updatedAt": 2026-11-25T12:56:53.419Z,
+  }
+
+ ❯ src/__tests__/team/member-2/reservations.db.member2.ts:96:41
+     94|       expect.soft(result.status).toBeGreaterThanOrEqual(400);
+     95|       expect.soft(result.status).toBeLessThan(500);
+     96|       if (initial) expect.soft(rows[0]).toEqual(initial); else expect.…
+       |                                         ^
+     97|     }
+     98|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/68]⎯
+
+ FAIL  src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations/availability:query:date:null-literal
+ FAIL  src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations/availability:query:date:invalid-format
+ FAIL  src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations:query:status:null-literal
+ FAIL  src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations:query:status:invalid-enum
+ FAIL  src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations:query:date:null-literal
+ FAIL  src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations:query:date:invalid-format
+AssertionError: expected true to be false // Object.is equality
+
+- Expected
++ Received
+
+- false
++ true
+
+ ❯ src/__tests__/team/member-2/reservations.db.member2.ts:173:38
+    171|       const stored = await db.reservation.findUniqueOrThrow({ where: {…
+    172|       console.log(JSON.stringify({ caseId: c.id, ...observed, recordUn…
+    173|       expect.soft(observed.timedOut).toBe(false);
+       |                                      ^
+    174|       expect.soft(observed.status).not.toBeNull();
+    175|       if (observed.status !== null) { expect.soft(observed.status).toB…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/68]⎯
+
+ FAIL  src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations/availability:query:date:null-literal
+ FAIL  src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations/availability:query:date:invalid-format
+ FAIL  src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations:query:status:null-literal
+ FAIL  src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations:query:status:invalid-enum
+ FAIL  src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations:query:date:null-literal
+ FAIL  src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations:query:date:invalid-format
+AssertionError: expected null not to be null
+ ❯ src/__tests__/team/member-2/reservations.db.member2.ts:174:40
+    172|       console.log(JSON.stringify({ caseId: c.id, ...observed, recordUn…
+    173|       expect.soft(observed.timedOut).toBe(false);
+    174|       expect.soft(observed.status).not.toBeNull();
+       |                                        ^
+    175|       if (observed.status !== null) { expect.soft(observed.status).toB…
+    176|       expect.soft(stored).toEqual(row);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/68]⎯
+
+ FAIL  src/__tests__/team/member-2/reservations.db.member2.ts > generated read-only path and query cases against PostgreSQL > get:/reservations/{id}:path:id:malformed-escape
+AssertionError: expected 500 to be less than 500
+ ❯ src/__tests__/team/member-2/reservations.db.member2.ts:186:29
+    184|       expect(result.body).toMatchObject({ success: false, error: expec…
+    185|       expect(result.status).toBeGreaterThanOrEqual(400);
+    186|       expect(result.status).toBeLessThan(500);
+       |                             ^
+    187|       return;
+    188|     }
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/68]⎯
+
+ FAIL  src/__tests__/team/member-2/reservations.db.member2.ts > availability time from the API guide > get:/reservations/availability:query:time:ordinary
+AssertionError: expected 200 to be 400 // Object.is equality
+
+- Expected
++ Received
+
+- 400
++ 200
+
+ ❯ src/__tests__/team/member-2/reservations.db.member2.ts:225:29
+    223|     } else if (c.partition === 'ordinary') {
+    224|       // The guide lists HTTP 400 when there is no table for the reque…
+    225|       expect(result.status).toBe(400);
+       |                             ^
+    226|       checkResponse('get', c.path, result.status, result.body);
+    227|     } else {
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[11/68]⎯
+
+ FAIL  src/__tests__/team/member-2/reservations.db.member2.ts > availability time from the API guide > get:/reservations/availability:query:time:free-slot
+AssertionError: expected { success: true, data: { …(2) } } to match object { success: true, data: { …(2) } }
+(2 matching properties omitted from actual)
+
+- Expected
++ Received
+
+  {
+    "data": {
++     "slots": [
++       {
++         "available": true,
++         "time": "11:00",
++       },
++       {
++         "available": true,
++         "time": "11:30",
++       },
++       {
++         "available": true,
++         "time": "12:00",
++       },
++       {
++         "available": true,
++         "time": "12:30",
++       },
++       {
++         "available": true,
++         "time": "13:00",
++       },
++       {
+          "available": true,
+-     "tables": [
++         "time": "13:30",
++       },
++       {
++         "available": true,
++         "time": "14:00",
++       },
++       {
++         "available": true,
++         "time": "14:30",
++       },
++       {
++         "available": true,
++         "time": "15:00",
++       },
++       {
++         "available": true,
++         "time": "15:30",
++       },
++       {
++         "available": true,
++         "time": "16:00",
++       },
++       {
++         "available": true,
++         "time": "16:30",
++       },
++       {
++         "available": true,
++         "time": "17:00",
++       },
++       {
++         "available": true,
++         "time": "17:30",
++       },
++       {
++         "available": true,
++         "time": "18:00",
++       },
++       {
++         "available": true,
++         "time": "18:30",
++       },
++       {
++         "available": false,
++         "time": "19:00",
++       },
++       {
++         "available": true,
++         "time": "19:30",
++       },
++       {
++         "available": true,
++         "time": "20:00",
++       },
+        {
+-         "capacity": 4,
+-         "id": "m2-table-062be879-d41c-449b-95a0-49805344ae61",
+-         "name": "T1",
++         "available": true,
++         "time": "20:30",
++       },
++       {
++         "available": true,
++         "time": "21:00",
++       },
++       {
++         "available": true,
++         "time": "21:30",
+        },
+      ],
++     "totalTables": 1,
+    },
+    "success": true,
+  }
+
+ ❯ src/__tests__/team/member-2/reservations.db.member2.ts:222:27
+    220|     if (c.partition === 'free-slot') {
+    221|       expect(result.status).toBe(200);
+    222|       expect(result.body).toMatchObject({ success: true, data: { avail…
+       |                           ^
+    223|     } else if (c.partition === 'ordinary') {
+    224|       // The guide lists HTTP 400 when there is no table for the reque…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[12/68]⎯
+
+ FAIL  src/__tests__/team/member-2/reservations.db.member2.ts > documented reservation lifecycle > rejects PENDING to SEATED without changing the record
+ FAIL  src/__tests__/team/member-2/reservations.db.member2.ts > documented reservation lifecycle > rejects PENDING to COMPLETED without changing the record
+ FAIL  src/__tests__/team/member-2/reservations.db.member2.ts > documented reservation lifecycle > rejects CONFIRMED to PENDING without changing the record
+ FAIL  src/__tests__/team/member-2/reservations.db.member2.ts > documented reservation lifecycle > rejects CONFIRMED to COMPLETED without changing the record
+ FAIL  src/__tests__/team/member-2/reservations.db.member2.ts > documented reservation lifecycle > rejects SEATED to PENDING without changing the record
+ FAIL  src/__tests__/team/member-2/reservations.db.member2.ts > documented reservation lifecycle > rejects SEATED to CONFIRMED without changing the record
+ FAIL  src/__tests__/team/member-2/reservations.db.member2.ts > documented reservation lifecycle > rejects COMPLETED to PENDING without changing the record
+ FAIL  src/__tests__/team/member-2/reservations.db.member2.ts > documented reservation lifecycle > rejects COMPLETED to CONFIRMED without changing the record
+ FAIL  src/__tests__/team/member-2/reservations.db.member2.ts > documented reservation lifecycle > rejects COMPLETED to SEATED without changing the record
+ FAIL  src/__tests__/team/member-2/reservations.db.member2.ts > documented reservation lifecycle > rejects CANCELLED to PENDING without changing the record
+ FAIL  src/__tests__/team/member-2/reservations.db.member2.ts > documented reservation lifecycle > rejects CANCELLED to CONFIRMED without changing the record
+ FAIL  src/__tests__/team/member-2/reservations.db.member2.ts > documented reservation lifecycle > rejects CANCELLED to SEATED without changing the record
+ FAIL  src/__tests__/team/member-2/reservations.db.member2.ts > documented reservation lifecycle > rejects CANCELLED to COMPLETED without changing the record
+AssertionError: expected 200 to be greater than or equal to 400
+ ❯ src/__tests__/team/member-2/reservations.db.member2.ts:600:32
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[13/68]⎯
+
+ FAIL  src/__tests__/team/member-2/reservations.db.member2.ts > documented reservation lifecycle > rejects PENDING to SEATED without changing the record
+AssertionError: expected { …(11) } to deeply equal { …(11) }
+
+- Expected
++ Received
+
+@@ -4,10 +4,10 @@
+    "customerId": "m2-customer-062be879-d41c-449b-95a0-49805344ae61",
+    "date": 2099-06-15T00:00:00.000Z,
+    "id": "cmww4p0ok00e14dbp97lz7f28",
+    "locationId": "m2-location-062be879-d41c-449b-95a0-49805344ae61",
+    "partySize": 4,
+-   "status": "PENDING",
++   "status": "SEATED",
+    "tableId": null,
+    "time": "19:00",
+-   "updatedAt": 2026-11-25T12:57:28.245Z,
++   "updatedAt": 2026-11-25T12:57:28.255Z,
+  }
+
+ ❯ src/__tests__/team/member-2/reservations.db.member2.ts:602:25
+    600|     expect.soft(result.status).toBeGreaterThanOrEqual(400);
+    601|     expect.soft(result.status).toBeLessThan(500);
+    602|     expect.soft(stored).toEqual(row);
+       |                         ^
+    603|   });
+    604| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[14/68]⎯
+
+ FAIL  src/__tests__/team/member-2/reservations.db.member2.ts > documented reservation lifecycle > rejects PENDING to COMPLETED without changing the record
+AssertionError: expected { …(11) } to deeply equal { …(11) }
+
+- Expected
++ Received
+
+@@ -4,10 +4,10 @@
+    "customerId": "m2-customer-062be879-d41c-449b-95a0-49805344ae61",
+    "date": 2099-06-15T00:00:00.000Z,
+    "id": "cmww4p0pn00e34dbpupanqw8l",
+    "locationId": "m2-location-062be879-d41c-449b-95a0-49805344ae61",
+    "partySize": 4,
+-   "status": "PENDING",
++   "status": "COMPLETED",
+    "tableId": null,
+    "time": "19:00",
+-   "updatedAt": 2026-11-25T12:57:28.283Z,
++   "updatedAt": 2026-11-25T12:57:28.293Z,
+  }
+
+ ❯ src/__tests__/team/member-2/reservations.db.member2.ts:602:25
+    600|     expect.soft(result.status).toBeGreaterThanOrEqual(400);
+    601|     expect.soft(result.status).toBeLessThan(500);
+    602|     expect.soft(stored).toEqual(row);
+       |                         ^
+    603|   });
+    604| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[15/68]⎯
+
+ FAIL  src/__tests__/team/member-2/reservations.db.member2.ts > documented reservation lifecycle > rejects CONFIRMED to PENDING without changing the record
+AssertionError: expected { …(11) } to deeply equal { …(11) }
+
+- Expected
++ Received
+
+@@ -4,10 +4,10 @@
+    "customerId": "m2-customer-062be879-d41c-449b-95a0-49805344ae61",
+    "date": 2099-06-15T00:00:00.000Z,
+    "id": "cmww4p0qm00e54dbp11q2p39e",
+    "locationId": "m2-location-062be879-d41c-449b-95a0-49805344ae61",
+    "partySize": 4,
+-   "status": "CONFIRMED",
++   "status": "PENDING",
+    "tableId": null,
+    "time": "19:00",
+-   "updatedAt": 2026-11-25T12:57:28.318Z,
++   "updatedAt": 2026-11-25T12:57:28.328Z,
+  }
+
+ ❯ src/__tests__/team/member-2/reservations.db.member2.ts:602:25
+    600|     expect.soft(result.status).toBeGreaterThanOrEqual(400);
+    601|     expect.soft(result.status).toBeLessThan(500);
+    602|     expect.soft(stored).toEqual(row);
+       |                         ^
+    603|   });
+    604| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[16/68]⎯
+
+ FAIL  src/__tests__/team/member-2/reservations.db.member2.ts > documented reservation lifecycle > rejects CONFIRMED to COMPLETED without changing the record
+AssertionError: expected { …(11) } to deeply equal { …(11) }
+
+- Expected
++ Received
+
+@@ -4,10 +4,10 @@
+    "customerId": "m2-customer-062be879-d41c-449b-95a0-49805344ae61",
+    "date": 2099-06-15T00:00:00.000Z,
+    "id": "cmww4p0rk00e74dbpea7as5nu",
+    "locationId": "m2-location-062be879-d41c-449b-95a0-49805344ae61",
+    "partySize": 4,
+-   "status": "CONFIRMED",
++   "status": "COMPLETED",
+    "tableId": null,
+    "time": "19:00",
+-   "updatedAt": 2026-11-25T12:57:28.352Z,
++   "updatedAt": 2026-11-25T12:57:28.362Z,
+  }
+
+ ❯ src/__tests__/team/member-2/reservations.db.member2.ts:602:25
+    600|     expect.soft(result.status).toBeGreaterThanOrEqual(400);
+    601|     expect.soft(result.status).toBeLessThan(500);
+    602|     expect.soft(stored).toEqual(row);
+       |                         ^
+    603|   });
+    604| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[17/68]⎯
+
+ FAIL  src/__tests__/team/member-2/reservations.db.member2.ts > documented reservation lifecycle > rejects SEATED to PENDING without changing the record
+AssertionError: expected { …(11) } to deeply equal { …(11) }
+
+- Expected
++ Received
+
+@@ -4,10 +4,10 @@
+    "customerId": "m2-customer-062be879-d41c-449b-95a0-49805344ae61",
+    "date": 2099-06-15T00:00:00.000Z,
+    "id": "cmww4p0si00e94dbpydvsdnm6",
+    "locationId": "m2-location-062be879-d41c-449b-95a0-49805344ae61",
+    "partySize": 4,
+-   "status": "SEATED",
++   "status": "PENDING",
+    "tableId": null,
+    "time": "19:00",
+-   "updatedAt": 2026-11-25T12:57:28.387Z,
++   "updatedAt": 2026-11-25T12:57:28.396Z,
+  }
+
+ ❯ src/__tests__/team/member-2/reservations.db.member2.ts:602:25
+    600|     expect.soft(result.status).toBeGreaterThanOrEqual(400);
+    601|     expect.soft(result.status).toBeLessThan(500);
+    602|     expect.soft(stored).toEqual(row);
+       |                         ^
+    603|   });
+    604| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[18/68]⎯
+
+ FAIL  src/__tests__/team/member-2/reservations.db.member2.ts > documented reservation lifecycle > rejects SEATED to CONFIRMED without changing the record
+AssertionError: expected { …(11) } to deeply equal { …(11) }
+
+- Expected
++ Received
+
+@@ -4,10 +4,10 @@
+    "customerId": "m2-customer-062be879-d41c-449b-95a0-49805344ae61",
+    "date": 2099-06-15T00:00:00.000Z,
+    "id": "cmww4p0th00eb4dbplttrvfyp",
+    "locationId": "m2-location-062be879-d41c-449b-95a0-49805344ae61",
+    "partySize": 4,
+-   "status": "SEATED",
++   "status": "CONFIRMED",
+    "tableId": null,
+    "time": "19:00",
+-   "updatedAt": 2026-11-25T12:57:28.422Z,
++   "updatedAt": 2026-11-25T12:57:28.432Z,
+  }
+
+ ❯ src/__tests__/team/member-2/reservations.db.member2.ts:602:25
+    600|     expect.soft(result.status).toBeGreaterThanOrEqual(400);
+    601|     expect.soft(result.status).toBeLessThan(500);
+    602|     expect.soft(stored).toEqual(row);
+       |                         ^
+    603|   });
+    604| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[19/68]⎯
+
+ FAIL  src/__tests__/team/member-2/reservations.db.member2.ts > documented reservation lifecycle > rejects COMPLETED to PENDING without changing the record
+AssertionError: expected { …(11) } to deeply equal { …(11) }
+
+- Expected
++ Received
+
+@@ -4,10 +4,10 @@
+    "customerId": "m2-customer-062be879-d41c-449b-95a0-49805344ae61",
+    "date": 2099-06-15T00:00:00.000Z,
+    "id": "cmww4p0uh00ed4dbpes86yfeo",
+    "locationId": "m2-location-062be879-d41c-449b-95a0-49805344ae61",
+    "partySize": 4,
+-   "status": "COMPLETED",
++   "status": "PENDING",
+    "tableId": null,
+    "time": "19:00",
+-   "updatedAt": 2026-11-25T12:57:28.458Z,
++   "updatedAt": 2026-11-25T12:57:28.469Z,
+  }
+
+ ❯ src/__tests__/team/member-2/reservations.db.member2.ts:602:25
+    600|     expect.soft(result.status).toBeGreaterThanOrEqual(400);
+    601|     expect.soft(result.status).toBeLessThan(500);
+    602|     expect.soft(stored).toEqual(row);
+       |                         ^
+    603|   });
+    604| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[20/68]⎯
+
+ FAIL  src/__tests__/team/member-2/reservations.db.member2.ts > documented reservation lifecycle > rejects COMPLETED to CONFIRMED without changing the record
+AssertionError: expected { …(11) } to deeply equal { …(11) }
+
+- Expected
++ Received
+
+@@ -4,10 +4,10 @@
+    "customerId": "m2-customer-062be879-d41c-449b-95a0-49805344ae61",
+    "date": 2099-06-15T00:00:00.000Z,
+    "id": "cmww4p0vj00ef4dbp2qvckb4c",
+    "locationId": "m2-location-062be879-d41c-449b-95a0-49805344ae61",
+    "partySize": 4,
+-   "status": "COMPLETED",
++   "status": "CONFIRMED",
+    "tableId": null,
+    "time": "19:00",
+-   "updatedAt": 2026-11-25T12:57:28.495Z,
++   "updatedAt": 2026-11-25T12:57:28.508Z,
+  }
+
+ ❯ src/__tests__/team/member-2/reservations.db.member2.ts:602:25
+    600|     expect.soft(result.status).toBeGreaterThanOrEqual(400);
+    601|     expect.soft(result.status).toBeLessThan(500);
+    602|     expect.soft(stored).toEqual(row);
+       |                         ^
+    603|   });
+    604| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[21/68]⎯
+
+ FAIL  src/__tests__/team/member-2/reservations.db.member2.ts > documented reservation lifecycle > rejects COMPLETED to SEATED without changing the record
+AssertionError: expected { …(11) } to deeply equal { …(11) }
+
+- Expected
++ Received
+
+@@ -4,10 +4,10 @@
+    "customerId": "m2-customer-062be879-d41c-449b-95a0-49805344ae61",
+    "date": 2099-06-15T00:00:00.000Z,
+    "id": "cmww4p0wn00eh4dbptazs6ng6",
+    "locationId": "m2-location-062be879-d41c-449b-95a0-49805344ae61",
+    "partySize": 4,
+-   "status": "COMPLETED",
++   "status": "SEATED",
+    "tableId": null,
+    "time": "19:00",
+-   "updatedAt": 2026-11-25T12:57:28.535Z,
++   "updatedAt": 2026-11-25T12:57:28.544Z,
+  }
+
+ ❯ src/__tests__/team/member-2/reservations.db.member2.ts:602:25
+    600|     expect.soft(result.status).toBeGreaterThanOrEqual(400);
+    601|     expect.soft(result.status).toBeLessThan(500);
+    602|     expect.soft(stored).toEqual(row);
+       |                         ^
+    603|   });
+    604| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[22/68]⎯
+
+ FAIL  src/__tests__/team/member-2/reservations.db.member2.ts > documented reservation lifecycle > rejects CANCELLED to PENDING without changing the record
+AssertionError: expected { …(11) } to deeply equal { …(11) }
+
+- Expected
++ Received
+
+@@ -4,10 +4,10 @@
+    "customerId": "m2-customer-062be879-d41c-449b-95a0-49805344ae61",
+    "date": 2099-06-15T00:00:00.000Z,
+    "id": "cmww4p0xn00ej4dbpc448suil",
+    "locationId": "m2-location-062be879-d41c-449b-95a0-49805344ae61",
+    "partySize": 4,
+-   "status": "CANCELLED",
++   "status": "PENDING",
+    "tableId": null,
+    "time": "19:00",
+-   "updatedAt": 2026-11-25T12:57:28.572Z,
++   "updatedAt": 2026-11-25T12:57:28.580Z,
+  }
+
+ ❯ src/__tests__/team/member-2/reservations.db.member2.ts:602:25
+    600|     expect.soft(result.status).toBeGreaterThanOrEqual(400);
+    601|     expect.soft(result.status).toBeLessThan(500);
+    602|     expect.soft(stored).toEqual(row);
+       |                         ^
+    603|   });
+    604| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[23/68]⎯
+
+ FAIL  src/__tests__/team/member-2/reservations.db.member2.ts > documented reservation lifecycle > rejects CANCELLED to CONFIRMED without changing the record
+AssertionError: expected { …(11) } to deeply equal { …(11) }
+
+- Expected
++ Received
+
+@@ -4,10 +4,10 @@
+    "customerId": "m2-customer-062be879-d41c-449b-95a0-49805344ae61",
+    "date": 2099-06-15T00:00:00.000Z,
+    "id": "cmww4p0ym00el4dbp0vgqwptw",
+    "locationId": "m2-location-062be879-d41c-449b-95a0-49805344ae61",
+    "partySize": 4,
+-   "status": "CANCELLED",
++   "status": "CONFIRMED",
+    "tableId": null,
+    "time": "19:00",
+-   "updatedAt": 2026-11-25T12:57:28.607Z,
++   "updatedAt": 2026-11-25T12:57:28.616Z,
+  }
+
+ ❯ src/__tests__/team/member-2/reservations.db.member2.ts:602:25
+    600|     expect.soft(result.status).toBeGreaterThanOrEqual(400);
+    601|     expect.soft(result.status).toBeLessThan(500);
+    602|     expect.soft(stored).toEqual(row);
+       |                         ^
+    603|   });
+    604| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[24/68]⎯
+
+ FAIL  src/__tests__/team/member-2/reservations.db.member2.ts > documented reservation lifecycle > rejects CANCELLED to SEATED without changing the record
+AssertionError: expected { …(11) } to deeply equal { …(11) }
+
+- Expected
++ Received
+
+@@ -4,10 +4,10 @@
+    "customerId": "m2-customer-062be879-d41c-449b-95a0-49805344ae61",
+    "date": 2099-06-15T00:00:00.000Z,
+    "id": "cmww4p0zm00en4dbp6l4iw5la",
+    "locationId": "m2-location-062be879-d41c-449b-95a0-49805344ae61",
+    "partySize": 4,
+-   "status": "CANCELLED",
++   "status": "SEATED",
+    "tableId": null,
+    "time": "19:00",
+-   "updatedAt": 2026-11-25T12:57:28.642Z,
++   "updatedAt": 2026-11-25T12:57:28.651Z,
+  }
+
+ ❯ src/__tests__/team/member-2/reservations.db.member2.ts:602:25
+    600|     expect.soft(result.status).toBeGreaterThanOrEqual(400);
+    601|     expect.soft(result.status).toBeLessThan(500);
+    602|     expect.soft(stored).toEqual(row);
+       |                         ^
+    603|   });
+    604| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[25/68]⎯
+
+ FAIL  src/__tests__/team/member-2/reservations.db.member2.ts > documented reservation lifecycle > rejects CANCELLED to COMPLETED without changing the record
+AssertionError: expected { …(11) } to deeply equal { …(11) }
+
+- Expected
++ Received
+
+@@ -4,10 +4,10 @@
+    "customerId": "m2-customer-062be879-d41c-449b-95a0-49805344ae61",
+    "date": 2099-06-15T00:00:00.000Z,
+    "id": "cmww4p10k00ep4dbpv8aec6l8",
+    "locationId": "m2-location-062be879-d41c-449b-95a0-49805344ae61",
+    "partySize": 4,
+-   "status": "CANCELLED",
++   "status": "COMPLETED",
+    "tableId": null,
+    "time": "19:00",
+-   "updatedAt": 2026-11-25T12:57:28.676Z,
++   "updatedAt": 2026-11-25T12:57:28.684Z,
+  }
+
+ ❯ src/__tests__/team/member-2/reservations.db.member2.ts:602:25
+    600|     expect.soft(result.status).toBeGreaterThanOrEqual(400);
+    601|     expect.soft(result.status).toBeLessThan(500);
+    602|     expect.soft(stored).toEqual(row);
+       |                         ^
+    603|   });
+    604| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[26/68]⎯
+
+ FAIL  src/__tests__/team/member-2/reservations.db.member2.ts > business-rule regressions > rejects assigning an inactive table without mutation
+ FAIL  src/__tests__/team/member-2/reservations.db.member2.ts > business-rule regressions > rejects assigning an other-location table without mutation
+AssertionError: expected 200 to be greater than or equal to 400
+ ❯ src/__tests__/team/member-2/reservations.db.member2.ts:620:36
+    618|       const stored = await db.reservation.findUniqueOrThrow({ where: {…
+    619|       console.log(JSON.stringify({ scenario: kind, observedStatus: res…
+    620|       expect.soft(response.status).toBeGreaterThanOrEqual(400);
+       |                                    ^
+    621|       expect.soft(response.status).toBeLessThan(500);
+    622|       expect.soft(stored).toEqual(row);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[27/68]⎯
+
+ FAIL  src/__tests__/team/member-2/reservations.db.member2.ts > business-rule regressions > rejects assigning an inactive table without mutation
+AssertionError: expected { …(11) } to deeply equal { …(11) }
+
+- Expected
++ Received
+
+@@ -5,9 +5,9 @@
+    "date": 2099-06-15T00:00:00.000Z,
+    "id": "cmww4p11l00et4dbpsieiqkgr",
+    "locationId": "m2-location-062be879-d41c-449b-95a0-49805344ae61",
+    "partySize": 4,
+    "status": "PENDING",
+-   "tableId": null,
++   "tableId": "cmww4p11h00er4dbp535nljsb",
+    "time": "19:00",
+-   "updatedAt": 2026-11-25T12:57:28.713Z,
++   "updatedAt": 2026-11-25T12:57:28.721Z,
+  }
+
+ ❯ src/__tests__/team/member-2/reservations.db.member2.ts:622:27
+    620|       expect.soft(response.status).toBeGreaterThanOrEqual(400);
+    621|       expect.soft(response.status).toBeLessThan(500);
+    622|       expect.soft(stored).toEqual(row);
+       |                           ^
+    623|     } finally {
+    624|       if (otherCreated) {
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[28/68]⎯
+
+ FAIL  src/__tests__/team/member-2/reservations.db.member2.ts > business-rule regressions > rejects assigning an other-location table without mutation
+AssertionError: expected { …(11) } to deeply equal { …(11) }
+
+- Expected
++ Received
+
+@@ -5,9 +5,9 @@
+    "date": 2099-06-15T00:00:00.000Z,
+    "id": "cmww4p12t00ex4dbpfpv0q7mn",
+    "locationId": "m2-location-062be879-d41c-449b-95a0-49805344ae61",
+    "partySize": 4,
+    "status": "PENDING",
+-   "tableId": null,
++   "tableId": "cmww4p12p00ev4dbpj3ofwr05",
+    "time": "19:00",
+-   "updatedAt": 2026-11-25T12:57:28.757Z,
++   "updatedAt": 2026-11-25T12:57:28.767Z,
+  }
+
+ ❯ src/__tests__/team/member-2/reservations.db.member2.ts:622:27
+    620|       expect.soft(response.status).toBeGreaterThanOrEqual(400);
+    621|       expect.soft(response.status).toBeLessThan(500);
+    622|       expect.soft(stored).toEqual(row);
+       |                           ^
+    623|     } finally {
+    624|       if (otherCreated) {
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[29/68]⎯
+
+ FAIL  src/__tests__/team/member-2/reservations.db.member2.ts > business-rule regressions > rejects assigning a nonexistent table without an unexpected server error
+AssertionError: expected true to be false // Object.is equality
+
+- Expected
++ Received
+
+- false
++ true
+
+ ❯ src/__tests__/team/member-2/reservations.db.member2.ts:639:36
+    637|     const stored = await db.reservation.findUniqueOrThrow({ where: { i…
+    638|     console.log(JSON.stringify({ scenario: 'unknown table', ...observe…
+    639|     expect.soft(observed.timedOut).toBe(false);
+       |                                    ^
+    640|     expect.soft(observed.status).not.toBeNull();
+    641|     if (observed.status !== null) { expect.soft(observed.status).toBeG…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[30/68]⎯
+
+ FAIL  src/__tests__/team/member-2/reservations.db.member2.ts > business-rule regressions > rejects assigning a nonexistent table without an unexpected server error
+AssertionError: expected null not to be null
+ ❯ src/__tests__/team/member-2/reservations.db.member2.ts:640:38
+    638|     console.log(JSON.stringify({ scenario: 'unknown table', ...observe…
+    639|     expect.soft(observed.timedOut).toBe(false);
+    640|     expect.soft(observed.status).not.toBeNull();
+       |                                      ^
+    641|     if (observed.status !== null) { expect.soft(observed.status).toBeG…
+    642|     expect.soft(stored).toEqual(row);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[31/68]⎯
+
+ FAIL  src/__tests__/team/member-2/reservations.db.member2.ts > business-rule regressions > does not create duplicate records for a repeated identical booking
+AssertionError: expected [ { …(11) }, { …(11) } ] to have a length of 1 but got 2
+
+- Expected
++ Received
+
+- 1
++ 2
+
+ ❯ src/__tests__/team/member-2/reservations.db.member2.ts:650:18
+    648|     console.log(JSON.stringify({ scenario: 'repeated booking', observe…
+    649|     expect(first.status).toBe(201);
+    650|     expect(rows).toHaveLength(1);
+       |                  ^
+    651|   });
+    652|   it('rejects assigning an undersized table without changing the reser…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[32/68]⎯
+
+ FAIL  src/__tests__/team/member-2/reservations.db.member2.ts > business-rule regressions > rejects assigning an undersized table without changing the reservation
+AssertionError: expected 200 to be greater than or equal to 400
+ ❯ src/__tests__/team/member-2/reservations.db.member2.ts:658:34
+    656|     const stored = await db.reservation.findUniqueOrThrow({ where: { i…
+    657|     console.log(JSON.stringify({ scenario: 'undersized table', observe…
+    658|     expect.soft(response.status).toBeGreaterThanOrEqual(400);
+       |                                  ^
+    659|     expect.soft(response.status).toBeLessThan(500);
+    660|     expect.soft(stored).toEqual(row);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[33/68]⎯
+
+ FAIL  src/__tests__/team/member-2/reservations.db.member2.ts > business-rule regressions > rejects assigning an undersized table without changing the reservation
+AssertionError: expected { …(11) } to deeply equal { …(11) }
+
+- Expected
++ Received
+
+@@ -5,9 +5,9 @@
+    "date": 2099-06-15T00:00:00.000Z,
+    "id": "cmww4p4kn00f54dbpers5llnw",
+    "locationId": "m2-location-062be879-d41c-449b-95a0-49805344ae61",
+    "partySize": 4,
+    "status": "PENDING",
+-   "tableId": null,
++   "tableId": "cmww4p4kv00f74dbpji8a64ps",
+    "time": "19:00",
+-   "updatedAt": 2026-11-25T12:57:33.288Z,
++   "updatedAt": 2026-11-25T12:57:33.309Z,
+  }
+
+ ❯ src/__tests__/team/member-2/reservations.db.member2.ts:660:25
+    658|     expect.soft(response.status).toBeGreaterThanOrEqual(400);
+    659|     expect.soft(response.status).toBeLessThan(500);
+    660|     expect.soft(stored).toEqual(row);
+       |                         ^
+    661|   });
+    662|   it('rejects assigning a table already booked for the same slot', asy…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[34/68]⎯
+
+ FAIL  src/__tests__/team/member-2/reservations.db.member2.ts > business-rule regressions > rejects assigning a table already booked for the same slot
+AssertionError: expected 200 to be greater than or equal to 400
+ ❯ src/__tests__/team/member-2/reservations.db.member2.ts:668:34
+    666|     const stored = await db.reservation.findUniqueOrThrow({ where: { i…
+    667|     console.log(JSON.stringify({ scenario: 'conflicting table', observ…
+    668|     expect.soft(response.status).toBeGreaterThanOrEqual(400);
+       |                                  ^
+    669|     expect.soft(response.status).toBeLessThan(500);
+    670|     expect.soft(stored).toEqual(row);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[35/68]⎯
+
+ FAIL  src/__tests__/team/member-2/reservations.db.member2.ts > business-rule regressions > rejects assigning a table already booked for the same slot
+AssertionError: expected { …(11) } to deeply equal { …(11) }
+
+- Expected
++ Received
+
+@@ -5,9 +5,9 @@
+    "date": 2099-06-15T00:00:00.000Z,
+    "id": "cmww4p4mg00fb4dbpfiokbbh6",
+    "locationId": "m2-location-062be879-d41c-449b-95a0-49805344ae61",
+    "partySize": 4,
+    "status": "PENDING",
+-   "tableId": null,
++   "tableId": "m2-table-062be879-d41c-449b-95a0-49805344ae61",
+    "time": "19:00",
+-   "updatedAt": 2026-11-25T12:57:33.352Z,
++   "updatedAt": 2026-11-25T12:57:33.362Z,
+  }
+
+ ❯ src/__tests__/team/member-2/reservations.db.member2.ts:670:25
+    668|     expect.soft(response.status).toBeGreaterThanOrEqual(400);
+    669|     expect.soft(response.status).toBeLessThan(500);
+    670|     expect.soft(stored).toEqual(row);
+       |                         ^
+    671|   });
+    672| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[36/68]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  36 failed | 346 passed (382)
+   Start at  17:56:48
+   Duration  45.17s (transform 933ms, setup 0ms, import 3.00s, tests 41.70s, environment 0ms)
+
+JSON report written to D:/5th Semester/SQE/Project/kitchen-nasty/docs/sqe/member-2/evidence/audit-final-results.json

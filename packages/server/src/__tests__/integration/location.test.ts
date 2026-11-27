@@ -25,7 +25,7 @@ vi.mock('../../lib/db.js', () => {
       delete: vi.fn(),
     },
     user: { findUnique: vi.fn() },
-    customer: { findUnique: vi.fn() },
+    customer: { findFirst: vi.fn().mockImplementation(async ({ where }: { where: { id?: string } }) => where.id ? { id: where.id } : null), findUnique: vi.fn() },
   };
   return { default: mockPrisma, prisma: mockPrisma };
 });

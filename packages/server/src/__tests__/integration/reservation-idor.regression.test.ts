@@ -30,7 +30,7 @@ vi.mock('../../lib/db.js', () => {
     table: { findMany: vi.fn(), findFirst: vi.fn(), findUnique: vi.fn(), create: vi.fn(), update: vi.fn(), delete: vi.fn() },
     reservation: { findMany: vi.fn(), findUnique: vi.fn(), create: vi.fn(), update: vi.fn(), delete: vi.fn(), count: vi.fn(), groupBy: vi.fn(), aggregate: vi.fn() },
     user: { findUnique: vi.fn() },
-    customer: { findUnique: vi.fn() },
+    customer: { findFirst: vi.fn().mockImplementation(async ({ where }: { where: { id?: string } }) => where.id ? { id: where.id } : null), findUnique: vi.fn() },
   };
   return { default: mockPrisma, prisma: mockPrisma };
 });

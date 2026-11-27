@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { Role } from '@prisma/client';
+import prisma from '../lib/db.js';
 
 // Placeholder values that have shipped in this repo's code, compose file and docs.
 // Anyone can sign tokens with them, so they are treated the same as no secret at all.
@@ -56,7 +57,17 @@ export function authenticate(req: Request, res: Response, next: NextFunction): v
 
   try {
     const token = authHeader.slice(7);
-    req.user = verifyToken(token);
+    const user = verifyToken(token);
+    if (user.type === 'customer') {
+      if (!user.id) { res.status(401).json({ success: false, error: 'Invalid or expired token' }); return; }
+      void prisma.customer.findFirst({ where: { id: user.id }, select: { id: true } }).then((customer) => {
+        if (!customer) { res.status(401).json({ success: false, error: 'Customer account no longer exists' }); return; }
+        req.user = user;
+        next();
+      }).catch(next);
+      return;
+    }
+    req.user = user;
     next();
   } catch {
     res.status(401).json({ success: false, error: 'Invalid or expired token' });
@@ -81,12 +92,22 @@ export function requireRole(...roles: Role[]) {
   };
 }
 
-export function optionalAuth(req: Request, _res: Response, next: NextFunction): void {
+export function optionalAuth(req: Request, res: Response, next: NextFunction): void {
   const authHeader = req.headers.authorization;
   if (authHeader?.startsWith('Bearer ')) {
     try {
       const token = authHeader.slice(7);
-      req.user = verifyToken(token);
+      const user = verifyToken(token);
+      if (user.type === 'customer') {
+        if (!user.id) { res.status(401).json({ success: false, error: 'Invalid or expired token' }); return; }
+        void prisma.customer.findFirst({ where: { id: user.id }, select: { id: true } }).then((customer) => {
+          if (!customer) { res.status(401).json({ success: false, error: 'Customer account no longer exists' }); return; }
+          req.user = user;
+          next();
+        }).catch(next);
+        return;
+      }
+      req.user = user;
     } catch {
       // Token invalid, continue without auth
     }

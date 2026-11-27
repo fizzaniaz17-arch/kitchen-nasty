@@ -1,11 +1,18 @@
 import type { Request, Response } from 'express';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { createHash } from 'node:crypto';
+import { Prisma } from '@prisma/client';
 
-vi.mock('../../../lib/db.js', () => ({
-  default: {
+vi.mock('../../../lib/db.js', () => {
+  const mockPrisma = {
+    $transaction: vi.fn(),
+    reservationCreateRequest: { findUnique: vi.fn(), create: vi.fn(), update: vi.fn(), delete: vi.fn() },
+    $executeRaw: vi.fn().mockResolvedValue(1),
+    $queryRaw: vi.fn().mockImplementation((strings: TemplateStringsArray) => Promise.resolve(strings.join('').includes('AS active') ? [{ active: true }] : strings.join('').includes('clock_timestamp') ? [{ now: new Date() }] : [])),
     location: { findUnique: vi.fn() },
     reservation: {
       findUnique: vi.fn(),
+      findFirst: vi.fn().mockResolvedValue(null),
       findMany: vi.fn(),
       create: vi.fn(),
       update: vi.fn(),
@@ -19,15 +26,19 @@ vi.mock('../../../lib/db.js', () => ({
       update: vi.fn(),
       delete: vi.fn(),
     },
-  },
-}));
+  };
+  mockPrisma.$transaction.mockImplementation(async (callback: (tx: typeof mockPrisma) => Promise<unknown>) => callback(mockPrisma));
+  return { default: mockPrisma };
+});
 
 vi.mock('../../../lib/events.js', () => ({ appEvents: { emit: vi.fn() } }));
+vi.mock('../../../lib/idempotency-crypto.js', () => ({ encryptSnapshot: vi.fn(() => ({ v: 1, alg: 'A256GCM' })), isEncryptedSnapshot: vi.fn(() => false), decryptSnapshot: vi.fn() }));
 
 import prisma from '../../../lib/db.js';
 import {
   checkAvailability,
   createReservation,
+  listReservations,
   updateReservation,
 } from '../../../controllers/reservation.controller.js';
 import {
@@ -38,6 +49,9 @@ import {
 } from '../../../controllers/table.controller.js';
 
 const db = prisma as unknown as {
+  $queryRaw: ReturnType<typeof vi.fn>;
+  $transaction: ReturnType<typeof vi.fn>;
+  reservationCreateRequest: Record<string, ReturnType<typeof vi.fn>>;
   location: { findUnique: ReturnType<typeof vi.fn> };
   reservation: Record<string, ReturnType<typeof vi.fn>>;
   table: Record<string, ReturnType<typeof vi.fn>>;
@@ -53,7 +67,7 @@ function response() {
 }
 
 function request(value: Partial<Request>): Request {
-  return value as Request;
+  return { get: () => undefined, ...value } as Request;
 }
 
 beforeEach(() => vi.clearAllMocks());
@@ -190,7 +204,7 @@ describe('M1-BR-03 partial reservation update', () => {
   });
 
   it('preserves omitted fields and supports explicit null', async () => {
-    db.reservation.findUnique.mockResolvedValue({ id: 'r-1' });
+    db.reservation.findUnique.mockResolvedValue({ id: 'r-1', tableId: null });
     db.reservation.update.mockResolvedValue({ id: 'r-1', tableId: null, comment: null });
     const res = response();
     await updateReservation(request({
@@ -203,7 +217,8 @@ describe('M1-BR-03 partial reservation update', () => {
   });
 
   it('maps every supplied optional field into the Prisma payload', async () => {
-    db.reservation.findUnique.mockResolvedValue({ id: 'r-1' });
+    db.reservation.findUnique.mockResolvedValue({ id: 'r-1', tableId: null, locationId: 'loc-1', partySize: 2, status: 'PENDING' });
+    db.table.findFirst.mockResolvedValue({ id: 't-1', locationId: 'loc-1', capacity: 4, isActive: true });
     db.reservation.update.mockResolvedValue({ id: 'r-1' });
     const res = response();
     await updateReservation(request({
@@ -212,11 +227,58 @@ describe('M1-BR-03 partial reservation update', () => {
         status: 'CONFIRMED', tableId: 't-1', date: '2027-02-03', time: '20:30', partySize: 4, comment: 'Window',
       },
     }), res);
+    expect(db.table.findFirst).toHaveBeenCalledWith({
+      where: { id: 't-1', locationId: 'loc-1', isActive: true, capacity: { gte: 4 } },
+    });
     expect(db.reservation.update).toHaveBeenCalledWith(expect.objectContaining({
       data: {
         status: 'CONFIRMED', tableId: 't-1', date: new Date('2027-02-03'), time: '20:30', partySize: 4, comment: 'Window',
       },
     }));
+  });
+
+  it('uses the existing party size for an eligible table assignment when partySize is omitted', async () => {
+    db.reservation.findUnique.mockResolvedValue({ id: 'r-1', tableId: null, locationId: 'loc-1', partySize: 3 });
+    db.table.findFirst.mockResolvedValue({ id: 't-1', locationId: 'loc-1', capacity: 3, isActive: true });
+    db.reservation.update.mockResolvedValue({ id: 'r-1', tableId: 't-1' });
+    const res = response();
+    await updateReservation(request({ params: { id: 'r-1' }, body: { tableId: 't-1' } }), res);
+    expect(db.table.findFirst).toHaveBeenCalledWith({
+      where: { id: 't-1', locationId: 'loc-1', isActive: true, capacity: { gte: 3 } },
+    });
+    expect(db.reservation.update).toHaveBeenCalledWith(expect.objectContaining({ data: { tableId: 't-1' } }));
+    expect(res.json).toHaveBeenCalled();
+  });
+
+  it('rejects an ineligible table before the reservation update', async () => {
+    db.reservation.findUnique.mockResolvedValue({ id: 'r-1', tableId: null, locationId: 'loc-1', partySize: 3 });
+    db.table.findFirst.mockResolvedValue(null);
+    const res = response();
+    await updateReservation(request({ params: { id: 'r-1' }, body: { tableId: 't-1' } }), res);
+    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.json).toHaveBeenCalledWith({ success: false, error: 'Table is not eligible for this reservation' });
+    expect(db.reservation.update).not.toHaveBeenCalled();
+  });
+
+  it('validates an existing assigned table when partySize is updated', async () => {
+    db.reservation.findUnique.mockResolvedValue({ id: 'r-1', tableId: 't-1', locationId: 'loc-1', partySize: 2 });
+    db.table.findFirst.mockResolvedValue({ id: 't-1', locationId: 'loc-1', capacity: 4, isActive: true });
+    db.reservation.update.mockResolvedValue({ id: 'r-1' });
+    const res = response();
+    await updateReservation(request({ params: { id: 'r-1' }, body: { partySize: 4 } }), res);
+    expect(db.table.findFirst).toHaveBeenCalledWith({
+      where: { id: 't-1', locationId: 'loc-1', isActive: true, capacity: { gte: 4 } },
+    });
+    expect(db.reservation.update).toHaveBeenCalledWith(expect.objectContaining({ data: { partySize: 4 } }));
+  });
+
+  it('bypasses table eligibility lookup when no table is assigned or updated', async () => {
+    db.reservation.findUnique.mockResolvedValue({ id: 'r-1', tableId: null, locationId: 'loc-1', partySize: 2, status: 'PENDING' });
+    db.reservation.update.mockResolvedValue({ id: 'r-1' });
+    const res = response();
+    await updateReservation(request({ params: { id: 'r-1' }, body: { status: 'CONFIRMED' } }), res);
+    expect(db.table.findFirst).not.toHaveBeenCalled();
+    expect(db.reservation.update).toHaveBeenCalledWith(expect.objectContaining({ data: { status: 'CONFIRMED' } }));
   });
 });
 
@@ -325,5 +387,290 @@ describe('table management rules', () => {
     await deleteTable(request({ params: { locationId: 'loc-1', tableId: 't-1' } }), res);
     expect(db.table.delete).toHaveBeenCalledWith({ where: { id: 't-1' } });
     expect(res.json).toHaveBeenCalledWith({ success: true, message: 'Table deleted' });
+  });
+});
+
+describe('Issue #25 reservation query filter validation and calendar policy', () => {
+  describe('listReservations query filter validation', () => {
+    it.each([
+      ['invalid status string', 'NOT_A_STATUS'],
+      ['repeated status array', ['PENDING', 'CONFIRMED']],
+    ])('rejects %s before database access', async (_scenario, status) => {
+      const res = response();
+      await listReservations(request({ query: { status: status as unknown as string } }), res);
+      expect(res.status).toHaveBeenCalledWith(400);
+      expect(res.json).toHaveBeenCalledWith({ success: false, error: 'Invalid status filter' });
+      expect(db.reservation.findMany).not.toHaveBeenCalled();
+      expect(db.reservation.count).not.toHaveBeenCalled();
+    });
+
+    it('rejects non-string or repeated locationId filter before database access', async () => {
+      const res = response();
+      await listReservations(request({ query: { locationId: ['loc-1', 'loc-2'] as unknown as string } }), res);
+      expect(res.status).toHaveBeenCalledWith(400);
+      expect(res.json).toHaveBeenCalledWith({ success: false, error: 'Invalid locationId filter' });
+      expect(db.reservation.findMany).not.toHaveBeenCalled();
+      expect(db.reservation.count).not.toHaveBeenCalled();
+    });
+
+    it.each([
+      ['impossible calendar date', '2099-02-30'],
+      ['repeated date array', ['2027-01-10', '2027-01-11']],
+      ['unrecognized format', 'not-a-date'],
+    ])('rejects %s filter before database access', async (_scenario, date) => {
+      const res = response();
+      await listReservations(request({ query: { date: date as unknown as string } }), res);
+      expect(res.status).toHaveBeenCalledWith(400);
+      expect(res.json).toHaveBeenCalledWith({ success: false, error: 'Invalid date filter' });
+      expect(db.reservation.findMany).not.toHaveBeenCalled();
+      expect(db.reservation.count).not.toHaveBeenCalled();
+    });
+
+    it('accepts valid combined status, locationId, and non-ISO date filters', async () => {
+      db.reservation.findMany.mockResolvedValue([{ id: 'r-1' }]);
+      db.reservation.count.mockResolvedValue(1);
+      const res = response();
+
+      await listReservations(request({
+        query: { status: 'CONFIRMED', locationId: 'loc-1', date: '02/28/2099', page: '2', limit: '10' },
+      }), res);
+
+      expect(db.reservation.findMany).toHaveBeenCalledWith(expect.objectContaining({
+        where: {
+          status: 'CONFIRMED',
+          locationId: 'loc-1',
+          date: new Date('02/28/2099'),
+        },
+        skip: 10,
+        take: 10,
+      }));
+      expect(db.reservation.count).toHaveBeenCalledWith({
+        where: {
+          status: 'CONFIRMED',
+          locationId: 'loc-1',
+          date: new Date('02/28/2099'),
+        },
+      });
+      expect(res.json).toHaveBeenCalledWith(expect.objectContaining({
+        success: true,
+        data: [{ id: 'r-1' }],
+        pagination: { page: 2, limit: 10, total: 1, totalPages: 1 },
+      }));
+    });
+  });
+
+  describe('checkAvailability query filter validation', () => {
+    it('rejects non-string or repeated locationId filter before database access', async () => {
+      const res = response();
+      await checkAvailability(request({
+        query: { locationId: ['loc-1', 'loc-2'] as unknown as string, date: '2027-01-10' },
+      }), res);
+      expect(res.status).toHaveBeenCalledWith(400);
+      expect(res.json).toHaveBeenCalledWith({ success: false, error: 'Invalid locationId filter' });
+      expect(db.table.findMany).not.toHaveBeenCalled();
+      expect(db.reservation.findMany).not.toHaveBeenCalled();
+    });
+
+    it.each([
+      ['impossible calendar date', '2099-02-30'],
+      ['repeated date array', ['2027-01-10', '2027-01-11']],
+      ['unrecognized date string', 'not-a-date'],
+    ])('rejects %s before database access', async (_scenario, date) => {
+      const res = response();
+      await checkAvailability(request({
+        query: { locationId: 'loc-1', date: date as unknown as string },
+      }), res);
+      expect(res.status).toHaveBeenCalledWith(400);
+      expect(res.json).toHaveBeenCalledWith({ success: false, error: 'Invalid date filter' });
+      expect(db.table.findMany).not.toHaveBeenCalled();
+      expect(db.reservation.findMany).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('queryDate calendar policy and format coverage', () => {
+    it.each([
+      ['year-first slash', '2027/01/10'],
+      ['year-first period', '2027.01.10'],
+      ['year-first space', '2027 01 10'],
+      ['year-first space-separated timestamp', '2027-01-10 12:00:00'],
+      ['year-first lowercase-t offset timestamp', '2027-01-10t12:00:00+01:00'],
+      ['month-first slash', '01/10/2027'],
+      ['month-first hyphen', '01-10-2027'],
+      ['month-first period', '01.10.2027'],
+      ['month-first space', '01 10 2027'],
+      ['named month-first with full name', 'February 28 2099'],
+      ['named month-first with comma', 'Feb 28, 2099'],
+      ['named month-first with weekday prefix', 'Wednesday, Feb 28, 2099'],
+      ['named day-first', '28 Feb 2099'],
+      ['named day-first with hyphen', '28-February-2099'],
+      ['named year-first', '2099 Feb 28'],
+      ['named year-first with hyphen', '2099-February-28'],
+      ['valid leap day in non-century leap year (2096)', '2096-02-29'],
+      ['valid leap day in 400-year century leap year (2000)', '2000-02-29'],
+      ['valid leap day in month-first format (2000)', '02/29/2000'],
+      ['valid leap day in named format (2000)', 'Feb 29 2000'],
+      ['ISO year below 100 with 4-digit notation', '0099-02-28'],
+    ])('accepts valid date format %s in availability query', async (_scenario, date) => {
+      db.table.findMany.mockResolvedValue([{ id: 't-1' }]);
+      db.reservation.findMany.mockResolvedValue([]);
+      const res = response();
+
+      await checkAvailability(request({ query: { locationId: 'loc-1', date } }), res);
+
+      expect(res.status).not.toHaveBeenCalledWith(400);
+      expect(db.table.findMany).toHaveBeenCalledWith(expect.objectContaining({
+        where: expect.objectContaining({ locationId: 'loc-1' }),
+      }));
+      expect(db.reservation.findMany).toHaveBeenCalledWith(expect.objectContaining({
+        where: expect.objectContaining({ locationId: 'loc-1', date: new Date(date) }),
+      }));
+    });
+
+    it.each([
+      ['two-digit year', '03/04/05'],
+      ['incomplete named date', 'Feb 3'],
+      ['incomplete numeric date', '01'],
+      ['unsupported non-ISO year below 100', '02/28/0099'],
+      ['non-leap century year (2100)', '2100-02-29'],
+      ['non-leap common year (2099)', '2099-02-29'],
+      ['month-first invalid February day', '02.30.2099'],
+      ['named-month invalid February day', 'Feb 30 2099'],
+      ['named-month unknown month name', 'Unknown 28, 2099'],
+      ['month outside 1-12', '2099-13-01'],
+      ['day is 0', '2099-01-00'],
+      ['day past 30-day month end (April 31)', '2099-04-31'],
+      ['valid calendar date paired with invalid time suffix', '2099-01-15T99:99:99Z'],
+    ])('rejects invalid or unsupported date %s in availability query before DB access', async (_scenario, date) => {
+      const res = response();
+
+      await checkAvailability(request({ query: { locationId: 'loc-1', date } }), res);
+
+      expect(res.status).toHaveBeenCalledWith(400);
+      expect(res.json).toHaveBeenCalledWith({ success: false, error: 'Invalid date filter' });
+      expect(db.table.findMany).not.toHaveBeenCalled();
+      expect(db.reservation.findMany).not.toHaveBeenCalled();
+    });
+  });
+});
+
+describe('Issue #20 transactional reservation conflict checks', () => {
+  it('locks the reservation and table, excludes itself, and returns 409 without updating on a conflict', async () => {
+    const date = new Date('2099-06-15');
+    db.reservation.findUnique.mockResolvedValueOnce({ id: 'r-1', tableId: 't-1', locationId: 'loc-1', partySize: 2, date, time: '19:00', status: 'PENDING' });
+    db.reservation.findFirst.mockResolvedValueOnce({ id: 'other' });
+    const res = response();
+    await updateReservation(request({ params: { id: 'r-1' }, body: { status: 'CONFIRMED' } }), res);
+    expect(db.$transaction).toHaveBeenCalledTimes(1);
+    expect(db.$queryRaw).toHaveBeenCalledTimes(2);
+    expect(db.$queryRaw.mock.calls[0][0].join('')).toContain('FROM "reservations"');
+    expect(db.$queryRaw.mock.calls[1][0].join('')).toContain('FROM "tables"');
+    expect(db.reservation.findFirst).toHaveBeenCalledWith({ where: { id: { not: 'r-1' }, locationId: 'loc-1', tableId: 't-1', date, time: '19:00', status: { in: ['PENDING', 'CONFIRMED', 'SEATED'] } }, select: { id: true } });
+    expect(res.status).toHaveBeenCalledWith(409);
+    expect(res.json).toHaveBeenCalledWith({ success: false, error: 'Table is already reserved for this slot' });
+    expect(db.reservation.update).not.toHaveBeenCalled();
+  });
+  it('propagates a reservation lock failure without querying or updating a record', async () => {
+    db.$queryRaw.mockRejectedValueOnce(new Error('Synthetic lock failure'));
+    const res = response();
+    await expect(updateReservation(request({ params: { id: 'r-1' }, body: { status: 'CONFIRMED' } }), res)).rejects.toThrow('Synthetic lock failure');
+    expect(db.reservation.findUnique).not.toHaveBeenCalled();
+    expect(db.reservation.update).not.toHaveBeenCalled();
+  });
+  it('checks a rescheduled date and time and locks old and new tables in sorted order', async () => {
+    db.reservation.findUnique.mockResolvedValueOnce({ id: 'r-1', tableId: 'z-table', locationId: 'loc-1', partySize: 2, date: new Date('2099-06-15'), time: '19:00', status: 'PENDING' });
+    db.table.findFirst.mockResolvedValueOnce({ id: 'a-table' });
+    db.reservation.findFirst.mockResolvedValueOnce(null);
+    db.reservation.update.mockResolvedValueOnce({ id: 'r-1' });
+    const res = response();
+    await updateReservation(request({ params: { id: 'r-1' }, body: { tableId: 'a-table', date: '2099-06-16', time: '20:00' } }), res);
+    expect(db.$queryRaw.mock.calls[1][1].values).toEqual(expect.arrayContaining(['a-table', 'z-table']));
+    expect(db.$queryRaw.mock.calls[1][1].values).toHaveLength(2);
+    expect(db.$queryRaw.mock.calls[1][0].join('')).toContain('ORDER BY "id" FOR UPDATE');
+    expect(db.reservation.findFirst).toHaveBeenCalledWith(expect.objectContaining({ where: expect.objectContaining({ date: new Date('2099-06-16'), time: '20:00', tableId: 'a-table' }) }));
+    expect(res.json).toHaveBeenCalledWith({ success: true, data: { id: 'r-1' } });
+  });
+});
+
+describe('approved reservation retry, transition and requested-time rules', () => {
+  const body = { locationId: 'loc-1', date: '2099-06-15', time: '19:00', partySize: 2, comment: 'synthetic' };
+  const hash = createHash('sha256').update(JSON.stringify({ ...body })).digest('hex');
+  const req = (key: string, user: unknown = { id: 'c-1', type: 'customer' }) => request({ body, user: user as Request['user'], get: (() => key) as Request['get'] });
+  beforeEach(() => {
+    db.reservationCreateRequest.findUnique.mockReset().mockResolvedValue(null);
+    db.reservationCreateRequest.create.mockReset().mockResolvedValue({ id: 'key-row' });
+    db.reservationCreateRequest.update.mockReset().mockResolvedValue({ id: 'key-row' });
+  });
+  it('rejects malformed retry keys and does not create a booking', async () => {
+    const res = response(); await createReservation(req('bad key'), res);
+    expect(res.status).toHaveBeenCalledWith(400); expect(db.reservation.create).not.toHaveBeenCalled();
+  });
+  it('requires a customer for a keyed request', async () => {
+    const res = response(); await createReservation(req('key', null), res);
+    expect(res.status).toHaveBeenCalledWith(401); expect(db.reservationCreateRequest.findUnique).not.toHaveBeenCalled();
+  });
+  it('atomically stores the response for a first keyed request', async () => {
+    db.location.findUnique.mockResolvedValueOnce({ id: 'loc-1', isActive: true });
+    db.reservation.create.mockResolvedValueOnce({ id: 'r-1' });
+    const res = response(); await createReservation(req('key'), res);
+    expect(db.reservationCreateRequest.create).toHaveBeenCalled();
+    expect(db.reservationCreateRequest.update).toHaveBeenCalled();
+    expect(res.status).toHaveBeenCalledWith(201);
+  });
+  it('accepts a keyed reservation with an omitted optional comment', async () => {
+    db.location.findUnique.mockResolvedValueOnce({ id: 'loc-1', isActive: true });
+    db.reservation.create.mockResolvedValueOnce({ id: 'r-1' });
+    const res = response();
+    await createReservation(request({ body: { locationId: 'loc-1', date: '2099-06-15', time: '19:00', partySize: 2 }, user: { id: 'c-1', type: 'customer' }, get: (() => 'key') as Request['get'] }), res);
+    expect(res.status).toHaveBeenCalledWith(201);
+    expect(db.reservationCreateRequest.update).toHaveBeenCalled();
+  });
+  it('replays the saved response for the same key and payload', async () => {
+    db.reservationCreateRequest.findUnique.mockResolvedValueOnce({ payloadHash: hash, response: { id: 'r-1' }, expiresAt: new Date('2099-01-01'), responseEncrypted: false });
+    const res = response(); await createReservation(req('key'), res);
+    expect(res.status).toHaveBeenCalledWith(201); expect(res.json).toHaveBeenCalledWith({ success: true, data: { id: 'r-1' } });
+    expect(db.reservation.create).not.toHaveBeenCalled();
+  });
+  it('rejects a changed payload for an existing key', async () => {
+    db.reservationCreateRequest.findUnique.mockResolvedValueOnce({ payloadHash: 'other', response: { id: 'r-1' }, expiresAt: new Date('2099-01-01') });
+    const res = response(); await createReservation(req('key'), res);
+    expect(res.status).toHaveBeenCalledWith(409); expect(db.reservation.create).not.toHaveBeenCalled();
+  });
+  it('rejects a keyed booking at an inactive location without a reservation', async () => {
+    db.location.findUnique.mockResolvedValueOnce({ id: 'loc-1', isActive: false });
+    const res = response(); await createReservation(req('key'), res);
+    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.json).toHaveBeenCalledWith({ success: false, error: 'Location not found or inactive' });
+    expect(db.reservation.create).not.toHaveBeenCalled();
+  });
+  it('fails closed if a stored retry response is missing', async () => {
+    db.reservationCreateRequest.findUnique.mockResolvedValueOnce({ payloadHash: hash, response: null, expiresAt: new Date('2099-01-01') });
+    await expect(createReservation(req('key'), response())).rejects.toThrow('Stored idempotency response is unavailable');
+  });
+  it('replays a unique-key race after a competing transaction commits', async () => {
+    db.reservationCreateRequest.findUnique.mockResolvedValueOnce(null).mockResolvedValueOnce({ payloadHash: hash, response: { id: 'r-1' }, expiresAt: new Date('2099-01-01'), responseEncrypted: false });
+    db.location.findUnique.mockResolvedValueOnce({ id: 'loc-1', isActive: true });
+    db.reservationCreateRequest.create.mockRejectedValueOnce(new Prisma.PrismaClientKnownRequestError('duplicate', { code: 'P2002', clientVersion: '5.22.0' }));
+    const res = response(); await createReservation(req('key'), res);
+    expect(res.status).toHaveBeenCalledWith(201); expect(res.json).toHaveBeenCalledWith({ success: true, data: { id: 'r-1' } });
+  });
+  it('propagates unrelated transaction errors', async () => {
+    db.location.findUnique.mockResolvedValueOnce({ id: 'loc-1', isActive: true });
+    db.reservationCreateRequest.create.mockRejectedValueOnce(new Error('Synthetic transaction failure'));
+    await expect(createReservation(req('key'), response())).rejects.toThrow('Synthetic transaction failure');
+  });
+  it('rejects a disallowed lifecycle jump without an update', async () => {
+    db.reservation.findUnique.mockResolvedValueOnce({ id: 'r-1', status: 'PENDING', tableId: null });
+    const res = response(); await updateReservation(request({ params: { id: 'r-1' }, body: { status: 'COMPLETED' } }), res);
+    expect(res.status).toHaveBeenCalledWith(409); expect(db.reservation.update).not.toHaveBeenCalled();
+  });
+  it('rejects a malformed requested availability time before database access', async () => {
+    const res = response(); await checkAvailability(request({ query: { locationId: 'loc-1', date: '2099-06-15', time: '24:00' } }), res);
+    expect(res.status).toHaveBeenCalledWith(400); expect(db.table.findMany).not.toHaveBeenCalled();
+  });
+  it('returns requested-time table details and retains the daily slots', async () => {
+    db.table.findMany.mockResolvedValueOnce([{ id: 't-1', name: 'T1', capacity: 2 }, { id: 't-2', name: 'T2', capacity: 4 }]);
+    db.reservation.findMany.mockResolvedValueOnce([{ time: '19:00', tableId: 't-1' }]);
+    const res = response(); await checkAvailability(request({ query: { locationId: 'loc-1', date: '2099-06-15', time: '19:00' } }), res);
+    expect(res.json).toHaveBeenCalledWith(expect.objectContaining({ data: expect.objectContaining({ available: true, tables: [{ id: 't-2', name: 'T2', capacity: 4 }], slots: expect.any(Array) }) }));
   });
 });
