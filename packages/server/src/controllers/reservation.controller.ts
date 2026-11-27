@@ -247,7 +247,7 @@ export async function updateReservation(req: Request<{ id: string }>, res: Respo
 
     // Every reservation writer in this path locks affected table rows in the same order.
     // This makes the subsequent conflict read and update atomic against competing requests.
-    const affectedTableIds = [...new Set([existing.tableId, effectiveTableId].filter((value): value is string => value !== null))].sort();
+    const affectedTableIds = [...new Set([existing.tableId, effectiveTableId].filter((value): value is string => value !== null))];
     if ((tableRelevantUpdate || occupancyRelevantUpdate) && affectedTableIds.length > 0) {
       await tx.$queryRaw`SELECT "id" FROM "tables" WHERE "id" IN (${Prisma.join(affectedTableIds)}) ORDER BY "id" FOR UPDATE`;
     }

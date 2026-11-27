@@ -581,7 +581,9 @@ describe('Issue #20 transactional reservation conflict checks', () => {
     db.reservation.update.mockResolvedValueOnce({ id: 'r-1' });
     const res = response();
     await updateReservation(request({ params: { id: 'r-1' }, body: { tableId: 'a-table', date: '2099-06-16', time: '20:00' } }), res);
-    expect(db.$queryRaw.mock.calls[1][1].values).toEqual(['a-table', 'z-table']);
+    expect(db.$queryRaw.mock.calls[1][1].values).toEqual(expect.arrayContaining(['a-table', 'z-table']));
+    expect(db.$queryRaw.mock.calls[1][1].values).toHaveLength(2);
+    expect(db.$queryRaw.mock.calls[1][0].join('')).toContain('ORDER BY "id" FOR UPDATE');
     expect(db.reservation.findFirst).toHaveBeenCalledWith(expect.objectContaining({ where: expect.objectContaining({ date: new Date('2099-06-16'), time: '20:00', tableId: 'a-table' }) }));
     expect(res.json).toHaveBeenCalledWith({ success: true, data: { id: 'r-1' } });
   });

@@ -51,6 +51,14 @@ describe('Issue 20 exact-slot conflicts and persistence', () => {
     const rejectedId = responses[0].status === 409 ? a.id : b.id;
     expect(after.find(r => r.id === rejectedId)).toEqual(before.find(r => r.id === rejectedId));
   });
+  it('rejects concurrent opposite table swaps without deadlock or mutation', async () => {
+    const a = await db.reservation.create({ data: base({ tableId }) });
+    const b = await db.reservation.create({ data: base({ tableId: otherTableId }) });
+    const before = await read();
+    const responses = await Promise.all([patch(a.id, { tableId: otherTableId }), patch(b.id, { tableId })]);
+    expect(responses.map(response => response.status)).toEqual([409, 409]);
+    expect(await read()).toEqual(before);
+  });
   it('serializes two requests that are both waiting on the same table lock', async () => {
     const a = await db.reservation.create({ data: base() }), b = await db.reservation.create({ data: base() });
     const before = await read();
