@@ -151,3 +151,39 @@ Additionally, **4 important gaps** exist:
 - [ ] Remove/replace `sonar-overview-live.png` (blank spinner) in the PDF.
 - [ ] Re-run `npm run build`, `npm run test:unit`, and `npx playwright test --project=student-3 --workers=1` on the integrated branch.
 - [ ] Compile final SE3002 PDF report and package clean repository ZIP (excluding `node_modules/`, `.stryker-tmp/`, `test-results/`).
+
+---
+
+## 9. Second Final Submission Audit (Post-Integration Review)
+
+**Audit Date:** 2026-11-27  
+**Branch:** `integration/final-sqe-submission` (includes `feature/student3-completion` + `origin/sqe/member2-api-testing` + Member 1 `main` work)
+
+### A. Previously Partial Requirements Now Resolved / Updated
+| # | Requirement | Previous Status | Updated Status | Resolution Evidence |
+|---|---|---|---|---|
+| 2 | Test plan, estimation, traceability, risk register, exit criteria | PARTIAL | **COMPLETE** | Merged `origin/sqe/member2-api-testing` (`docs/sqe/member-2/ep-bva-and-traceability.md` now coexists with Student 3 & Member 1 docs) |
+| 5 | API & integration testing, EP, and 3-point BVA | PARTIAL | **COMPLETE (evidence)** | Merged `reservations.db.member2.ts`, `ep-bva-cases.json`, and `audit-final-results.json` (382 cases: 346 passed, 36 genuine defects preserved) |
+| 6 | Automated test data generation using OpenAPI | PARTIAL | **COMPLETE** | Merged `tests/team/member-2/` (`generate-ep-bva.mjs`, `reservations.openapi.json`, `audit-final-constraints.json`); `generator.test.mjs` verified **5/5 passed** |
+| 10 | Defensive security & dependency audit | PARTIAL | **COMPLETE** | Reconciled `reports/student-3/security/dependency-audit.md`: baseline `89` (`npm-audit.json`) vs post-PR #7 `22` (`npm-audit-final.json`, server prod `0`) vs current tree `23` |
+| 12 | Defect management, RCA & Pareto | PARTIAL | **COMPLETE** | Created `reports/final-submission/defect-analysis.md` (21 deduplicated defects, Pareto table & chart, 2 Five-Whys + Fishbone RCAs) |
+| 14 | AI-use record & final release/hold decision | PARTIAL | **COMPLETE** | Created `reports/final-submission/ai-use-record.md` (all 3 members) and `reports/final-submission/group-release-signoff.md` (**HOLD** decision) |
+
+### B. Remaining Partial Requirements (Honest Limitations Preserved)
+| # | Requirement | Status | Exact Limitation |
+|---|---|---|---|
+| 3 | Static analysis & SonarQube | **PARTIAL** | `sonar-overview-live.png` is a blank spinner (superseded by `Screenshot 2026-11-22 135514.png` / `134956.png`); scratch `updateReservation` complexity API returned HTTP 403 (`V(G)=9` manual CFG retained) |
+| 9 | Usability & accessibility | **PARTIAL** | Admin reservation screens have post-fix Lighthouse/axe JSONs only; pre-fix admin baseline JSONs were not captured in git history (Customer form has full before/after JSONs) |
+
+### C. Integrated Verification Results (2026-11-27 on `integration/final-sqe-submission`)
+- `npm run build`: **Passed** (`@kitchenasty/shared`, `server`, `admin`, `storefront`).
+- `npm run test:unit`: **Passed** (`17/17` shared, `60/60` server).
+- `npm run test:member1`: **Passed** (`59/59` across 2 files).
+- `node --test tests/team/member-2/generator.test.mjs`: **Passed** (`5/5`).
+- `npx vitest run security/student-3/authorization-tests/reservation-access.test.ts`: **Passed** (`4/4`).
+- `npx playwright test --project=student-3 --workers=1`: **Passed** (`24/24` in `1.5m`).
+- Member 2 API suite (`vitest.member2.config.ts`): Requires dedicated `kitchenasty_member2_test` DB on port `55432` (currently occupied by `student3-recovery-pg`); historical verified run in `docs/sqe/member-2/evidence/audit-final-results.json` records **382 executed, 346 passed, 36 failed** (all 36 mapped to `M2-D01..M2-D10`).
+
+### D. Final Readiness Verdict
+- **PDF Report & Repository ZIP Preparation:** **READY** for compiling the final SE3002 PDF report and repository ZIP (all 14 categories have verified evidence, and the two remaining `PARTIAL` items have documented, honest limitations rather than missing work).
+- **Production Release:** **HOLD** per `reports/final-submission/group-release-signoff.md` due to the 36 unresolved Member 2 API defects (`M2-D01..M2-D10`), unmerged PR #8 past-date fix on `main`, and open security header findings (`D-01..D-04`).
