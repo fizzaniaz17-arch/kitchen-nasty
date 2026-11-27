@@ -163,7 +163,7 @@ export default function ReservationList() {
                       {r.table ? (
                         <span className="text-gray-900">{r.table.name} (seats {r.table.capacity})</span>
                       ) : (
-                        <span className="text-gray-400">Unassigned</span>
+                        <span className="text-gray-500">Unassigned</span>
                       )}
                     </td>
                     <td className="px-4 py-3">
@@ -211,7 +211,7 @@ export default function ReservationList() {
                         )}
                         <Link
                           to={`/reservations/${r.id}`}
-                          className="text-xs px-2 py-1 text-primary-600 hover:text-primary-700"
+                          className="text-xs px-2 py-1 text-primary-700 hover:text-primary-800"
                         >
                           Details
                         </Link>
