@@ -109,14 +109,15 @@ export default function AdminLayout({ children, onLogout }: { children: React.Re
 
     async function fetchPending() {
       try {
-        const res = await fetch('/api/dashboard', {
+        const res = await fetch('/api/orders?status=PENDING&page=1&limit=1', {
           headers: { Authorization: `Bearer ${token}` },
         });
-        const data = await res.json();
-        if (data.success && data.data) {
-          setPendingCount(data.data.pendingOrders ?? 0);
-        }
-      } catch { /* ignore */ }
+        if (!res.ok) throw new Error(`Failed to load pending orders (${res.status})`);
+        const data: { success: boolean; pagination?: { total: number } } = await res.json();
+        if (data.success && data.pagination) setPendingCount(data.pagination.total);
+      } catch (error) {
+        console.error('Failed to refresh pending order count', error);
+      }
     }
 
     fetchPending();
@@ -140,12 +141,12 @@ export default function AdminLayout({ children, onLogout }: { children: React.Re
   return (
     <div className="min-h-screen bg-gray-50 flex">
       {/* Sidebar */}
-      <aside className="w-64 bg-gray-900 text-white flex flex-col" role="navigation" aria-label="Main navigation">
+      <aside className="w-64 bg-gray-900 text-white flex flex-col">
         <div className="px-6 py-4 border-b border-gray-700">
           <h1 className="text-xl font-bold text-primary-400">KitchenAsty</h1>
           <p className="text-xs text-gray-400 mt-1">Admin Panel</p>
         </div>
-        <nav className="flex-1 py-4">
+        <nav className="flex-1 py-4" aria-label="Main navigation">
           {filteredNav.map((item) => {
             const isActive =
               item.path === '/'
@@ -205,7 +206,6 @@ export default function AdminLayout({ children, onLogout }: { children: React.Re
               to="/orders?status=PENDING"
               className="relative p-2 text-gray-400 hover:text-gray-600 transition-colors"
               title="Pending orders"
-              aria-label="Pending orders"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
@@ -244,7 +244,6 @@ export default function AdminLayout({ children, onLogout }: { children: React.Re
                 <button
                   onClick={() => setDropdownOpen(!dropdownOpen)}
                   className="flex items-center gap-2 p-1 rounded-lg hover:bg-gray-100 transition-colors"
-                  aria-label="User menu"
                   aria-expanded={dropdownOpen}
                   aria-haspopup="true"
                 >
@@ -252,6 +251,7 @@ export default function AdminLayout({ children, onLogout }: { children: React.Re
                     {user.name.charAt(0).toUpperCase()}
                   </div>
                   <span className="text-sm text-gray-700 font-medium hidden sm:block">{user.name}</span>
+                  <span className="sr-only">Open account menu for {user.name}</span>
                   <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
                   </svg>
