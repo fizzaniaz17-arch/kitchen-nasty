@@ -62,6 +62,7 @@ model Customer {
   addresses             Address[]
   orders                Order[]
   reservations          Reservation[]
+  reservationCreateRequests ReservationCreateRequest[]
   reviews               Review[]
   loyaltyTransactions   LoyaltyTransaction[]
   cookieConsents        CookieConsent[]
@@ -505,6 +506,7 @@ model Reservation {
 model ReservationCreateRequest {
   id          String   @id @default(cuid())
   customerId  String
+  customer    Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
   keyHash     String   @db.Char(64)
   payloadHash String   @db.Char(64)
   response    Json?

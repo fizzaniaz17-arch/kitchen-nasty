@@ -91,4 +91,22 @@ describe('customer-scoped reservation idempotency', () => {
     const result = await create(0, body, 'bad key');
     expect(result.status).toBe(400); expect(await rows()).toHaveLength(0); expect(await keys()).toHaveLength(0);
   });
+  it('deletes replay snapshots when their customer is deleted', async () => {
+    const id = `idem-deletion-${randomUUID()}`;
+    await db.customer.create({ data: { id, email: `${id}@example.test`, name: 'Synthetic customer' } });
+    try {
+      const token = generateToken({ id, email: `${id}@example.test`, type: 'customer' });
+      const response = await request(app).post('/api/reservations').set('Authorization', `Bearer ${token}`)
+        .set('Idempotency-Key', 'deletion-test').send(body);
+      expect(response.status).toBe(201);
+      expect(await db.reservationCreateRequest.count({ where: { customerId: id } })).toBe(1);
+      // Existing reservation foreign keys must be handled before customer deletion.
+      await db.reservation.deleteMany({ where: { customerId: id } });
+      await db.customer.delete({ where: { id } });
+      expect(await db.reservationCreateRequest.count({ where: { customerId: id } })).toBe(0);
+    } finally {
+      await db.reservation.deleteMany({ where: { customerId: id } });
+      await db.customer.deleteMany({ where: { id } });
+    }
+  });
 });
