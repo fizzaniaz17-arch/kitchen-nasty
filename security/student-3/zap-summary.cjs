@@ -63,9 +63,9 @@ async function main() {
       alert: group.alert,
       risk: group.risk,
       instances: group.count,
-      components: [...group.components].sort(),
+      components: [...group.components].sort((a, b) => a.localeCompare(b)),
       affectedPathCount: group.paths.size,
-      representativePaths: [...group.paths].sort().slice(0, 5),
+      representativePaths: [...group.paths].sort((a, b) => a.localeCompare(b)).slice(0, 5),
       recommendation: group.recommendation,
     }))
     .sort((a, b) => a.risk.localeCompare(b.risk) || a.alert.localeCompare(b.alert));
@@ -88,7 +88,7 @@ async function main() {
   console.log(`Saved ${report.totalRawAlerts} passive alerts across ${findings.length} finding groups to ${reportPath}`);
 }
 
-main().catch((error) => {
-  console.error(error);
+main().catch(() => {
+  console.error('Failed to summarize ZAP results.');
   process.exitCode = 1;
 });

@@ -1,6 +1,5 @@
 import http from 'k6/http';
-import { check } from 'k6';
-import { sleep } from 'k6';
+import { check, sleep } from 'k6';
 
 const baseUrl = __ENV.BASE_URL || 'http://host.docker.internal:3000';
 const vus = Number.parseInt(__ENV.VUS || '1', 10);
@@ -36,7 +35,7 @@ export function setup() {
   return { locationId: locations[0].id, date };
 }
 
-export default function ({ locationId, date }) {
+export default function reservationAvailability({ locationId, date }) {
   const url = `${baseUrl}/api/reservations/availability?locationId=${encodeURIComponent(locationId)}&date=${date}&partySize=${partySize}`;
   const response = http.get(url, { tags: { endpoint: 'reservation-availability' } });
 

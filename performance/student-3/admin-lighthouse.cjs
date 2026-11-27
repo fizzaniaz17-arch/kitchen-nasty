@@ -45,7 +45,8 @@ async function main() {
       { path: `/reservations/${reservations[0].id}`, name: 'admin-reservation-detail' },
     ];
 
-    for (const route of routes) {
+    await routes.reduce(async (previousAudit, route) => {
+      await previousAudit;
       const url = `${ADMIN}${route.path}`;
       await page.goto(url);
       const { lhr, report } = await lighthouse(url, {
@@ -64,9 +65,9 @@ async function main() {
         ]),
       );
       console.log(`${route.name}: ${JSON.stringify(scores)}`);
-    }
+    }, Promise.resolve());
   } finally {
-    await chrome.kill();
+    chrome.kill();
   }
 }
 

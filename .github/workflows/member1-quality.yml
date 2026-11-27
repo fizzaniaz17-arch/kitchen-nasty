@@ -100,10 +100,13 @@ jobs:
         run: npx -w packages/server vitest run --coverage --coverage.reporter=lcov --coverage.reportsDirectory=coverage/sonar
       - name: Generate storefront coverage
         run: npm run test:coverage --workspace packages/storefront
+      - name: Generate admin coverage
+        run: npm run test:coverage --workspace packages/admin
       - name: Normalize LCOV paths
         run: |
           sed -i 's#^SF:src/#SF:packages/server/src/#' packages/server/coverage/sonar/lcov.info
           sed -i 's#^SF:src/#SF:packages/storefront/src/#' packages/storefront/coverage/sonar/lcov.info
+          sed -i 's#^SF:src/#SF:packages/admin/src/#' packages/admin/coverage/sonar/lcov.info
       - name: Verify Sonar LCOV reports
         shell: bash
         run: |
@@ -123,6 +126,14 @@ jobs:
             echo "Storefront LCOV paths were not normalized to the repository root."
             exit 1
           fi
+          if [ ! -f packages/admin/coverage/sonar/lcov.info ]; then
+            echo "Expected coverage report packages/admin/coverage/sonar/lcov.info was not found."
+            exit 1
+          fi
+          if ! grep -q '^SF:packages/admin/src/' packages/admin/coverage/sonar/lcov.info; then
+            echo "Admin LCOV paths were not normalized to the repository root."
+            exit 1
+          fi
       - name: Analyze and wait for this analysis quality gate
         uses: SonarSource/sonarqube-scan-action@v7
         env:
@@ -131,6 +142,10 @@ jobs:
           args: >-
             -Dsonar.projectKey=fizzaniaz17-arch_kitchen-nasty
             -Dsonar.organization=${{ vars.SONAR_ORGANIZATION }}
+            -Dsonar.sources=packages/server/src,packages/admin/src,packages/storefront/src,packages/shared/src
+            -Dsonar.tests=packages/server/src/__tests__,packages/admin/tests,packages/storefront/tests,e2e
+            -Dsonar.test.inclusions=packages/server/src/__tests__/**/*.ts,packages/admin/tests/**/*.tsx,packages/storefront/tests/**/*.tsx,e2e/**/*.ts
+            -Dsonar.javascript.lcov.reportPaths=packages/server/coverage/sonar/lcov.info,packages/storefront/coverage/sonar/lcov.info,packages/admin/coverage/sonar/lcov.info
             -Dsonar.qualitygate.wait=true
             -Dsonar.qualitygate.timeout=300
 
