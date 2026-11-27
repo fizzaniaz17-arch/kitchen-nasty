@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
 import { z } from 'zod';
 import { Prisma } from '@prisma/client';
-import { createHash } from 'node:crypto';
 import prisma from '../lib/db.js';
+import { createIdempotentReservation } from '../lib/reservation-idempotency.js';
 
 // Reject impossible dates instead of allowing JavaScript to normalize them.
 const reservationDate = z.string().regex(/^\d{4}-\d{2}-\d{2}$/).refine((value) => {
@@ -75,24 +75,21 @@ export async function createReservation(req: Request, res: Response): Promise<vo
   const user = req.user;
   const customerId = user?.type === 'customer' ? user.id : null;
   const { locationId, date, time, partySize, comment } = parsed.data;
-  const keyHash = key === undefined ? undefined : createHash('sha256').update(key).digest('hex');
-  const payloadHash = keyHash === undefined ? undefined : createHash('sha256')
-    .update(JSON.stringify({ locationId, date, time, partySize, comment: comment ?? null })).digest('hex');
-
-  // Replay an already committed result before time/location checks change over time.
-  const replay = async (): Promise<boolean> => {
-    if (!customerId || !keyHash || !payloadHash) return false;
-    const previous = await prisma.reservationCreateRequest.findUnique({ where: { customerId_keyHash: { customerId, keyHash } } });
-    if (!previous) return false;
-    if (previous.payloadHash !== payloadHash) {
-      res.status(409).json({ success: false, error: 'Idempotency key already used for different reservation details' });
-      return true;
+  if (key !== undefined && customerId) {
+    const result = await createIdempotentReservation(customerId, key, { locationId, date, time, partySize, comment });
+    if (result.kind === 'invalid' || result.kind === 'conflict') {
+      res.status(result.kind === 'invalid' ? 400 : 409).json({ success: false, error: result.message });
+      return;
     }
-    if (previous.response === null) throw new Error('Stored idempotency response is unavailable');
-    res.status(201).json({ success: true, data: previous.response });
-    return true;
-  };
-  if (await replay()) return;
+    if (result.kind === 'created') {
+      try {
+        const { appEvents } = await import('../lib/events.js');
+        appEvents.emit('reservation.created', { reservation: result.data });
+      } catch {}
+    }
+    res.status(201).json({ success: true, data: result.data });
+    return;
+  }
 
   if (date < new Date().toISOString().slice(0, 10)) {
     res.status(400).json({ success: false, error: 'Cannot reserve in the past' });
@@ -113,22 +110,7 @@ export async function createReservation(req: Request, res: Response): Promise<vo
   }
   const data = { customerId, locationId, date: new Date(date), time, partySize, comment };
   const include = { location: { select: { id: true, name: true } }, customer: { select: { id: true, name: true, email: true } }, table: true } as const;
-  let reservation;
-  if (keyHash && payloadHash) {
-    try {
-      reservation = await prisma.$transaction(async (tx) => {
-        await tx.reservationCreateRequest.create({ data: { customerId, keyHash, payloadHash } });
-        const created = await tx.reservation.create({ data, include });
-        await tx.reservationCreateRequest.update({ where: { customerId_keyHash: { customerId, keyHash } }, data: { response: JSON.parse(JSON.stringify(created)) } });
-        return created;
-      });
-    } catch (error) {
-      if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002' && await replay()) return;
-      throw error;
-    }
-  } else {
-    reservation = await prisma.reservation.create({ data, include });
-  }
+  const reservation = await prisma.reservation.create({ data, include });
 
   try {
     const { appEvents } = await import('../lib/events.js');

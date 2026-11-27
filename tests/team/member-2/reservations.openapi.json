@@ -635,7 +635,7 @@
             "in": "header",
             "name": "Idempotency-Key",
             "required": false,
-            "description": "Optional customer-scoped retry key. Identical retries replay the original 201 response; reuse with different validated details returns 409. Requests without a key create separate bookings.",
+            "description": "Optional customer-scoped retry key. For 24 hours identical retries replay the original 201 response and reuse with different validated details returns 409. At or after expiry the key can create a new booking. Requests without a key create separate bookings.",
             "schema": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[A-Za-z0-9._~-]+$" }
           }
         ],

@@ -20,6 +20,7 @@ const { default: db } = await import('../../../lib/db.js');
 const app = createApp();
 const suffix = randomUUID();
 const customerId = `m2-customer-${suffix}`;
+const otherCustomerId = `m2-other-customer-${suffix}`;
 const locationId = `m2-location-${suffix}`;
 const tableId = `m2-table-${suffix}`;
 const customer = generateToken({ id: customerId, email: 'customer@example.test', type: 'customer' });
@@ -46,6 +47,7 @@ function checkResponse(method: string, path: string, status: number, body: unkno
 
 beforeAll(async () => {
   await db.customer.create({ data: { id: customerId, email: `${suffix}@example.test`, name: 'Synthetic customer' } });
+  await db.customer.create({ data: { id: otherCustomerId, email: `other-${suffix}@example.test`, name: 'Other synthetic customer' } });
   await db.location.create({ data: { id: locationId, name: 'Member 2 test', slug: `m2-${suffix}`, address: 'Test', city: 'Test', postalCode: '00000' } });
   await db.table.create({ data: { id: tableId, locationId, name: 'T1', capacity: 4 } });
 });
@@ -59,6 +61,7 @@ afterAll(async () => {
   await db.table.deleteMany({ where: { locationId } });
   await db.location.deleteMany({ where: { id: locationId } });
   await db.customer.deleteMany({ where: { id: customerId } });
+  await db.customer.deleteMany({ where: { id: otherCustomerId } });
   await db.$disconnect();
 });
 
@@ -522,7 +525,7 @@ describe('shared reservation workflow', () => {
   });
   it('does not leak another customer reservation', async () => {
     const row = await db.reservation.create({ data: { ...base(), date: new Date(base().date), customerId } });
-    const other = generateToken({ id: 'other-customer', email: 'other@example.test', type: 'customer' });
+    const other = generateToken({ id: otherCustomerId, email: 'other@example.test', type: 'customer' });
     const response = await request(app).get(`/api/reservations/${row.id}`).set('Authorization', auth(other));
     expect(response.status).toBe(403);
     expect(response.body.data).toBeUndefined();

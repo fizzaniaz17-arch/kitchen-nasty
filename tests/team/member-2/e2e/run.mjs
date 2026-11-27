@@ -8,6 +8,8 @@ import { setTimeout as sleep } from 'node:timers/promises';
 const env = { ...process.env };
 env.POSTGRES_PASSWORD = randomBytes(32).toString('hex');
 env.JWT_SECRET = randomBytes(32).toString('hex');
+env.IDEMPOTENCY_ACTIVE_KEY_ID = 'member2-e2e';
+env.IDEMPOTENCY_ENCRYPTION_KEYS = JSON.stringify({ 'member2-e2e': randomBytes(32).toString('base64') });
 env.DATABASE_URL = 'postgresql://m2_e2e:' + env.POSTGRES_PASSWORD + '@127.0.0.1:55433/kitchenasty_member2_e2e';
 env.NODE_ENV = 'test';
 env.M2_E2E_OUTPUT = resolve('test-results/member2-e2e', new Date().toISOString().replace(/:/g, '-'));

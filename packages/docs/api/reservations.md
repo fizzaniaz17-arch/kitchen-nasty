@@ -34,7 +34,7 @@ Authorization: Bearer <customer-token>
 Idempotency-Key: <optional-key>
 ```
 
-An optional customer-scoped key replays the original 201 response for identical validated reservation details. Reusing it with different details returns 409. Without a key, each request creates a separate booking. Key retention and response-snapshot handling remain subject to final team review.
+An optional customer-scoped key replays the original 201 response for identical validated reservation details during its 24-hour lifetime. Reusing it with different details during that period returns 409. At or after expiry, the key can create a new booking. Without a key, each request creates a separate booking. Deployment requires the encryption keys and cleanup schedule described in the SQE idempotency security review.
 
 **Request:**
 

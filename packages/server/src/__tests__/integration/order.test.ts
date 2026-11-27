@@ -13,7 +13,7 @@ vi.mock('../../lib/db.js', () => {
     table: { findMany: vi.fn(), findFirst: vi.fn(), findUnique: vi.fn(), create: vi.fn(), update: vi.fn(), delete: vi.fn() },
     reservation: { count: vi.fn() },
     user: { findUnique: vi.fn() },
-    customer: { findUnique: vi.fn(), update: vi.fn() },
+    customer: { findFirst: vi.fn().mockImplementation(async ({ where }: { where: { id?: string } }) => where.id ? { id: where.id } : null), findUnique: vi.fn(), update: vi.fn() },
     loyaltyTransaction: { create: vi.fn() },
     automationRule: { findMany: vi.fn() },
     category: { findMany: vi.fn(), findUnique: vi.fn(), create: vi.fn(), update: vi.fn(), delete: vi.fn(), count: vi.fn() },

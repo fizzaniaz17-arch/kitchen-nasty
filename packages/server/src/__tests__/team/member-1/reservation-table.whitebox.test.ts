@@ -6,8 +6,9 @@ import { Prisma } from '@prisma/client';
 vi.mock('../../../lib/db.js', () => {
   const mockPrisma = {
     $transaction: vi.fn(),
-    reservationCreateRequest: { findUnique: vi.fn(), create: vi.fn(), update: vi.fn() },
-    $queryRaw: vi.fn().mockResolvedValue([]),
+    reservationCreateRequest: { findUnique: vi.fn(), create: vi.fn(), update: vi.fn(), delete: vi.fn() },
+    $executeRaw: vi.fn().mockResolvedValue(1),
+    $queryRaw: vi.fn().mockImplementation((strings: TemplateStringsArray) => Promise.resolve(strings.join('').includes('clock_timestamp') ? [{ now: new Date() }] : [])),
     location: { findUnique: vi.fn() },
     reservation: {
       findUnique: vi.fn(),
@@ -31,6 +32,7 @@ vi.mock('../../../lib/db.js', () => {
 });
 
 vi.mock('../../../lib/events.js', () => ({ appEvents: { emit: vi.fn() } }));
+vi.mock('../../../lib/idempotency-crypto.js', () => ({ encryptSnapshot: vi.fn(() => ({ v: 1, alg: 'A256GCM' })), isEncryptedSnapshot: vi.fn(() => false), decryptSnapshot: vi.fn() }));
 
 import prisma from '../../../lib/db.js';
 import {
@@ -623,22 +625,29 @@ describe('approved reservation retry, transition and requested-time rules', () =
     expect(db.reservationCreateRequest.update).toHaveBeenCalled();
   });
   it('replays the saved response for the same key and payload', async () => {
-    db.reservationCreateRequest.findUnique.mockResolvedValueOnce({ payloadHash: hash, response: { id: 'r-1' } });
+    db.reservationCreateRequest.findUnique.mockResolvedValueOnce({ payloadHash: hash, response: { id: 'r-1' }, expiresAt: new Date('2099-01-01'), responseEncrypted: false });
     const res = response(); await createReservation(req('key'), res);
     expect(res.status).toHaveBeenCalledWith(201); expect(res.json).toHaveBeenCalledWith({ success: true, data: { id: 'r-1' } });
     expect(db.reservation.create).not.toHaveBeenCalled();
   });
   it('rejects a changed payload for an existing key', async () => {
-    db.reservationCreateRequest.findUnique.mockResolvedValueOnce({ payloadHash: 'other', response: { id: 'r-1' } });
+    db.reservationCreateRequest.findUnique.mockResolvedValueOnce({ payloadHash: 'other', response: { id: 'r-1' }, expiresAt: new Date('2099-01-01') });
     const res = response(); await createReservation(req('key'), res);
     expect(res.status).toHaveBeenCalledWith(409); expect(db.reservation.create).not.toHaveBeenCalled();
   });
+  it('rejects a keyed booking at an inactive location without a reservation', async () => {
+    db.location.findUnique.mockResolvedValueOnce({ id: 'loc-1', isActive: false });
+    const res = response(); await createReservation(req('key'), res);
+    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.json).toHaveBeenCalledWith({ success: false, error: 'Location not found or inactive' });
+    expect(db.reservation.create).not.toHaveBeenCalled();
+  });
   it('fails closed if a stored retry response is missing', async () => {
-    db.reservationCreateRequest.findUnique.mockResolvedValueOnce({ payloadHash: hash, response: null });
+    db.reservationCreateRequest.findUnique.mockResolvedValueOnce({ payloadHash: hash, response: null, expiresAt: new Date('2099-01-01') });
     await expect(createReservation(req('key'), response())).rejects.toThrow('Stored idempotency response is unavailable');
   });
   it('replays a unique-key race after a competing transaction commits', async () => {
-    db.reservationCreateRequest.findUnique.mockResolvedValueOnce(null).mockResolvedValueOnce({ payloadHash: hash, response: { id: 'r-1' } });
+    db.reservationCreateRequest.findUnique.mockResolvedValueOnce(null).mockResolvedValueOnce({ payloadHash: hash, response: { id: 'r-1' }, expiresAt: new Date('2099-01-01'), responseEncrypted: false });
     db.location.findUnique.mockResolvedValueOnce({ id: 'loc-1', isActive: true });
     db.reservationCreateRequest.create.mockRejectedValueOnce(new Prisma.PrismaClientKnownRequestError('duplicate', { code: 'P2002', clientVersion: '5.22.0' }));
     const res = response(); await createReservation(req('key'), res);

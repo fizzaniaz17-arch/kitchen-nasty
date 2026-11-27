@@ -510,9 +510,12 @@ model ReservationCreateRequest {
   keyHash     String   @db.Char(64)
   payloadHash String   @db.Char(64)
   response    Json?
+  responseEncrypted Boolean @default(false)
   createdAt   DateTime @default(now())
+  expiresAt   DateTime @db.Timestamptz(3)
 
   @@unique([customerId, keyHash])
+  @@index([expiresAt])
   @@map("reservation_create_requests")
 }
 

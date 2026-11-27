@@ -15,7 +15,7 @@ vi.mock('../../lib/db.js', () => {
     $queryRaw: vi.fn().mockResolvedValue([]),
     $transaction: vi.fn(),
     user: { findUnique: vi.fn() },
-    customer: { findUnique: vi.fn() },
+    customer: { findFirst: vi.fn().mockImplementation(async ({ where }: { where: { id?: string } }) => where.id ? { id: where.id } : null), findUnique: vi.fn() },
     category: { findMany: vi.fn(), findUnique: vi.fn(), create: vi.fn(), update: vi.fn(), delete: vi.fn(), count: vi.fn() },
   };
   mockPrisma.$transaction.mockImplementation(async (callback: (tx: typeof mockPrisma) => Promise<unknown>) => callback(mockPrisma));
