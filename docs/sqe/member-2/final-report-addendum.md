@@ -2,7 +2,7 @@
 
 > **Merged status, 27 November 2026:** PR #32 merged at `055c117f384f92e9c9dc49e8858d6ad52b59b8a5`. Its verified head passed 476/476 PostgreSQL API tests, 124/124 Member 1 white-box tests with 100% configured coverage, 71.24% mutation, 344/344 integration tests, 5/5 generator checks, a 296/296 generated-case audit, and 10/10 Member 2 browser flows. Required hosted checks and Sonar passed on that head. The review-branch totals and release conditions below are preserved as historical snapshots, not current results. Production deployment remains on hold for encryption-key provisioning, cleanup scheduling, backup and coordinated-cutover review.
 
-This addendum is a review-branch snapshot, not a claim that unresolved work has been released. It complements the existing Member 2 documents and preserves the Member 1 and Member 3 reports.
+The sections below preserve the review-branch snapshot; current integrated results are summarized above. It complements the existing Member 2 documents and preserves the Member 1 and Member 3 reports.
 
 ## Workflows and test basis
 
@@ -20,7 +20,7 @@ Tests use a dedicated synthetic PostgreSQL environment, read the same reservatio
 
 The [original defect register](defects.md) links all ten issue groups and historical raw evidence. The [current analysis and release decision](defect-analysis-and-release.md) distinguishes provisional fixes, limitations, two five-whys/fishbone analyses and an explicitly group-based Pareto chart. Risk IDs R-P01/R-P02/R-P03/R-P05 refer to the shared register; M2-R01 and M2-R02 remain proposed. After the user reported team approval, the prior 455-test baseline (438 passed/17 failed) was reconciled: the obsolete conflict characterization and the old cancelled-reopening characterization were changed to assert the approved rules while prior evidence was preserved. A subsequent local run recorded 464/464 API tests and 296/296 generated cases; review full identity comparison and current logs before release.
 
-## Verification and AI disclosure
+## Historical verification and AI disclosure
 
 On this working candidate, the transaction-aware Member 1 fixtures and expanded tests produced 123/123 passing with 100% statements, branches, functions and lines; existing integration passed 344/344; server TypeScript and the full project build passed. After the logging correction, the API suite was rerun using a fresh tmpfs PostgreSQL container on a separate IPv6 loopback binding: 464/464 passed and 296/296 generated cases executed once. An earlier attempt using an ephemeral port was rejected by the test suite safety guard before any tests ran; its output is retained. Stryker scored 71.01% against the unchanged 60% gate: 729 killed, one timeout and 298 survived; the full machine-readable mutation report is retained in the local phase-5 evidence. Historical test evidence is preserved outside the repository as well as in the original evidence index. Hosted checks and Sonar must be verified on the actual committed integration candidate; none is claimed here.
 
@@ -30,11 +30,11 @@ Codex was used for investigation, code/test changes, documentation, review and r
 
 The shared structured logger now redacts authorization, cookie, idempotency-key and set-cookie headers; a synthetic request through the actual HTTP middleware confirmed the redactions. The previous no-key duplicate expectation now supplies the approved optional key, while no-key separate bookings remain valid. The conflicting-assignment and cancelled-reopening characterizations now assert the approved rules. The previously documented occupied-time 400 expectation was replaced with the approved 200 response and available=false. Generated status cases use a valid source state for each target. Historical results are retained.
 
-## Release and group handoff
+## Historical release and group handoff
 
-**Recommendation: HOLD.** Merge only after final business decisions, reviewed authorship, all required gates or formally authorized exceptions, hosted CI/Sonar, and no unexpected regressions. Pending work: review the reported team decisions and idempotency persistence, retention, client adoption and timezone details; verify the stacked PRs against current main; review #18-#27 and risks; coordinate team review and submission. The Member 2 contributor should be able to demonstrate EP classes, three-point bounds, the OpenAPI generator and two-constraint regeneration, persisted-state assertions, concurrency evidence, actual failures and AI use in the viva.
+**Historical recommendation before PR #32 merged: HOLD.** Merge only after final business decisions, reviewed authorship, all required gates or formally authorized exceptions, hosted CI/Sonar, and no unexpected regressions. Pending work: review the reported team decisions and idempotency persistence, retention, client adoption and timezone details; verify the stacked PRs against current main; review #18-#27 and risks; coordinate team review and submission. The Member 2 contributor should be able to demonstrate EP classes, three-point bounds, the OpenAPI generator and two-constraint regeneration, persisted-state assertions, concurrency evidence, actual failures and AI use in the viva.
 
-## Group submission checklist
+## Historical group submission checklist
 
 - [x] Preserve original API, browser and defect evidence; retain owner attribution for existing commits.
 - [x] Map API inputs, EP/BVA and generated cases; retain the two-constraint demonstration.
