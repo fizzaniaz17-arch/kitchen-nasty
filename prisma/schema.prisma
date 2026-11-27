@@ -502,6 +502,18 @@ model Reservation {
   @@map("reservations")
 }
 
+model ReservationCreateRequest {
+  id          String   @id @default(cuid())
+  customerId  String
+  keyHash     String   @db.Char(64)
+  payloadHash String   @db.Char(64)
+  response    Json?
+  createdAt   DateTime @default(now())
+
+  @@unique([customerId, keyHash])
+  @@map("reservation_create_requests")
+}
+
 // ============================================================
 // MARKETING
 // ============================================================

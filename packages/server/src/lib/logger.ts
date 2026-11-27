@@ -4,6 +4,15 @@ const level = process.env.LOG_LEVEL || (process.env.NODE_ENV === 'production' ? 
 
 const logger = pino({
   level: process.env.NODE_ENV === 'test' ? 'silent' : level,
+  redact: {
+    paths: [
+      'req.headers.authorization',
+      'req.headers.cookie',
+      'req.headers["idempotency-key"]',
+      'res.headers["set-cookie"]',
+    ],
+    censor: '[Redacted]',
+  },
   ...(process.env.NODE_ENV !== 'production' && {
     transport: {
       target: 'pino-pretty',
