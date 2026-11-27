@@ -49,7 +49,9 @@ in `packages/storefront/src/pages/Reservations.tsx`.
 
 ## Admin Reservation List (`/reservations`)
 
-### Lighthouse Scores (After Fix Only)
+> **Baseline Limitation:** Pre-fix ("before") Lighthouse and axe-core JSON snapshots were **not captured** for the admin reservation list and detail screens prior to applying the accessibility fixes (verified against repository git history). Only post-fix JSON reports are retained for the admin screens; full machine-readable before-and-after comparison is available for the Customer Reservation Form above.
+
+### Lighthouse Scores (Post-Fix Only)
 
 | Category | Score |
 |---|---:|
@@ -59,9 +61,9 @@ in `packages/storefront/src/pages/Reservations.tsx`.
 
 ### axe-core Results
 
-| Metric | Before | After | Change |
-|---|---:|---:|---|
-| Violations | 3 (landmark, 2× contrast, label-name) | 0 | **−3** |
+| Metric | Pre-Fix (Observed in DOM/Test Prior to Fix) | Post-Fix (Verified JSON) | Change |
+|---|---|---|---|
+| Violations | 3 (landmark, 2× contrast, label-name — no pre-fix JSON saved) | 0 | **−3** |
 | Affected nodes | 4 | 0 | **−4** |
 
 ### What Changed

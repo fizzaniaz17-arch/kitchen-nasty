@@ -1,91 +1,50 @@
-# Student 3 — Dependency Audit Report
+# Student 3 — Dependency Audit Report (Reconciled)
 
-## Audit Method
+## Executive Summary
 
-The dependency audit was performed using `npm audit` against the full workspace
-after `npm install` on the local checkout at commit `d6af7237e9569ebeab19ccab375362f9d144e25e`
-(version 0.3.2).
+This report reconciles the **pre-remediation baseline** dependency audit (`npm-audit.json`: **89** findings) with the **post-remediation** audit (`npm-audit-final.json`: **22** findings) and the **current integration branch** audit (**23** findings after installing `@axe-core/playwright` and `lighthouse` plus 2026-11-26 registry advisories).
 
-The raw audit output is saved as `reports/student-3/security/npm-audit.json`.
-
----
-
-## Summary
-
-| Severity | Count |
-|---|---:|
-| Critical | 5 |
-| High | 47 |
-| Moderate | 30 |
-| Low | 7 |
-| **Total** | **89** |
+| Audit Snapshot | Evidence File / Command | Critical | High | Moderate | Low | Total |
+|---|---|---:|---:|---:|---:|---:|
+| **Pre-remediation baseline** (0.3.2 `d6af723`, before PR #7 overrides) | `reports/student-3/security/npm-audit.json` | 5 | 47 | 30 | 7 | **89** |
+| **Post-remediation (PR #7, 2026-11-22)** | `reports/student-3/security/npm-audit-final.json` | 0 | 1 | 21 | 0 | **22** |
+| **Server production workspace (PR #7)** | `reports/student-3/security/npm-audit-server-production-final.json` | 0 | 0 | 0 | 0 | **0** |
+| **Integration branch `npm install` (2026-11-27)** | `npm install` on `integration/final-sqe-submission` | 0 | 1 | 22 | 0 | **23** |
 
 ---
 
-## Scope Clarification
+## Why the Counts Differ (89 → 22 → 23)
 
-The audit covers the **entire workspace** including:
-- `packages/server` — Express API (production runtime)
-- `packages/admin` — React admin app (build-time only)
-- `packages/storefront` — React storefront (build-time only)
-- `packages/docs` — VitePress documentation (build-time only)
-- `packages/mobile` — React Native mobile app (build-time only)
-- Root devDependencies (Playwright, Lighthouse, Prisma, TypeScript)
-
-Most findings affect **development and build dependencies** (Vite, Webpack,
-React Native, Expo, documentation tooling), not the production runtime API.
+1. **Why the original audit reported 89 findings (`npm-audit.json`)**:
+   - It was captured on the un-remediated `0.3.2` baseline (`d6af723`) across all workspaces (`server`, `admin`, `storefront`, `docs`, `mobile`) and root devDependencies before PR #7's compatible updates and `overrides` were applied.
+2. **What remediation was applied (PR #7 / `docs/sqe/student-3/dependency-audit.md`)**:
+   - Compatible updates for `proxy-addr` (`2.0.8`), `shell-quote` (`1.12.0`), `qs` (`6.17.1`), React Router, Vite, Vue, Babel, Multer, Nodemailer, `express-rate-limit`, Vitest, and Zod.
+   - Scoped `overrides` in root `package.json`: `@xmldom/xmldom` (`^0.8.15`), `postcss` (`^8.5.33`), `qs` (`^6.16.2`), `tar` (`^7.5.23`), and `vitepress -> vite` (`^6.4.6`).
+   - Removed unused storefront `intlayer` and redundant `@types/nodemailer`.
+3. **Why the post-remediation audit reported 22 findings (`npm-audit-final.json`)**:
+   - All **5 critical**, **46 of 47 high**, and all **7 low** findings were eliminated, leaving **1 high** and **21 moderate** findings concentrated in Expo 52 / Metro (`packages/mobile`) and Stryker devDependencies.
+   - The `packages/server` production audit dropped to **0 vulnerabilities**.
+4. **Why the current integration branch reports 23 findings (`0 critical, 1 high, 22 moderate`)**:
+   - Reflects the 2026-11-26 npm registry advisory for `i18next` (`< 26.3.4`, moderate) documented in `docs/sqe/student-3/dependency-audit.md`, not a regression in `packages/server`.
 
 ---
 
-## Key Findings by Package Category
+## Remaining Vulnerabilities & Override Risks
 
-### Production Runtime (packages/server)
-
-| Package | Version | Severity | Description | Impact | Recommendation |
-|---|---|---|---|---|---|
-| express | ^4.x transitive deps | Moderate | Prototype pollution in qs/body-parser | Low — application uses Zod validation | Monitor for express@5 compatibility |
-| jsonwebtoken | ^9.x | Low | Known timing sidechannel in verification | Low — standard JWT usage | Accept risk; no alternative |
-
-### Build/Development Dependencies
-
-| Category | Packages Affected | Severity Range | Production Impact |
+| Package / Path | Severity | Scope | Reason Unresolved & Residual Risk |
 |---|---|---|---|
-| Vite/Rollup | Multiple transitive | High–Critical | **None** — build tool only |
-| React Native/Expo | Multiple | High–Moderate | **None** — mobile app build tool |
-| Webpack (docs) | Multiple transitive | High–Moderate | **None** — docs build only |
-| PostCSS/CSS tooling | Various | Moderate | **None** — build-time CSS processing |
+| `image-size@1.2.1` (via Expo 52 / Metro `0.81.5`) | High (1) | Mobile build/dev tooling | Fixed in `2.x`, which changes CommonJS export shape; Metro `0.81.5` invokes it as a function (`^1.0.2`). Forcing `2.x` breaks mobile bundling. Not reachable in `packages/server`. |
+| Expo 52 transitive chain (`glob@10.5.0`, `minimatch`, `uuid`) | Moderate (19–20) | Mobile build/tooling | Requires semver-major Expo SDK 58 upgrade; deferred to avoid breaking mobile compatibility. |
+| `i18next < 26.3.4` | Moderate (1) | Storefront/Admin i18n | Suggested fix (`27.2.9`) is semver-major; deferred. |
+| `@stryker-mutator/core` / `vitest-runner` | Moderate (2) | Dev-only mutation testing | No non-breaking fix available; not shipped in production. |
 
-### No Automatic Fix Applied
-
-No `npm audit fix` was run because:
-1. Many findings are in deeply nested transitive dependencies.
-2. Breaking changes in major version bumps could affect build pipelines.
-3. The remediation should be coordinated with the full team.
+### Compatibility & Maintenance Risks of Applied Overrides
+- Root `package.json` overrides (`tar`, `vitepress.vite`, `qs`, `postcss`, `@xmldom/xmldom`) were verified against `npm run build`, Expo config/bundle exports, and VitePress docs build.
+- **Residual maintenance risk:** Future upgrades of `vitepress` or `expo` must re-evaluate these pinned overrides so they do not mask or conflict with newer upstream major versions.
 
 ---
 
-## Residual Risks
-
-| Risk | Severity | Mitigation |
-|---|---|---|
-| Critical findings in build tools (Vite/Rollup) | Low residual | Build tools are not deployed; they process trusted local source code |
-| Express transitive vulnerability (qs) | Low residual | Input validation via Zod schema prevents exploitation |
-| No dependency pinning (uses `^` ranges) | Informational | Could introduce new vulnerabilities on `npm install`; consider lockfile-only installs in CI |
-| Mobile/docs dependencies included in audit count | Informational | Inflates the total count; not relevant to the reservation module runtime |
-
----
-
-## Recommendations
-
-1. **Separate audit scopes:** Run `npm audit --workspace=packages/server` for production-relevant findings.
-2. **Regular updates:** Schedule quarterly dependency reviews with breaking-change testing.
-3. **Consider lockfile-only CI installs:** Use `npm ci` to prevent range-resolved changes.
-4. **Coordinate with team:** Major version bumps (Express 5, Vite 7, etc.) should be team decisions.
-
----
-
-## Evidence
-
-- Raw audit: `reports/student-3/security/npm-audit.json`
-- Security report: `docs/student-3/security-report.md`
-- ZAP findings: `reports/student-3/security/zap-passive.json`
+## Retained Evidence Files
+- Pre-remediation baseline: `reports/student-3/security/npm-audit.json` (89 findings) and `npm-audit-baseline.json`
+- Post-remediation: `reports/student-3/security/npm-audit-final.json` (22 findings) and `npm-audit-server-production-final.json` (0 findings)
+- Detailed advisory triage: `docs/sqe/student-3/dependency-audit.md`
