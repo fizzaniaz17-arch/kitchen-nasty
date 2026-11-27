@@ -1,0 +1,150 @@
+{
+  "generatedAt": "2026-11-21T13:38:16.477Z",
+  "tool": {
+    "name": "OWASP ZAP",
+    "version": "2.17.0"
+  },
+  "mode": "Passive only; no active scan was run.",
+  "scope": [
+    "local API on port 3000",
+    "local admin UI on port 5173",
+    "local storefront on port 5174"
+  ],
+  "workflows": [
+    "customer reservation creation",
+    "staff reservation confirmation",
+    "keyboard navigation"
+  ],
+  "passiveQueueAtCapture": 0,
+  "totalRawAlerts": 169,
+  "distinctFindings": 8,
+  "findings": [
+    {
+      "alert": "Authentication Request Identified",
+      "risk": "Informational",
+      "instances": 2,
+      "components": [
+        "API"
+      ],
+      "affectedPathCount": 2,
+      "representativePaths": [
+        "API/api/auth/customer/login",
+        "API/api/auth/staff/login"
+      ],
+      "recommendation": "This is an informational alert rather than a vulnerability and so there is nothing to fix."
+    },
+    {
+      "alert": "Information Disclosure - Sensitive Information in URL",
+      "risk": "Informational",
+      "instances": 2,
+      "components": [
+        "Admin",
+        "Storefront"
+      ],
+      "affectedPathCount": 2,
+      "representativePaths": [
+        "Admin/",
+        "Storefront/"
+      ],
+      "recommendation": "Do not pass sensitive information in URIs."
+    },
+    {
+      "alert": "Information Disclosure - Suspicious Comments",
+      "risk": "Informational",
+      "instances": 27,
+      "components": [
+        "Admin",
+        "Storefront"
+      ],
+      "affectedPathCount": 4,
+      "representativePaths": [
+        "Admin/<vite-dependency-module>",
+        "Admin/@react-refresh",
+        "Storefront/<vite-dependency-module>",
+        "Storefront/@react-refresh"
+      ],
+      "recommendation": "Remove all comments that return information that may help an attacker and fix any underlying problems they refer to."
+    },
+    {
+      "alert": "Modern Web Application",
+      "risk": "Informational",
+      "instances": 3,
+      "components": [
+        "Admin",
+        "Storefront"
+      ],
+      "affectedPathCount": 3,
+      "representativePaths": [
+        "Admin/reservations/cmwqft4fr002127go0hum6c8e",
+        "Storefront/",
+        "Storefront/reservations"
+      ],
+      "recommendation": "This is an informational alert and so no changes are required."
+    },
+    {
+      "alert": "Session Management Response Identified",
+      "risk": "Informational",
+      "instances": 2,
+      "components": [
+        "API"
+      ],
+      "affectedPathCount": 2,
+      "representativePaths": [
+        "API/api/auth/customer/login",
+        "API/api/auth/staff/login"
+      ],
+      "recommendation": "This is an informational alert rather than a vulnerability and so there is nothing to fix."
+    },
+    {
+      "alert": "X-Content-Type-Options Header Missing",
+      "risk": "Low",
+      "instances": 127,
+      "components": [
+        "Admin",
+        "Storefront"
+      ],
+      "affectedPathCount": 13,
+      "representativePaths": [
+        "Admin/<vite-dependency-module>",
+        "Admin/<vite-file-serving>",
+        "Admin/<vite-source-module>",
+        "Admin/@react-refresh",
+        "Admin/@vite/client"
+      ],
+      "recommendation": "Ensure that the application/web server sets the Content-Type header appropriately, and that it sets the X-Content-Type-Options header to 'nosniff' for all web pages.\nIf possible, ensure that the end user uses a standards-compliant and modern web browser that does not perform MIME-sniffing at all, or that can be directed by the web application/web server to not perform MIME-sniffing."
+    },
+    {
+      "alert": "Content Security Policy (CSP) Header Not Set",
+      "risk": "Medium",
+      "instances": 3,
+      "components": [
+        "Admin",
+        "Storefront"
+      ],
+      "affectedPathCount": 3,
+      "representativePaths": [
+        "Admin/reservations/cmwqft4fr002127go0hum6c8e",
+        "Storefront/",
+        "Storefront/reservations"
+      ],
+      "recommendation": "Ensure that your web server, application server, load balancer, etc. is configured to set the Content-Security-Policy header."
+    },
+    {
+      "alert": "Missing Anti-clickjacking Header",
+      "risk": "Medium",
+      "instances": 3,
+      "components": [
+        "Admin",
+        "Storefront"
+      ],
+      "affectedPathCount": 3,
+      "representativePaths": [
+        "Admin/reservations/cmwqft4fr002127go0hum6c8e",
+        "Storefront/",
+        "Storefront/reservations"
+      ],
+      "recommendation": "Modern Web browsers support the Content-Security-Policy and X-Frame-Options HTTP headers. Ensure one of them is set on all web pages returned by your site/app.\nIf you expect the page to be framed only by pages on your server (e.g. it's part of a FRAMESET) then you'll want to use SAMEORIGIN, otherwise if you never expect the page to be framed, you should use DENY. Alternatively consider implementing Content Security Policy's \"frame-ancestors\" directive."
+    }
+  ],
+  "sanitization": "URLs are reduced to local component and path; query values and request/response evidence are omitted."
+}

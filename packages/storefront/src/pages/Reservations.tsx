@@ -140,8 +140,9 @@ export default function Reservations() {
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">{t('reservations.location')}</label>
+              <label htmlFor="reservation-location" className="block text-sm font-medium text-gray-700 mb-1">{t('reservations.location')}</label>
               <select
+                id="reservation-location"
                 value={locationId}
                 onChange={(e) => setLocationId(e.target.value)}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500 outline-none"
@@ -155,8 +156,9 @@ export default function Reservations() {
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">{t('reservations.date')}</label>
+                <label htmlFor="reservation-date" className="block text-sm font-medium text-gray-700 mb-1">{t('reservations.date')}</label>
                 <input
+                  id="reservation-date"
                   type="date"
                   value={date}
                   min={today}
@@ -165,8 +167,9 @@ export default function Reservations() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">{t('reservations.partySize')}</label>
+                <label htmlFor="reservation-party-size" className="block text-sm font-medium text-gray-700 mb-1">{t('reservations.partySize')}</label>
                 <select
+                  id="reservation-party-size"
                   value={partySize}
                   onChange={(e) => setPartySize(parseInt(e.target.value))}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500 outline-none"
@@ -181,7 +184,7 @@ export default function Reservations() {
             {/* Time Slots */}
             {locationId && date && (
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">{t('reservations.availableSlots')}</label>
+                <div className="block text-sm font-medium text-gray-700 mb-2">{t('reservations.availableSlots')}</div>
                 {loadingSlots ? (
                   <div className="flex justify-center py-4">
                     <div className="w-6 h-6 border-3 border-primary-200 border-t-primary-600 rounded-full animate-spin" />
@@ -213,8 +216,9 @@ export default function Reservations() {
             )}
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">{t('reservations.specialRequests')}</label>
+              <label htmlFor="reservation-comment" className="block text-sm font-medium text-gray-700 mb-1">{t('reservations.specialRequests')}</label>
               <textarea
+                id="reservation-comment"
                 value={comment}
                 onChange={(e) => setComment(e.target.value)}
                 rows={2}

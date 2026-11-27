@@ -1,4 +1,5 @@
 node_modules/
+packages/docs/.vitepress/.temp/
 dist/
 dist-*/
 build/
