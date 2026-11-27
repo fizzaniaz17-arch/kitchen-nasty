@@ -4,9 +4,9 @@ import { encryptLegacySnapshotsBatch } from '../lib/reservation-idempotency.js';
 async function main(): Promise<void> {
   let total = 0;
   for (let batch = 0; batch < 20; batch++) {
-    const count = await encryptLegacySnapshotsBatch(500);
+    const count = await encryptLegacySnapshotsBatch(50);
     total += count;
-    if (count < 500) break;
+    if (count < 50) break;
   }
   process.stdout.write(`Encrypted ${total} unexpired idempotency snapshots\n`);
 }

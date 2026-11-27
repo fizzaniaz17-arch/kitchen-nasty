@@ -18,7 +18,11 @@ export async function createIdempotentReservation(customerId: string, key: strin
     const [clock] = await tx.$queryRaw<{ now: Date }[]>`SELECT clock_timestamp() AS now`;
     const where = { customerId_keyHash: { customerId, keyHash } };
     const previous = await tx.reservationCreateRequest.findUnique({ where });
-    if (previous && previous.expiresAt > clock.now) {
+    // Compare using the database clock after taking the row lock; JS Date loses sub-millisecond precision.
+    const [expiry] = previous ? await tx.$queryRaw<{ active: boolean }[]>`
+      SELECT "expiresAt" > clock_timestamp() AS active FROM "reservation_create_requests" WHERE "id" = ${previous.id}` : [];
+    if (previous && !expiry) throw new Error('Locked idempotency record is unavailable');
+    if (previous && expiry?.active) {
       if (previous.payloadHash !== payloadHash) return { kind: 'conflict', message: 'Idempotency key already used for different reservation details' };
       if (previous.response === null) throw new Error('Stored idempotency response is unavailable');
       if (previous.responseEncrypted && !isEncryptedSnapshot(previous.response)) throw new Error('Invalid encrypted idempotency response');
@@ -56,7 +60,7 @@ export async function cleanupExpiredIdempotencyBatch(limit = 500): Promise<numbe
   )`;
 }
 
-export async function encryptLegacySnapshotsBatch(limit = 500): Promise<number> {
+export async function encryptLegacySnapshotsBatch(limit = 50): Promise<number> {
   if (!Number.isInteger(limit) || limit < 1 || limit > 1000) throw new Error('Encryption batch size must be between 1 and 1000');
   return prisma.$transaction(async (tx) => {
     const rows = await tx.$queryRaw<{ id: string; customerId: string; keyHash: string; payloadHash: string; response: Prisma.JsonValue }[]>`
@@ -69,5 +73,5 @@ export async function encryptLegacySnapshotsBatch(limit = 500): Promise<number> 
       await tx.reservationCreateRequest.update({ where: { id: row.id }, data: { response: encryptSnapshot(row.response, context), responseEncrypted: true } });
     }
     return rows.length;
-  });
+  }, { timeout: 30000 });
 }

@@ -8,7 +8,7 @@ vi.mock('../../../lib/db.js', () => {
     $transaction: vi.fn(),
     reservationCreateRequest: { findUnique: vi.fn(), create: vi.fn(), update: vi.fn(), delete: vi.fn() },
     $executeRaw: vi.fn().mockResolvedValue(1),
-    $queryRaw: vi.fn().mockImplementation((strings: TemplateStringsArray) => Promise.resolve(strings.join('').includes('clock_timestamp') ? [{ now: new Date() }] : [])),
+    $queryRaw: vi.fn().mockImplementation((strings: TemplateStringsArray) => Promise.resolve(strings.join('').includes('AS active') ? [{ active: true }] : strings.join('').includes('clock_timestamp') ? [{ now: new Date() }] : [])),
     location: { findUnique: vi.fn() },
     reservation: {
       findUnique: vi.fn(),
