@@ -14,7 +14,9 @@ import {
 const router = Router();
 
 // Public: check availability
-router.get('/availability', checkAvailability);
+router.get('/availability', (req, res, next) => {
+  void checkAvailability(req, res).catch(next);
+});
 
 // Customer: own reservations
 router.get('/my-reservations', authenticate, listCustomerReservations);
@@ -26,7 +28,9 @@ router.get('/analytics', authenticate, requireStaff, getReservationAnalytics);
 router.post('/', authenticate, createReservation);
 
 // Staff: manage reservations
-router.get('/', authenticate, requireStaff, listReservations);
+router.get('/', authenticate, requireStaff, (req, res, next) => {
+  void listReservations(req, res).catch(next);
+});
 // Not staff-only: customers may read their own booking. Ownership is enforced
 // inside getReservation, so this route must stay authenticated.
 router.get('/:id', authenticate, getReservation);

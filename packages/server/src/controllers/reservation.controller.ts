@@ -9,6 +9,33 @@ const reservationDate = z.string().regex(/^\d{4}-\d{2}-\d{2}$/).refine((value) =
   return !Number.isNaN(parsed.getTime()) && parsed.toISOString().slice(0, 10) === value;
 }, 'Invalid calendar date');
 
+// Validate calendar components before using the runtime parser for supported time/offset syntax.
+const queryDate = z.string().refine((value) => {
+  const text = value.trim();
+  const yearFirst = text.match(/^(\d{4})[-/.\s](\d{1,2})[-/.\s](\d{1,2})(?=$|[Tt\s])/);
+  const monthFirst = text.match(/^(\d{1,2})[-/.\s](\d{1,2})[-/.\s](\d{4})(?=$|[Tt\s])/);
+  const named = text.match(/^(?:(?:mon|tue|wed|thu|fri|sat|sun)[a-z]*,?\s+)?(?:([a-z]+)[\s/-]+(\d{1,2})(?:,\s*|[\s/-]+)(\d{4})|(\d{1,2})[\s/-]+([a-z]+)(?:,\s*|[\s/-]+)(\d{4})|(\d{4})[\s/-]+([a-z]+)[\s/-]+(\d{1,2}))(?=$|[Tt\s])/i);
+  let year: number, month: number, day: number;
+  if (yearFirst) {
+    [, year, month, day] = yearFirst.map(Number);
+  } else if (monthFirst) {
+    [, month, day, year] = monthFirst.map(Number);
+  } else if (named) {
+    const months = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
+    const monthName = named[1] || named[5] || named[8];
+    month = months.indexOf(monthName.slice(0, 3).toLowerCase()) + 1;
+    day = Number(named[2] || named[4] || named[9]);
+    year = Number(named[3] || named[6] || named[7]);
+  } else {
+    return false;
+  }
+  // Legacy runtime parsing maps years below 100 to another century; accept only ISO syntax for them.
+  if (year < 100 && !/^\d{4}-\d{2}-\d{2}(?:$|[Tt])/.test(text)) return false;
+  const leap = year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0);
+  const days = [31, leap ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+  return month >= 1 && month <= 12 && day >= 1 && day <= days[month - 1] && !Number.isNaN(new Date(text).getTime());
+}, 'Invalid date filter');
+
 const reservationTime = z.string().regex(/^\d{2}:\d{2}$/).refine((value) => {
   const hours = Number(value.slice(0, 2));
   const minutes = Number(value.slice(3, 5));
@@ -95,14 +122,25 @@ export async function listReservations(req: Request, res: Response): Promise<voi
   const page = Math.max(1, parseInt(req.query.page as string) || 1);
   const limit = Math.min(50, Math.max(1, parseInt(req.query.limit as string) || 20));
   const skip = (page - 1) * limit;
-  const status = req.query.status as string | undefined;
-  const locationId = req.query.locationId as string | undefined;
-  const date = req.query.date as string | undefined;
+  const { status, locationId, date } = req.query;
+
+  if (status && !updateReservationSchema.shape.status.safeParse(status).success) {
+    res.status(400).json({ success: false, error: 'Invalid status filter' });
+    return;
+  }
+  if (locationId && typeof locationId !== 'string') {
+    res.status(400).json({ success: false, error: 'Invalid locationId filter' });
+    return;
+  }
+  if (date && !queryDate.safeParse(date).success) {
+    res.status(400).json({ success: false, error: 'Invalid date filter' });
+    return;
+  }
 
   const where: Record<string, unknown> = {};
   if (status) where.status = status;
   if (locationId) where.locationId = locationId;
-  if (date) where.date = new Date(date);
+  if (date) where.date = new Date(date as string);
 
   const [reservations, total] = await Promise.all([
     prisma.reservation.findMany({
@@ -407,6 +445,15 @@ export async function checkAvailability(req: Request, res: Response): Promise<vo
 
   if (!locationId || !date) {
     res.status(400).json({ success: false, error: 'locationId and date are required' });
+    return;
+  }
+
+  if (typeof locationId !== 'string') {
+    res.status(400).json({ success: false, error: 'Invalid locationId filter' });
+    return;
+  }
+  if (!queryDate.safeParse(date).success) {
+    res.status(400).json({ success: false, error: 'Invalid date filter' });
     return;
   }
 

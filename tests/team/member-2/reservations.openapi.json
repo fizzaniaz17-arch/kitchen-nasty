@@ -537,6 +537,7 @@
             "in": "query",
             "name": "date",
             "required": true,
+            "description": "Valid four-digit-year calendar date: YYYY-MM-DD, month/day/year using runtime-supported separators, named-month or supported year-first legacy formats; supported timestamps preserve their runtime instant. Two-digit years, incomplete dates, impossible dates and repeated values are rejected.",
             "schema": {
               "type": "string"
             }
@@ -593,7 +594,7 @@
             }
           },
           "400": {
-            "description": "Required query missing",
+            "description": "Required query missing or invalid date/locationId filter",
             "content": {
               "application/json": {
                 "schema": {
@@ -686,8 +687,10 @@
           {
             "in": "query",
             "name": "status",
+            "description": "Optional reservation status enum; an empty value is treated as omitted.",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "enum": ["", "PENDING", "CONFIRMED", "SEATED", "COMPLETED", "CANCELLED"]
             }
           },
           {
@@ -700,6 +703,7 @@
           {
             "in": "query",
             "name": "date",
+            "description": "Optional valid four-digit-year calendar date: YYYY-MM-DD, month/day/year using runtime-supported separators, named-month or supported year-first legacy formats; supported timestamps preserve their runtime instant. Two-digit years, incomplete dates and impossible dates are rejected. An empty value is treated as omitted.",
             "schema": {
               "type": "string"
             }
@@ -734,6 +738,16 @@
                       "$ref": "#/components/schemas/Pagination"
                     }
                   }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid status, date, or locationId filter",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
                 }
               }
             }
