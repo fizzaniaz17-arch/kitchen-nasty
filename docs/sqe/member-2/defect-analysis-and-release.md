@@ -1,10 +1,12 @@
 # Reservation defects: analysis and release decision
 
-This is an SQE review-branch analysis, not an assertion that changes have reached main. The historical defect evidence and issue descriptions remain intact in [defects.md](defects.md). The user reported team approval for the listed business rules on 27 November; persistence/retention design and integration review remain open. See [final contract decisions](final-contract-decisions.md).
+> **Merged status, 27 November 2026:** PR #32 merged at `055c117f384f92e9c9dc49e8858d6ad52b59b8a5`; the former candidate states in this preserved analysis describe the pre-merge investigation. Issues #21, #23, #24, #25 and #27 are closed for scoped acceptance. Issues #18, #19, #20, #22 and #26 remain open for the residual operational, historical-data, noncooperating-writer or mobile-client limitations described below. Production release remains on hold pending the controls in [the security review](idempotency-security-review.md).
+
+The following analysis records the pre-merge investigation; the current merged status is summarized above. Historical defect evidence and issue descriptions remain intact in [defects.md](defects.md). The user reported team approval for the listed business rules on 27 November; production operational review remains open. See [final contract decisions](final-contract-decisions.md).
 
 ## Defect-group status and risk
 
-| ID / issue | Severity / priority | Current review-branch state and evidence | Residual risk / release impact |
+| ID / issue | Severity / priority | Historical review-branch state and evidence | Residual risk / release impact |
 | --- | --- | --- | --- |
 | D01 / [#18](https://github.com/fizzaniaz17-arch/kitchen-nasty/issues/18) | High / high | Candidate implemented: optional customer-scoped idempotency keys replay identical requests and reject changed payloads; nine PostgreSQL cases passed. | R-P01; retention, deletion, client adoption and stored-response privacy require team review before release. |
 | D02 / [#19](https://github.com/fizzaniaz17-arch/kitchen-nasty/issues/19) | High / high | Partially fixed in [PR #29](https://github.com/fizzaniaz17-arch/kitchen-nasty/pull/29): assignment and effective party-size checks pass PostgreSQL regressions. | R-P03; old associations and later table capacity edits are not remediated. |
@@ -37,4 +39,4 @@ Count **distinct originally documented defect groups**, not failed test invocati
 
 ## Measurable release decision: HOLD
 
-Exit criteria: team signs off lifecycle, occupancy, availability, retry and date/timezone contracts; no unexpected API/browser/integration regressions; 100% Member 1 coverage and Stryker at least the unchanged 60% gate; scoped generator checks and execution audit pass; hosted required CI/Sonar checks pass for the actual reviewed integration head; teammates' contributions and secrets are protected; all required approvals and branch protections are satisfied. Current hold: local candidate requires reviewed idempotency persistence/retention, security review, integration on current main, required hosted CI/Sonar and teammate review. Local API and browser results must be rechecked on the integration candidate. Do not close issues or merge merely on a local passing gate.
+Exit criteria: team signs off lifecycle, occupancy, availability, retry and date/timezone contracts; no unexpected API/browser/integration regressions; 100% Member 1 coverage and Stryker at least the unchanged 60% gate; scoped generator checks and execution audit pass; hosted required CI/Sonar checks pass for the actual reviewed integration head; teammates' contributions and secrets are protected; all required approvals and branch protections are satisfied. Current production hold: provision encryption keys and a monitored cleanup schedule, verify historical timestamps and orphan handling, and approve backup, coordinated cutover and rollback procedures. Academic integration and passing tests do not constitute production deployment approval.

@@ -1,8 +1,10 @@
 # Reservation and table defect register
 
-> **Current review-branch update, 27 November 2026:** The historical observations below remain preserved. The user reported team approval of lifecycle, occupancy, availability and optional retry rules. Local candidate verification and remaining persistence/retention, integration and hosted-CI review are tracked in [final contract decisions](final-contract-decisions.md), [defect analysis](defect-analysis-and-release.md), and [report addendum](final-report-addendum.md). Do not interpret the historical failure counts below as the latest run.
+> **Merged status, 27 November 2026:** [PR #32](https://github.com/fizzaniaz17-arch/kitchen-nasty/pull/32) merged at `055c117f384f92e9c9dc49e8858d6ad52b59b8a5`. The latest verified API run passed 476/476 tests. Issues #21, #23, #24, #25 and #27 were closed for their scoped acceptance criteria; #18, #19, #20, #22 and #26 remain open for the limitations recorded in their issue updates. The observations and 36 failures below are historical evidence, not current results.
 
-The final PostgreSQL run had 36 failed requirement tests, including expectations that still await team confirmation. The 33 original failures reproduced by exact full Vitest name. The rows below link each triage ID to its GitHub issue. Issue creation does not establish owner acceptance or resolve requirements awaiting team review.
+> **Historical review-branch update, 27 November 2026:** The historical observations below remain preserved. The user reported team approval of lifecycle, occupancy, availability and optional retry rules. Local candidate verification and remaining persistence/retention, integration and hosted-CI review are tracked in [final contract decisions](final-contract-decisions.md), [defect analysis](defect-analysis-and-release.md), and [report addendum](final-report-addendum.md). Do not interpret the historical failure counts below as the latest run.
+
+The historical PostgreSQL baseline had 36 failed requirement tests, including expectations that awaited team confirmation at that time. The 33 original failures reproduced by exact full Vitest name. The rows below link each triage ID to its GitHub issue. Issue creation does not establish owner acceptance or resolve requirements awaiting team review.
 
 | ID | Reproduction and expected result | Observed behavior and candidate cause | Severity / priority | Risk |
 |---|---|---|---|---|
@@ -21,7 +23,7 @@ R-P01, R-P02, R-P03 and R-P05 refer to the [team risk register](../member-1/risk
 
 ### Test-level evidence
 
-Use the [reproduction commands](status.md) to run the whole suite. With the same test database and setup, append Vitest's `-t` option with a distinctive fragment of a title to select a narrow repro. Each evidence link points to that case?s observation in the final unedited log. The [JSON report](evidence/audit-final-results.json) records the corresponding assertions. The expected behavior and suspected cause are grouped above by defect ID.
+Use the [reproduction commands](status.md) to run the whole suite. With the same test database and setup, append Vitest's `-t` option with a distinctive fragment of a title to select a narrow repro. Each evidence link points to that case's observation in the historical unedited log. The [JSON report](evidence/audit-final-results.json) records the corresponding assertions. The expected behavior and suspected cause are grouped above by defect ID.
 
 | Defect | Exact test title | HTTP and persisted result |
 |---|---|---|
