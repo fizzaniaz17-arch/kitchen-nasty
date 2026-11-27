@@ -1,5 +1,7 @@
 # Member 2 SQE report and submission handoff
 
+> **Merged status, 27 November 2026:** PR #32 merged at `055c117f384f92e9c9dc49e8858d6ad52b59b8a5`. Its verified head passed 476/476 PostgreSQL API tests, 124/124 Member 1 white-box tests with 100% configured coverage, 71.24% mutation, 344/344 integration tests, 5/5 generator checks, a 296/296 generated-case audit, and 10/10 Member 2 browser flows. Required hosted checks and Sonar passed on that head. The review-branch totals and release conditions below are preserved as historical snapshots, not current results. Production deployment remains on hold for encryption-key provisioning, cleanup scheduling, backup and coordinated-cutover review.
+
 This addendum is a review-branch snapshot, not a claim that unresolved work has been released. It complements the existing Member 2 documents and preserves the Member 1 and Member 3 reports.
 
 ## Workflows and test basis

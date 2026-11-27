@@ -1,5 +1,7 @@
 # Reservation and table defect register
 
+> **Merged status, 27 November 2026:** [PR #32](https://github.com/fizzaniaz17-arch/kitchen-nasty/pull/32) merged at `055c117f384f92e9c9dc49e8858d6ad52b59b8a5`. The latest verified API run passed 476/476 tests. Issues #21, #23, #24, #25 and #27 were closed for their scoped acceptance criteria; #18, #19, #20, #22 and #26 remain open for the limitations recorded in their issue updates. The observations and 36 failures below are historical evidence, not current results.
+
 > **Current review-branch update, 27 November 2026:** The historical observations below remain preserved. The user reported team approval of lifecycle, occupancy, availability and optional retry rules. Local candidate verification and remaining persistence/retention, integration and hosted-CI review are tracked in [final contract decisions](final-contract-decisions.md), [defect analysis](defect-analysis-and-release.md), and [report addendum](final-report-addendum.md). Do not interpret the historical failure counts below as the latest run.
 
 The final PostgreSQL run had 36 failed requirement tests, including expectations that still await team confirmation. The 33 original failures reproduced by exact full Vitest name. The rows below link each triage ID to its GitHub issue. Issue creation does not establish owner acceptance or resolve requirements awaiting team review.

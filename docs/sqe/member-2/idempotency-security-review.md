@@ -22,6 +22,8 @@ Before applying the earlier customer-cascade migration to an existing database, 
 
 ## Earlier analysis and proposed design
 
+The following sections preserve the earlier pre-approval analysis. Statements below that describe expiry or encryption as unimplemented are historical; see the current implementation and deployment status above.
+
 The reservation retry contract is optional and customer-scoped. A unique `(customerId, keyHash)` and a single database transaction protect cooperating concurrent requests; a matching payload replays the original 201 response, a different valid payload returns 409, and requests without keys remain separate. The raw key is not persisted. Hashes are not encryption and low-entropy keys or payloads can be guessed offline by someone with database access. A keyed HMAC would require an independently managed, rotatable server key and a migration plan.
 
 The stored JSON response duplicates the reservation result, including customer name and email. This supports exact replay even after the original reservation changes, but duplicates personal information and potentially becomes stale. Database credentials and backups must be restricted as personal data; logs redact authorization, cookies and idempotency keys. The current implementation has no expiry, background cleanup or encryption specific to snapshots. Authentication checks the signed customer identity, and lookup is scoped to that customer; the authentication middleware does not itself check whether the customer still exists in the database.

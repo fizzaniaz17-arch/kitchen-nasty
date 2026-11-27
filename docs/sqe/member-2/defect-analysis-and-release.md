@@ -1,5 +1,7 @@
 # Reservation defects: analysis and release decision
 
+> **Merged status, 27 November 2026:** PR #32 merged at `055c117f384f92e9c9dc49e8858d6ad52b59b8a5`; the former candidate states in this preserved analysis describe the pre-merge investigation. Issues #21, #23, #24, #25 and #27 are closed for scoped acceptance. Issues #18, #19, #20, #22 and #26 remain open for the residual operational, historical-data, noncooperating-writer or mobile-client limitations described below. Production release remains on hold pending the controls in [the security review](idempotency-security-review.md).
+
 This is an SQE review-branch analysis, not an assertion that changes have reached main. The historical defect evidence and issue descriptions remain intact in [defects.md](defects.md). The user reported team approval for the listed business rules on 27 November; persistence/retention design and integration review remain open. See [final contract decisions](final-contract-decisions.md).
 
 ## Defect-group status and risk
