@@ -1,5 +1,7 @@
 # Reservation and table defect register
 
+> **Current review-branch update, 27 November 2026:** The historical observations below remain preserved. The user reported team approval of lifecycle, occupancy, availability and optional retry rules. Local candidate verification and remaining persistence/retention, integration and hosted-CI review are tracked in [final contract decisions](final-contract-decisions.md), [defect analysis](defect-analysis-and-release.md), and [report addendum](final-report-addendum.md). Do not interpret the historical failure counts below as the latest run.
+
 The final PostgreSQL run had 36 failed requirement tests, including expectations that still await team confirmation. The 33 original failures reproduced by exact full Vitest name. The rows below link each triage ID to its GitHub issue. Issue creation does not establish owner acceptance or resolve requirements awaiting team review.
 
 | ID | Reproduction and expected result | Observed behavior and candidate cause | Severity / priority | Risk |

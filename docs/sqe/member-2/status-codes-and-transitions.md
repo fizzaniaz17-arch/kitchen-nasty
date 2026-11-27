@@ -1,5 +1,7 @@
 # HTTP status and lifecycle test basis
 
+> **Current review-branch update, 27 November 2026:** The historical observations below remain preserved. The user reported team approval of lifecycle, occupancy, availability and optional retry rules. Local candidate verification and remaining persistence/retention, integration and hosted-CI review are tracked in [final contract decisions](final-contract-decisions.md), [defect analysis](defect-analysis-and-release.md), and [report addendum](final-report-addendum.md). Do not interpret the historical failure counts below as the latest run.
+
 | Result | Actual scope and examples |
 |---|---|
 | 200 | Successful GET or PATCH; also incorrectly accepted invalid table assignments and status transitions. |

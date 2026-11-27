@@ -1,5 +1,7 @@
 # EP, BVA and traceability
 
+> **Current review-branch update, 27 November 2026:** The historical observations below remain preserved. The user reported team approval of lifecycle, occupancy, availability and optional retry rules. Local candidate verification and remaining persistence/retention, integration and hosted-CI review are tracked in [final contract decisions](final-contract-decisions.md), [defect analysis](defect-analysis-and-release.md), and [report addendum](final-report-addendum.md). Do not interpret the historical failure counts below as the latest run.
+
 Working source: `tests/team/member-2/reservations.openapi.json`; emitted case IDs and values: `tests/team/member-2/generated/ep-bva-cases.json`. The rows below describe test categories, not a claim that all business rules pass. Query parameters travel as text; the query literal `null` is not a JSON null. Path IDs cannot be JSON null at the HTTP path layer. Domain rules that relate multiple records are represented by separate fixtures and tests.
 
 | Input and endpoints | Classes and boundaries exercised | Requirement / evidence |
