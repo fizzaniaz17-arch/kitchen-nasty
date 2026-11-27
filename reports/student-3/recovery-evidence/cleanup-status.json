@@ -1,0 +1,11 @@
+{
+    "observedAt":  "2026-11-22T11:00:54.2714945Z",
+    "isolatedContainer":  "student3-recovery-pg",
+    "isolatedContainerState":  "exited",
+    "recoveryDatabase":  "student3_recovery",
+    "e2eDatabase":  "student3_recovery_e2e",
+    "sharedContainer":  "kitchenasty-db",
+    "sharedContainerState":  "running",
+    "preservedNamedVolume":  "student3-recovery-data",
+    "volumeDeleted":  false
+}

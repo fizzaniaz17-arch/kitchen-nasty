@@ -109,7 +109,7 @@ const updateStaffSchema = z.object({
 export async function updateStaff(req: Request<{ id: string }>, res: Response): Promise<void> {
   const parsed = updateStaffSchema.safeParse(req.body);
   if (!parsed.success) {
-    res.status(400).json({ success: false, error: parsed.error.errors });
+    res.status(400).json({ success: false, error: parsed.error.issues });
     return;
   }
 
@@ -189,7 +189,7 @@ const inviteStaffSchema = z.object({
 export async function inviteStaff(req: Request, res: Response): Promise<void> {
   const parsed = inviteStaffSchema.safeParse(req.body);
   if (!parsed.success) {
-    res.status(400).json({ success: false, error: parsed.error.errors });
+    res.status(400).json({ success: false, error: parsed.error.issues });
     return;
   }
 
@@ -280,7 +280,7 @@ const acceptInviteSchema = z.object({
 export async function acceptInvite(req: Request, res: Response): Promise<void> {
   const parsed = acceptInviteSchema.safeParse(req.body);
   if (!parsed.success) {
-    res.status(400).json({ success: false, error: parsed.error.errors });
+    res.status(400).json({ success: false, error: parsed.error.issues });
     return;
   }
 

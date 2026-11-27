@@ -23,7 +23,12 @@ const updateReservationSchema = z.object({
 export async function createReservation(req: Request, res: Response): Promise<void> {
   const parsed = createReservationSchema.safeParse(req.body);
   if (!parsed.success) {
-    res.status(400).json({ success: false, error: parsed.error.errors });
+    res.status(400).json({ success: false, error: parsed.error.issues });
+    return;
+  }
+
+  if (parsed.data.date < new Date().toISOString().slice(0, 10)) {
+    res.status(400).json({ success: false, error: 'Cannot reserve in the past' });
     return;
   }
 
@@ -140,7 +145,7 @@ export async function updateReservation(req: Request<{ id: string }>, res: Respo
   const { id } = req.params;
   const parsed = updateReservationSchema.safeParse(req.body);
   if (!parsed.success) {
-    res.status(400).json({ success: false, error: parsed.error.errors });
+    res.status(400).json({ success: false, error: parsed.error.issues });
     return;
   }
 

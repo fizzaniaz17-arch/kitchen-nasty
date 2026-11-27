@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { z } from 'zod';
 import prisma from '../lib/db.js';
 import { auditLog } from '../lib/audit.js';
@@ -38,40 +38,53 @@ const createLocationSchema = z.object({
   })).optional(),
 });
 
-const updateLocationSchema = createLocationSchema.partial().omit({ slug: true });
+const updateLocationSchema = createLocationSchema.partial().omit({ slug: true }).extend({
+  country: z.string().optional(),
+  isActive: z.boolean().optional(),
+  deliveryEnabled: z.boolean().optional(),
+  pickupEnabled: z.boolean().optional(),
+  minOrderDelivery: z.number().min(0).optional(),
+  minOrderPickup: z.number().min(0).optional(),
+  deliveryLeadTime: z.number().int().min(0).optional(),
+  pickupLeadTime: z.number().int().min(0).optional(),
+});
 
 // ============================================================
 // HANDLERS
 // ============================================================
 
-export async function listLocations(req: Request, res: Response): Promise<void> {
-  const page = Math.max(1, parseInt(req.query.page as string) || 1);
-  const limit = Math.min(50, Math.max(1, parseInt(req.query.limit as string) || 20));
-  const skip = (page - 1) * limit;
+export async function listLocations(req: Request, res: Response, next: NextFunction): Promise<void> {
+  try {
+    const page = Math.max(1, parseInt(req.query.page as string) || 1);
+    const limit = Math.min(50, Math.max(1, parseInt(req.query.limit as string) || 20));
+    const skip = (page - 1) * limit;
 
-  const [locations, total] = await Promise.all([
-    prisma.location.findMany({
-      skip,
-      take: limit,
-      orderBy: { name: 'asc' },
-      include: {
-        operatingHours: { orderBy: { dayOfWeek: 'asc' } },
-        _count: { select: { deliveryZones: true, tables: true, orders: true } },
+    const [locations, total] = await Promise.all([
+      prisma.location.findMany({
+        skip,
+        take: limit,
+        orderBy: { name: 'asc' },
+        include: {
+          operatingHours: { orderBy: { dayOfWeek: 'asc' } },
+          _count: { select: { deliveryZones: true, tables: true, orders: true } },
+        },
+      }),
+      prisma.location.count(),
+    ]);
+
+    res.json({
+      success: true,
+      data: locations,
+      pagination: {
+        page,
+        limit,
+        total,
+        totalPages: Math.ceil(total / limit),
       },
-    }),
-    prisma.location.count(),
-  ]);
-
-  res.json({
-    success: true,
-    data: locations,
-    pagination: {
-      page,
-      limit,
-      total,
-      totalPages: Math.ceil(total / limit),
-    },
-  });
+    });
+  } catch (error) {
+    next(error);
+  }
 }
 
 export async function getLocation(req: Request<{ id: string }>, res: Response): Promise<void> {
@@ -98,7 +111,7 @@ export async function getLocation(req: Request<{ id: string }>, res: Response): 
 export async function createLocation(req: Request, res: Response): Promise<void> {
   const parsed = createLocationSchema.safeParse(req.body);
   if (!parsed.success) {
-    res.status(400).json({ success: false, error: parsed.error.errors });
+    res.status(400).json({ success: false, error: parsed.error.issues });
     return;
   }
 
@@ -131,7 +144,7 @@ export async function updateLocation(req: Request<{ id: string }>, res: Response
   const { id } = req.params;
   const parsed = updateLocationSchema.safeParse(req.body);
   if (!parsed.success) {
-    res.status(400).json({ success: false, error: parsed.error.errors });
+    res.status(400).json({ success: false, error: parsed.error.issues });
     return;
   }
 

@@ -1,0 +1,19 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: member2
+      POSTGRES_PASSWORD: ${MEMBER2_DB_PASSWORD:?Set MEMBER2_DB_PASSWORD for the disposable test database}
+      POSTGRES_DB: kitchenasty_member2_test
+    ports:
+      - "127.0.0.1:55432:5432"
+    volumes:
+      - member2_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U member2 -d kitchenasty_member2_test"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  member2_data:

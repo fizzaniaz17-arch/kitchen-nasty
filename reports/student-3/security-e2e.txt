@@ -1,0 +1,8 @@
+
+Running 3 tests using 1 worker
+
+  ok 1 [admin] › e2e\admin\security-headers.spec.ts:3:5 › admin development server returns security headers (81ms)
+  ok 2 [storefront] › e2e\storefront\security-headers.spec.ts:3:5 › storefront development server returns security headers (105ms)
+  ok 3 [storefront] › e2e\storefront\social-auth-callback.spec.ts:3:5 › exchanges the social login code without retaining it in the browser URL (837ms)
+
+  3 passed (26.9s)

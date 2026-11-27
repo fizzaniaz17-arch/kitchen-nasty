@@ -1,0 +1,92 @@
+{
+  "description": "Temporary spec file changed and regenerated using the CLI, then restored and regenerated; checked-in spec unchanged.",
+  "baselineSpecSha256": "09f32b4199dcb734a04932afb2b1ba1bc12cfacbf813ff141fd9f45dc57edaf7",
+  "restoredTemporarySpecSha256": "09f32b4199dcb734a04932afb2b1ba1bc12cfacbf813ff141fd9f45dc57edaf7",
+  "baselineCases": 296,
+  "changedCases": 296,
+  "restoredCases": 296,
+  "reservationPartySizeMaximum": {
+    "before": [
+      {
+        "id": "post:/reservations:partySize:max-1",
+        "partition": "max-1",
+        "value": 49,
+        "valid": true
+      },
+      {
+        "id": "post:/reservations:partySize:max",
+        "partition": "max",
+        "value": 50,
+        "valid": true
+      },
+      {
+        "id": "post:/reservations:partySize:max+1",
+        "partition": "max+1",
+        "value": 51,
+        "valid": false
+      }
+    ],
+    "after": [
+      {
+        "id": "post:/reservations:partySize:max-1",
+        "partition": "max-1",
+        "value": 39,
+        "valid": true
+      },
+      {
+        "id": "post:/reservations:partySize:max",
+        "partition": "max",
+        "value": 40,
+        "valid": true
+      },
+      {
+        "id": "post:/reservations:partySize:max+1",
+        "partition": "max+1",
+        "value": 41,
+        "valid": false
+      }
+    ]
+  },
+  "tableCapacityMinimum": {
+    "before": [
+      {
+        "id": "post:/locations/{locationId}/tables:capacity:min-1",
+        "partition": "min-1",
+        "value": 0,
+        "valid": false
+      },
+      {
+        "id": "post:/locations/{locationId}/tables:capacity:min",
+        "partition": "min",
+        "value": 1,
+        "valid": true
+      },
+      {
+        "id": "post:/locations/{locationId}/tables:capacity:min+1",
+        "partition": "min+1",
+        "value": 2,
+        "valid": true
+      }
+    ],
+    "after": [
+      {
+        "id": "post:/locations/{locationId}/tables:capacity:min-1",
+        "partition": "min-1",
+        "value": 1,
+        "valid": false
+      },
+      {
+        "id": "post:/locations/{locationId}/tables:capacity:min",
+        "partition": "min",
+        "value": 2,
+        "valid": true
+      },
+      {
+        "id": "post:/locations/{locationId}/tables:capacity:min+1",
+        "partition": "min+1",
+        "value": 3,
+        "valid": true
+      }
+    ]
+  }
+}

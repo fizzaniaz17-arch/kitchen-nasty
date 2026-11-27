@@ -1,0 +1,12 @@
+PR #8 red-phase evidence
+
+Commit: d405f8326be9d8e2db29f60ff7005e4863b46eef
+Workflow: https://github.com/fizzaniaz17-arch/kitchen-nasty/actions/runs/45007936801
+Coverage job: https://github.com/fizzaniaz17-arch/kitchen-nasty/actions/runs/45007936801/job/137163603085
+
+Failing test: rejects a past reservation date before database access
+Expected: HTTP 400 with { success: false, error: 'Cannot reserve in the past' }
+Actual: HTTP 400 with { success: false, error: 'Location not found or inactive' }
+Result: the past-date check was absent and the request reached the location database lookup. Member 1 test totals were 58 passed, 1 failed. Coverage and mutation failed; custom mutations passed; Sonar was skipped; Member 1 / Required failed.
+
+The genuine run-summary screenshot is screenshots/pr8-member1-red-d405f83.png. The failure detail is from the GitHub Actions coverage-job log, not recreated output.

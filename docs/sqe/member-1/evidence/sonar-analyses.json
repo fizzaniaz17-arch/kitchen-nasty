@@ -1,0 +1,23 @@
+﻿{
+    "paging":  {
+                   "pageIndex":  1,
+                   "pageSize":  20,
+                   "total":  1
+               },
+    "analyses":  [
+                     {
+                         "key":  "1c498e96-82b7-4545-a8ad-646479986687",
+                         "date":  "2026-11-21T16:15:11+0000",
+                         "events":  [
+                                        {
+                                            "key":  "AaH-5Ou7IgZiFB_GBOZ-",
+                                            "category":  "VERSION",
+                                            "name":  "0.3.2"
+                                        }
+                                    ],
+                         "projectVersion":  "0.3.2",
+                         "manualNewCodePeriodBaseline":  false,
+                         "revision":  "46a942874deaf7f578e79461e1806603de107513"
+                     }
+                 ]
+}

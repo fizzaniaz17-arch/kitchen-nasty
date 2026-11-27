@@ -1,0 +1,25 @@
+SonarQube Cloud isolated updateReservation analysis
+Observed: 2026-11-22
+
+Scratch project: fizzaniaz17-arch_kitchen-nasty-update-reservation-scratch
+Source commit: 03d977cf352699dbfca919c4209056c1116e3818
+Scratch workflow commit: b293f982099c763a4dc5e767ceac1b3d50fd5f1e
+SonarScanner CLI: 8.0.1.6346
+Sonar analysis ID: 0e966ce9-1b82-4100-9fe6-3a2c959a7d6a
+
+Scope verification:
+- Sonar project base directory was sonar-scratch.
+- Sonar log reported "Project root configuration file: NONE".
+- Sonar log reported "1 file indexed".
+- The indexed TypeScript file, sonar-scratch/updateReservation.ts, contains only the unchanged updateReservation function.
+- The extracted function was compared against the source at commit 03d977cf352699dbfca919c4209056c1116e3818.
+
+Analysis result:
+- The Sonar scanner uploaded and processed the analysis successfully.
+- Reading the file complexity measure through the SonarCloud measures API returned HTTP 403 with the configured analysis credential.
+- No function-level complexity value is claimed from this run. The manual CFG result V(G)=9 remains separate.
+- Minimum next step: use a SonarCloud identity/token with Browse access to this scratch project, then retrieve the complexity measure for updateReservation.ts.
+
+GitHub evidence:
+- Workflow run: https://github.com/fizzaniaz17-arch/kitchen-nasty/actions/runs/45012955478
+- Analysis job: https://github.com/fizzaniaz17-arch/kitchen-nasty/actions/runs/45012955478/job/137179069022

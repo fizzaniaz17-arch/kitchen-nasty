@@ -1,0 +1,10 @@
+{
+  "reservationId": "student3-recovery-reservation-1",
+  "date": "2026-11-23",
+  "time": "19:00",
+  "status": "CONFIRMED",
+  "partySize": 2,
+  "customerEmail": "student3-recovery@example.test",
+  "locationSlug": "student3-recovery-test-location",
+  "tableName": "Recovery Test Table 1"
+}

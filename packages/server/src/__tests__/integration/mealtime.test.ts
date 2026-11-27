@@ -214,6 +214,7 @@ describe('Mealtime API', () => {
             expect(res.status).toBe(200);
             expect(res.body.success).toBe(true);
             expect(res.body.data.name).toBe('Brunch');
+            expect(mockedPrisma.mealtime.update.mock.calls[0][0].data).toStrictEqual({ name: 'Brunch' });
         });
 
         it('partial update — only isActive field', async () => {

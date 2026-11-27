@@ -35,12 +35,13 @@ const app = createApp();
 const staffToken = generateToken({ id: '1', email: 'admin@test.com', type: 'staff', role: 'SUPER_ADMIN' });
 const customerToken = generateToken({ id: 'cust-1', email: 'customer@test.com', type: 'customer' });
 
+const futureReservationDate = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
 const sampleLocation = { id: 'loc-1', name: 'Downtown Kitchen', isActive: true };
 const sampleReservation = {
   id: 'res-1',
   customerId: 'cust-1',
   locationId: 'loc-1',
-  date: new Date('2026-03-15'),
+  date: new Date(futureReservationDate),
   time: '19:00',
   partySize: 4,
   status: 'PENDING',
@@ -76,7 +77,7 @@ describe('Reservation API', () => {
       const res = await request(app)
         .post('/api/reservations')
         .set('Authorization', `Bearer ${customerToken}`)
-        .send({ locationId: 'loc-1', date: '2026-03-15', time: '19:00', partySize: 4 });
+        .send({ locationId: 'loc-1', date: futureReservationDate, time: '19:00', partySize: 4 });
       expect(res.status).toBe(400);
     });
 
@@ -86,7 +87,7 @@ describe('Reservation API', () => {
       const res = await request(app)
         .post('/api/reservations')
         .set('Authorization', `Bearer ${customerToken}`)
-        .send({ locationId: 'loc-1', date: '2026-03-15', time: '19:00', partySize: 4 });
+        .send({ locationId: 'loc-1', date: futureReservationDate, time: '19:00', partySize: 4 });
       expect(res.status).toBe(201);
       expect(res.body.data.partySize).toBe(4);
     });

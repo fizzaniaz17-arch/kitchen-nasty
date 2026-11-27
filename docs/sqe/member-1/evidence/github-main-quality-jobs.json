@@ -1,0 +1,465 @@
+﻿{
+    "total_count":  5,
+    "jobs":  [
+                 {
+                     "id":  136904240179,
+                     "run_id":  44923446784,
+                     "workflow_name":  "Member 1 Quality Gates",
+                     "head_branch":  "main",
+                     "run_url":  "https://api.github.com/repos/fizzaniaz17-arch/kitchen-nasty/actions/runs/44923446784",
+                     "run_attempt":  1,
+                     "node_id":  "CR_kwDOV18ijc8AAAAf4CDsMw",
+                     "head_sha":  "46a942874deaf7f578e79461e1806603de107513",
+                     "url":  "https://api.github.com/repos/fizzaniaz17-arch/kitchen-nasty/actions/jobs/136904240179",
+                     "html_url":  "https://github.com/fizzaniaz17-arch/kitchen-nasty/actions/runs/44923446784/job/136904240179",
+                     "status":  "completed",
+                     "conclusion":  "success",
+                     "created_at":  "2026-11-21T16:14:10Z",
+                     "started_at":  "2026-11-21T16:14:12Z",
+                     "completed_at":  "2026-11-21T16:14:54Z",
+                     "name":  "Member 1 / Custom Mutations",
+                     "steps":  [
+                                   {
+                                       "name":  "Set up job",
+                                       "status":  "completed",
+                                       "conclusion":  "success",
+                                       "number":  1,
+                                       "started_at":  "2026-11-21T16:14:13Z",
+                                       "completed_at":  "2026-11-21T16:14:13Z"
+                                   },
+                                   {
+                                       "name":  "Run actions/checkout@v4",
+                                       "status":  "completed",
+                                       "conclusion":  "success",
+                                       "number":  2,
+                                       "started_at":  "2026-11-21T16:14:13Z",
+                                       "completed_at":  "2026-11-21T16:14:14Z"
+                                   },
+                                   {
+                                       "name":  "Run actions/setup-node@v4",
+                                       "status":  "completed",
+                                       "conclusion":  "success",
+                                       "number":  3,
+                                       "started_at":  "2026-11-21T16:14:14Z",
+                                       "completed_at":  "2026-11-21T16:14:15Z"
+                                   },
+                                   {
+                                       "name":  "Run npm ci",
+                                       "status":  "completed",
+                                       "conclusion":  "success",
+                                       "number":  4,
+                                       "started_at":  "2026-11-21T16:14:15Z",
+                                       "completed_at":  "2026-11-21T16:14:48Z"
+                                   },
+                                   {
+                                       "name":  "Run npx -w packages/server prisma generate --schema ../../prisma/schema.prisma",
+                                       "status":  "completed",
+                                       "conclusion":  "success",
+                                       "number":  5,
+                                       "started_at":  "2026-11-21T16:14:48Z",
+                                       "completed_at":  "2026-11-21T16:14:50Z"
+                                   },
+                                   {
+                                       "name":  "CM-A maximum 50 to 49 must fail",
+                                       "status":  "completed",
+                                       "conclusion":  "success",
+                                       "number":  6,
+                                       "started_at":  "2026-11-21T16:14:50Z",
+                                       "completed_at":  "2026-11-21T16:14:51Z"
+                                   },
+                                   {
+                                       "name":  "CM-B inverted slot match must fail",
+                                       "status":  "completed",
+                                       "conclusion":  "success",
+                                       "number":  7,
+                                       "started_at":  "2026-11-21T16:14:51Z",
+                                       "completed_at":  "2026-11-21T16:14:52Z"
+                                   },
+                                   {
+                                       "name":  "Post Run actions/setup-node@v4",
+                                       "status":  "completed",
+                                       "conclusion":  "success",
+                                       "number":  13,
+                                       "started_at":  "2026-11-21T16:14:52Z",
+                                       "completed_at":  "2026-11-21T16:14:52Z"
+                                   },
+                                   {
+                                       "name":  "Post Run actions/checkout@v4",
+                                       "status":  "completed",
+                                       "conclusion":  "success",
+                                       "number":  14,
+                                       "started_at":  "2026-11-21T16:14:52Z",
+                                       "completed_at":  "2026-11-21T16:14:53Z"
+                                   },
+                                   {
+                                       "name":  "Complete job",
+                                       "status":  "completed",
+                                       "conclusion":  "success",
+                                       "number":  15,
+                                       "started_at":  "2026-11-21T16:14:53Z",
+                                       "completed_at":  "2026-11-21T16:14:53Z"
+                                   }
+                               ],
+                     "check_run_url":  "https://api.github.com/repos/fizzaniaz17-arch/kitchen-nasty/check-runs/136904240179",
+                     "labels":  [
+                                    "ubuntu-latest"
+                                ],
+                     "runner_id":  1000000173,
+                     "runner_name":  "GitHub Actions 1000000173",
+                     "runner_group_id":  0,
+                     "runner_group_name":  "GitHub Actions"
+                 },
+                 {
+                     "id":  136904240374,
+                     "run_id":  44923446784,
+                     "workflow_name":  "Member 1 Quality Gates",
+                     "head_branch":  "main",
+                     "run_url":  "https://api.github.com/repos/fizzaniaz17-arch/kitchen-nasty/actions/runs/44923446784",
+                     "run_attempt":  1,
+                     "node_id":  "CR_kwDOV18ijc8AAAAf4CDs9g",
+                     "head_sha":  "46a942874deaf7f578e79461e1806603de107513",
+                     "url":  "https://api.github.com/repos/fizzaniaz17-arch/kitchen-nasty/actions/jobs/136904240374",
+                     "html_url":  "https://github.com/fizzaniaz17-arch/kitchen-nasty/actions/runs/44923446784/job/136904240374",
+                     "status":  "completed",
+                     "conclusion":  "success",
+                     "created_at":  "2026-11-21T16:14:10Z",
+                     "started_at":  "2026-11-21T16:14:12Z",
+                     "completed_at":  "2026-11-21T16:14:50Z",
+                     "name":  "Member 1 / 100% Coverage",
+                     "steps":  [
+                                   {
+                                       "name":  "Set up job",
+                                       "status":  "completed",
+                                       "conclusion":  "success",
+                                       "number":  1,
+                                       "started_at":  "2026-11-21T16:14:13Z",
+                                       "completed_at":  "2026-11-21T16:14:14Z"
+                                   },
+                                   {
+                                       "name":  "Run actions/checkout@v4",
+                                       "status":  "completed",
+                                       "conclusion":  "success",
+                                       "number":  2,
+                                       "started_at":  "2026-11-21T16:14:14Z",
+                                       "completed_at":  "2026-11-21T16:14:19Z"
+                                   },
+                                   {
+                                       "name":  "Run actions/setup-node@v4",
+                                       "status":  "completed",
+                                       "conclusion":  "success",
+                                       "number":  3,
+                                       "started_at":  "2026-11-21T16:14:19Z",
+                                       "completed_at":  "2026-11-21T16:14:24Z"
+                                   },
+                                   {
+                                       "name":  "Run npm ci",
+                                       "status":  "completed",
+                                       "conclusion":  "success",
+                                       "number":  4,
+                                       "started_at":  "2026-11-21T16:14:24Z",
+                                       "completed_at":  "2026-11-21T16:14:44Z"
+                                   },
+                                   {
+                                       "name":  "Run npx -w packages/server prisma generate --schema ../../prisma/schema.prisma",
+                                       "status":  "completed",
+                                       "conclusion":  "success",
+                                       "number":  5,
+                                       "started_at":  "2026-11-21T16:14:44Z",
+                                       "completed_at":  "2026-11-21T16:14:45Z"
+                                   },
+                                   {
+                                       "name":  "Run npm run coverage:member1",
+                                       "status":  "completed",
+                                       "conclusion":  "success",
+                                       "number":  6,
+                                       "started_at":  "2026-11-21T16:14:45Z",
+                                       "completed_at":  "2026-11-21T16:14:46Z"
+                                   },
+                                   {
+                                       "name":  "Upload coverage evidence",
+                                       "status":  "completed",
+                                       "conclusion":  "success",
+                                       "number":  7,
+                                       "started_at":  "2026-11-21T16:14:46Z",
+                                       "completed_at":  "2026-11-21T16:14:47Z"
+                                   },
+                                   {
+                                       "name":  "Post Run actions/setup-node@v4",
+                                       "status":  "completed",
+                                       "conclusion":  "success",
+                                       "number":  13,
+                                       "started_at":  "2026-11-21T16:14:47Z",
+                                       "completed_at":  "2026-11-21T16:14:49Z"
+                                   },
+                                   {
+                                       "name":  "Post Run actions/checkout@v4",
+                                       "status":  "completed",
+                                       "conclusion":  "success",
+                                       "number":  14,
+                                       "started_at":  "2026-11-21T16:14:49Z",
+                                       "completed_at":  "2026-11-21T16:14:49Z"
+                                   },
+                                   {
+                                       "name":  "Complete job",
+                                       "status":  "completed",
+                                       "conclusion":  "success",
+                                       "number":  15,
+                                       "started_at":  "2026-11-21T16:14:49Z",
+                                       "completed_at":  "2026-11-21T16:14:49Z"
+                                   }
+                               ],
+                     "check_run_url":  "https://api.github.com/repos/fizzaniaz17-arch/kitchen-nasty/check-runs/136904240374",
+                     "labels":  [
+                                    "ubuntu-latest"
+                                ],
+                     "runner_id":  1000000174,
+                     "runner_name":  "GitHub Actions 1000000174",
+                     "runner_group_id":  0,
+                     "runner_group_name":  "GitHub Actions"
+                 },
+                 {
+                     "id":  136904240516,
+                     "run_id":  44923446784,
+                     "workflow_name":  "Member 1 Quality Gates",
+                     "head_branch":  "main",
+                     "run_url":  "https://api.github.com/repos/fizzaniaz17-arch/kitchen-nasty/actions/runs/44923446784",
+                     "run_attempt":  1,
+                     "node_id":  "CR_kwDOV18ijc8AAAAf4CDthA",
+                     "head_sha":  "46a942874deaf7f578e79461e1806603de107513",
+                     "url":  "https://api.github.com/repos/fizzaniaz17-arch/kitchen-nasty/actions/jobs/136904240516",
+                     "html_url":  "https://github.com/fizzaniaz17-arch/kitchen-nasty/actions/runs/44923446784/job/136904240516",
+                     "status":  "completed",
+                     "conclusion":  "success",
+                     "created_at":  "2026-11-21T16:14:10Z",
+                     "started_at":  "2026-11-21T16:14:12Z",
+                     "completed_at":  "2026-11-21T16:16:13Z",
+                     "name":  "Member 1 / Mutation 60%",
+                     "steps":  [
+                                   {
+                                       "name":  "Set up job",
+                                       "status":  "completed",
+                                       "conclusion":  "success",
+                                       "number":  1,
+                                       "started_at":  "2026-11-21T16:14:13Z",
+                                       "completed_at":  "2026-11-21T16:14:13Z"
+                                   },
+                                   {
+                                       "name":  "Run actions/checkout@v4",
+                                       "status":  "completed",
+                                       "conclusion":  "success",
+                                       "number":  2,
+                                       "started_at":  "2026-11-21T16:14:13Z",
+                                       "completed_at":  "2026-11-21T16:14:14Z"
+                                   },
+                                   {
+                                       "name":  "Run actions/setup-node@v4",
+                                       "status":  "completed",
+                                       "conclusion":  "success",
+                                       "number":  3,
+                                       "started_at":  "2026-11-21T16:14:14Z",
+                                       "completed_at":  "2026-11-21T16:14:15Z"
+                                   },
+                                   {
+                                       "name":  "Run npm ci",
+                                       "status":  "completed",
+                                       "conclusion":  "success",
+                                       "number":  4,
+                                       "started_at":  "2026-11-21T16:14:15Z",
+                                       "completed_at":  "2026-11-21T16:14:49Z"
+                                   },
+                                   {
+                                       "name":  "Run npx -w packages/server prisma generate --schema ../../prisma/schema.prisma",
+                                       "status":  "completed",
+                                       "conclusion":  "success",
+                                       "number":  5,
+                                       "started_at":  "2026-11-21T16:14:49Z",
+                                       "completed_at":  "2026-11-21T16:14:50Z"
+                                   },
+                                   {
+                                       "name":  "Run npm run mutation:member1",
+                                       "status":  "completed",
+                                       "conclusion":  "success",
+                                       "number":  6,
+                                       "started_at":  "2026-11-21T16:14:50Z",
+                                       "completed_at":  "2026-11-21T16:16:10Z"
+                                   },
+                                   {
+                                       "name":  "Upload mutation evidence",
+                                       "status":  "completed",
+                                       "conclusion":  "success",
+                                       "number":  7,
+                                       "started_at":  "2026-11-21T16:16:10Z",
+                                       "completed_at":  "2026-11-21T16:16:11Z"
+                                   },
+                                   {
+                                       "name":  "Post Run actions/setup-node@v4",
+                                       "status":  "completed",
+                                       "conclusion":  "success",
+                                       "number":  13,
+                                       "started_at":  "2026-11-21T16:16:11Z",
+                                       "completed_at":  "2026-11-21T16:16:12Z"
+                                   },
+                                   {
+                                       "name":  "Post Run actions/checkout@v4",
+                                       "status":  "completed",
+                                       "conclusion":  "success",
+                                       "number":  14,
+                                       "started_at":  "2026-11-21T16:16:12Z",
+                                       "completed_at":  "2026-11-21T16:16:12Z"
+                                   },
+                                   {
+                                       "name":  "Complete job",
+                                       "status":  "completed",
+                                       "conclusion":  "success",
+                                       "number":  15,
+                                       "started_at":  "2026-11-21T16:16:12Z",
+                                       "completed_at":  "2026-11-21T16:16:12Z"
+                                   }
+                               ],
+                     "check_run_url":  "https://api.github.com/repos/fizzaniaz17-arch/kitchen-nasty/check-runs/136904240516",
+                     "labels":  [
+                                    "ubuntu-latest"
+                                ],
+                     "runner_id":  1000000175,
+                     "runner_name":  "GitHub Actions 1000000175",
+                     "runner_group_id":  0,
+                     "runner_group_name":  "GitHub Actions"
+                 },
+                 {
+                     "id":  136904430022,
+                     "run_id":  44923446784,
+                     "workflow_name":  "Member 1 Quality Gates",
+                     "head_branch":  "main",
+                     "run_url":  "https://api.github.com/repos/fizzaniaz17-arch/kitchen-nasty/actions/runs/44923446784",
+                     "run_attempt":  1,
+                     "node_id":  "CR_kwDOV18ijc8AAAAf4CPRxg",
+                     "head_sha":  "46a942874deaf7f578e79461e1806603de107513",
+                     "url":  "https://api.github.com/repos/fizzaniaz17-arch/kitchen-nasty/actions/jobs/136904430022",
+                     "html_url":  "https://github.com/fizzaniaz17-arch/kitchen-nasty/actions/runs/44923446784/job/136904430022",
+                     "status":  "completed",
+                     "conclusion":  "failure",
+                     "created_at":  "2026-11-21T16:14:50Z",
+                     "started_at":  "2026-11-21T16:14:53Z",
+                     "completed_at":  "2026-11-21T16:16:28Z",
+                     "name":  "Member 1 / Sonar Quality Gate",
+                     "steps":  [
+                                   {
+                                       "name":  "Set up job",
+                                       "status":  "completed",
+                                       "conclusion":  "success",
+                                       "number":  1,
+                                       "started_at":  "2026-11-21T16:14:54Z",
+                                       "completed_at":  "2026-11-21T16:14:55Z"
+                                   },
+                                   {
+                                       "name":  "Run actions/checkout@v4",
+                                       "status":  "completed",
+                                       "conclusion":  "success",
+                                       "number":  2,
+                                       "started_at":  "2026-11-21T16:14:55Z",
+                                       "completed_at":  "2026-11-21T16:14:57Z"
+                                   },
+                                   {
+                                       "name":  "Run actions/download-artifact@v4",
+                                       "status":  "completed",
+                                       "conclusion":  "success",
+                                       "number":  3,
+                                       "started_at":  "2026-11-21T16:14:57Z",
+                                       "completed_at":  "2026-11-21T16:14:58Z"
+                                   },
+                                   {
+                                       "name":  "Verify Member 1 LCOV report",
+                                       "status":  "completed",
+                                       "conclusion":  "success",
+                                       "number":  4,
+                                       "started_at":  "2026-11-21T16:14:58Z",
+                                       "completed_at":  "2026-11-21T16:14:58Z"
+                                   },
+                                   {
+                                       "name":  "Analyze and wait for this analysis quality gate",
+                                       "status":  "completed",
+                                       "conclusion":  "failure",
+                                       "number":  5,
+                                       "started_at":  "2026-11-21T16:14:58Z",
+                                       "completed_at":  "2026-11-21T16:16:26Z"
+                                   },
+                                   {
+                                       "name":  "Post Run actions/checkout@v4",
+                                       "status":  "completed",
+                                       "conclusion":  "success",
+                                       "number":  10,
+                                       "started_at":  "2026-11-21T16:16:26Z",
+                                       "completed_at":  "2026-11-21T16:16:26Z"
+                                   },
+                                   {
+                                       "name":  "Complete job",
+                                       "status":  "completed",
+                                       "conclusion":  "success",
+                                       "number":  11,
+                                       "started_at":  "2026-11-21T16:16:26Z",
+                                       "completed_at":  "2026-11-21T16:16:26Z"
+                                   }
+                               ],
+                     "check_run_url":  "https://api.github.com/repos/fizzaniaz17-arch/kitchen-nasty/check-runs/136904430022",
+                     "labels":  [
+                                    "ubuntu-latest"
+                                ],
+                     "runner_id":  1000000183,
+                     "runner_name":  "GitHub Actions 1000000183",
+                     "runner_group_id":  0,
+                     "runner_group_name":  "GitHub Actions"
+                 },
+                 {
+                     "id":  136904931575,
+                     "run_id":  44923446784,
+                     "workflow_name":  "Member 1 Quality Gates",
+                     "head_branch":  "main",
+                     "run_url":  "https://api.github.com/repos/fizzaniaz17-arch/kitchen-nasty/actions/runs/44923446784",
+                     "run_attempt":  1,
+                     "node_id":  "CR_kwDOV18ijc8AAAAf4Ct49w",
+                     "head_sha":  "46a942874deaf7f578e79461e1806603de107513",
+                     "url":  "https://api.github.com/repos/fizzaniaz17-arch/kitchen-nasty/actions/jobs/136904931575",
+                     "html_url":  "https://github.com/fizzaniaz17-arch/kitchen-nasty/actions/runs/44923446784/job/136904931575",
+                     "status":  "completed",
+                     "conclusion":  "failure",
+                     "created_at":  "2026-11-21T16:16:28Z",
+                     "started_at":  "2026-11-21T16:16:31Z",
+                     "completed_at":  "2026-11-21T16:16:34Z",
+                     "name":  "Member 1 / Required",
+                     "steps":  [
+                                   {
+                                       "name":  "Set up job",
+                                       "status":  "completed",
+                                       "conclusion":  "success",
+                                       "number":  1,
+                                       "started_at":  "2026-11-21T16:16:31Z",
+                                       "completed_at":  "2026-11-21T16:16:31Z"
+                                   },
+                                   {
+                                       "name":  "Enforce all Member 1 gates",
+                                       "status":  "completed",
+                                       "conclusion":  "failure",
+                                       "number":  2,
+                                       "started_at":  "2026-11-21T16:16:31Z",
+                                       "completed_at":  "2026-11-21T16:16:32Z"
+                                   },
+                                   {
+                                       "name":  "Complete job",
+                                       "status":  "completed",
+                                       "conclusion":  "success",
+                                       "number":  3,
+                                       "started_at":  "2026-11-21T16:16:32Z",
+                                       "completed_at":  "2026-11-21T16:16:32Z"
+                                   }
+                               ],
+                     "check_run_url":  "https://api.github.com/repos/fizzaniaz17-arch/kitchen-nasty/check-runs/136904931575",
+                     "labels":  [
+                                    "ubuntu-latest"
+                                ],
+                     "runner_id":  1000000185,
+                     "runner_name":  "GitHub Actions 1000000185",
+                     "runner_group_id":  0,
+                     "runner_group_name":  "GitHub Actions"
+                 }
+             ]
+}

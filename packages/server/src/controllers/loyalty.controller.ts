@@ -51,7 +51,7 @@ export async function redeemPoints(req: Request, res: Response): Promise<void> {
 
   const parsed = redeemSchema.safeParse(req.body);
   if (!parsed.success) {
-    res.status(400).json({ success: false, error: parsed.error.errors });
+    res.status(400).json({ success: false, error: parsed.error.issues });
     return;
   }
 
@@ -99,7 +99,7 @@ export async function adjustPoints(req: Request<{ id: string }>, res: Response):
   const { id: customerId } = req.params;
   const parsed = adjustSchema.safeParse(req.body);
   if (!parsed.success) {
-    res.status(400).json({ success: false, error: parsed.error.errors });
+    res.status(400).json({ success: false, error: parsed.error.issues });
     return;
   }
 
