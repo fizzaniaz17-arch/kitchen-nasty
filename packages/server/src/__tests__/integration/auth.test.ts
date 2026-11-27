@@ -12,6 +12,7 @@ vi.mock('../../lib/db.js', () => {
       create: vi.fn(),
     },
     customer: {
+      findFirst: vi.fn().mockImplementation(async ({ where }: { where: { id?: string } }) => where.id ? { id: where.id } : null),
       findUnique: vi.fn(),
       create: vi.fn(),
     },

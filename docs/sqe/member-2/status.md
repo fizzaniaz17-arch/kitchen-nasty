@@ -1,5 +1,7 @@
 # Member 2 audit closeout
 
+> **Current review-branch update, 27 November 2026:** The historical observations below remain preserved. The user reported team approval of lifecycle, occupancy, availability and optional retry rules. Local candidate verification and remaining persistence/retention, integration and hosted-CI review are tracked in [final contract decisions](final-contract-decisions.md), [defect analysis](defect-analysis-and-release.md), and [report addendum](final-report-addendum.md). Do not interpret the historical failure counts below as the latest run.
+
 Branch `sqe/member2-api-testing`, team baseline `6dbae760f9763740ff7f569eca3a981021c18e5d`. The updated reservation/table suite ran against PostgreSQL 16 on the dedicated loopback port 55432. The suite returned exit 1. No release or merge sign-off is warranted.
 
 | Local check | Result | Evidence |

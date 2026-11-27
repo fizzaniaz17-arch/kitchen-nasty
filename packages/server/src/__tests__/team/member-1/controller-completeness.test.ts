@@ -1,17 +1,21 @@
 import type { Request, Response } from 'express';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-vi.mock('../../../lib/db.js', () => ({
-  default: {
+vi.mock('../../../lib/db.js', () => {
+  const mockPrisma = {
+    $transaction: vi.fn(),
+    reservationCreateRequest: { findUnique: vi.fn(), create: vi.fn(), update: vi.fn() },
     $queryRaw: vi.fn(),
     location: { findUnique: vi.fn() },
     reservation: {
-      findUnique: vi.fn(), findMany: vi.fn(), create: vi.fn(), update: vi.fn(),
+      findUnique: vi.fn(), findFirst: vi.fn().mockResolvedValue(null), findMany: vi.fn(), create: vi.fn(), update: vi.fn(),
       count: vi.fn(), delete: vi.fn(), groupBy: vi.fn(), aggregate: vi.fn(),
     },
     table: { findMany: vi.fn(), findFirst: vi.fn(), create: vi.fn(), update: vi.fn(), delete: vi.fn() },
-  },
-}));
+  };
+  mockPrisma.$transaction.mockImplementation(async (callback: (tx: typeof mockPrisma) => Promise<unknown>) => callback(mockPrisma));
+  return { default: mockPrisma };
+});
 
 vi.mock('../../../lib/events.js', () => ({ appEvents: { emit: vi.fn() } }));
 
@@ -39,7 +43,7 @@ function response() {
 }
 
 function request(value: Partial<Request>): Request {
-  return value as Request;
+  return { get: () => undefined, ...value } as Request;
 }
 
 beforeEach(() => vi.clearAllMocks());
@@ -126,7 +130,7 @@ describe('reservation controller completeness', () => {
   });
 
   it('performs a valid no-op partial update with every optional field omitted', async () => {
-    db.reservation.findUnique.mockResolvedValue({ id: 'r-1' });
+    db.reservation.findUnique.mockResolvedValue({ id: 'r-1', tableId: null });
     db.reservation.update.mockResolvedValue({ id: 'r-1' });
     const res = response();
     await updateReservation(request({ params: { id: 'r-1' }, body: {} }), res);

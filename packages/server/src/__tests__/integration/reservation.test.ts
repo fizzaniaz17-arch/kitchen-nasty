@@ -11,12 +11,14 @@ vi.mock('../../lib/db.js', () => {
     menuItem: { findMany: vi.fn(), findUnique: vi.fn(), update: vi.fn() },
     deliveryZone: { findMany: vi.fn(), findFirst: vi.fn(), create: vi.fn(), update: vi.fn(), delete: vi.fn() },
     table: { findMany: vi.fn(), findFirst: vi.fn(), findUnique: vi.fn(), create: vi.fn(), update: vi.fn(), delete: vi.fn() },
-    reservation: { findMany: vi.fn(), findUnique: vi.fn(), create: vi.fn(), update: vi.fn(), delete: vi.fn(), count: vi.fn(), groupBy: vi.fn(), aggregate: vi.fn() },
-    $queryRaw: vi.fn(),
+    reservation: { findMany: vi.fn(), findFirst: vi.fn(), findUnique: vi.fn(), create: vi.fn(), update: vi.fn(), delete: vi.fn(), count: vi.fn(), groupBy: vi.fn(), aggregate: vi.fn() },
+    $queryRaw: vi.fn().mockResolvedValue([]),
+    $transaction: vi.fn(),
     user: { findUnique: vi.fn() },
-    customer: { findUnique: vi.fn() },
+    customer: { findFirst: vi.fn().mockImplementation(async ({ where }: { where: { id?: string } }) => where.id ? { id: where.id } : null), findUnique: vi.fn() },
     category: { findMany: vi.fn(), findUnique: vi.fn(), create: vi.fn(), update: vi.fn(), delete: vi.fn(), count: vi.fn() },
   };
+  mockPrisma.$transaction.mockImplementation(async (callback: (tx: typeof mockPrisma) => Promise<unknown>) => callback(mockPrisma));
   return { default: mockPrisma, prisma: mockPrisma };
 });
 
@@ -41,6 +43,7 @@ const sampleReservation = {
   id: 'res-1',
   customerId: 'cust-1',
   locationId: 'loc-1',
+  tableId: null,
   date: new Date(futureReservationDate),
   time: '19:00',
   partySize: 4,
@@ -197,14 +200,18 @@ describe('Reservation API', () => {
     });
 
     it('updates status successfully', async () => {
-      mockedPrisma.reservation.findUnique.mockResolvedValueOnce(sampleReservation as any);
-      mockedPrisma.reservation.update.mockResolvedValueOnce({ ...sampleReservation, status: 'CONFIRMED' } as any);
+      mockedPrisma.reservation.findUnique.mockResolvedValueOnce({ ...sampleReservation, tableId: 'table-1' } as any);
+      mockedPrisma.reservation.findFirst.mockResolvedValueOnce(null);
+      mockedPrisma.reservation.update.mockResolvedValueOnce({ ...sampleReservation, tableId: 'table-1', status: 'CONFIRMED' } as any);
       const res = await request(app)
         .patch('/api/reservations/res-1')
         .set('Authorization', `Bearer ${staffToken}`)
         .send({ status: 'CONFIRMED' });
       expect(res.status).toBe(200);
       expect(res.body.data.status).toBe('CONFIRMED');
+      expect(mockedPrisma.reservation.findFirst).toHaveBeenCalledWith(expect.objectContaining({
+        where: expect.objectContaining({ tableId: 'table-1', id: { not: 'res-1' } }),
+      }));
     });
   });
 
