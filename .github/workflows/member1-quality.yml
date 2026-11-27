@@ -101,7 +101,7 @@ jobs:
       - name: Generate storefront coverage
         run: node node_modules/vitest/vitest.mjs run --coverage --coverage.reporter=lcov --coverage.reportsDirectory=coverage/sonar --root packages/storefront
       - name: Generate admin coverage
-        run: node node_modules/vitest/vitest.mjs run --coverage --config packages/admin/vitest.config.ts --coverage.reporter=lcov --coverage.reportsDirectory=coverage/sonar --root packages/admin
+        run: node node_modules/vitest/vitest.mjs run --coverage --config vitest.config.ts --coverage.reporter=lcov --coverage.reportsDirectory=coverage/sonar --root packages/admin
       - name: Normalize LCOV paths
         run: |
           sed -i 's#^SF:src/#SF:packages/server/src/#' packages/server/coverage/sonar/lcov.info
