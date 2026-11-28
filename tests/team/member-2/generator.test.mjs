@@ -41,3 +41,40 @@ test('relative-day triplets follow the minimum UTC-day offset', () => {
   const days = generate(changed).filter(c => c.location === 'relative-date');
   assert.deepEqual(days.map(c => [c.value, c.valid]), [[0, false], [1, true], [2, true]]);
 });
+
+
+test('header string cases follow schema length and pattern constraints', () => {
+  const header = cases => cases.filter(c => c.location === 'header' && c.field === 'Idempotency-Key');
+  const cases = header(generate(original));
+  assert.deepEqual(cases.map(c => c.partition), ['omitted', 'ordinary', 'invalid-pattern',
+    'minLength-1', 'minLength', 'minLength+1', 'maxLength-1', 'maxLength', 'maxLength+1']);
+  assert.deepEqual(cases.slice(3).map(c => [c.value.length, c.valid]),
+    [[0, false], [1, true], [2, true], [127, true], [128, true], [129, false]]);
+  assert.equal(cases[1].value, 'Test-42._~');
+  assert.equal(cases[0].omitted, true);
+  assert.equal(cases[0].valid, true);
+  assert.equal(cases[3].omitted, false);
+  assert.equal(cases[3].value, '');
+  assert.equal(cases[2].valid, false);
+  const changed = structuredClone(original);
+  const rule = changed.paths['/reservations'].post.parameters.find(p => p.name === 'Idempotency-Key').schema;
+  rule.minLength = 2;
+  rule.maxLength = 4;
+  const modified = header(generate(changed));
+  assert.deepEqual(modified.slice(3).map(c => c.value.length), [1, 2, 3, 3, 4, 5]);
+  rule.minLength = 1;
+  rule.maxLength = 128;
+  rule.pattern = '^[A-Z0-9]+$';
+  const patternCases = header(generate(changed));
+  assert.equal(patternCases.find(c => c.partition === 'ordinary').value, 'A');
+  assert.equal(patternCases.find(c => c.partition === 'invalid-pattern').valid, false);
+});
+
+test('generated case IDs are unique, deterministic, and preserve non-header cases', () => {
+  const cases = generate(original);
+  assert.deepEqual(generate(original), cases);
+  assert.equal(new Set(cases.map(c => c.id)).size, cases.length);
+  const withoutHeaders = structuredClone(original);
+  withoutHeaders.paths['/reservations'].post.parameters = [];
+  assert.deepEqual(cases.filter(c => c.location !== 'header'), generate(withoutHeaders));
+});
