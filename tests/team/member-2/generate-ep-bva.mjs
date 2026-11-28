@@ -67,7 +67,36 @@ export function generate(spec) {
       if (!op) continue;
       for (const p of [...(item.parameters || []), ...(op.parameters || [])].map(deref)) {
         const add = (partition, value, omitted = false, isolated = false) => cases.push({ id: `${method}:${path}:${p.in}:${p.name}:${partition}`, method, path, location: p.in, field: p.name, partition, value, omitted, isolated });
-        if (p.in === 'path') {
+        if (p.in === 'header' && p.schema?.type === 'string') {
+          const rule = p.schema;
+          const pattern = rule.pattern ? new RegExp(rule.pattern) : null;
+          const valid = value => (rule.minLength === undefined || value.length >= rule.minLength) &&
+            (rule.maxLength === undefined || value.length <= rule.maxLength) && (!pattern || pattern.test(value));
+          const addHeader = (partition, value, omitted = false) => cases.push({
+            id: `${method}:${path}:header:${p.name}:${partition}`, method, path,
+            location: 'header', field: p.name, partition, value, omitted,
+            valid: omitted ? !p.required : valid(value),
+          });
+          const sample = p.example ?? ['Test-42._~', 'A'.repeat(Math.max(1, rule.minLength ?? 1))].find(valid);
+          if (sample === undefined || !valid(sample)) throw new Error(`Header ${p.name} needs a schema-valid example`);
+          addHeader(p.required ? 'missing' : 'omitted', null, true);
+          addHeader('ordinary', sample);
+          if (pattern) {
+            const invalid = ['bad key', sample + '!', '!', '@', '/'].find(value =>
+              (rule.minLength === undefined || value.length >= rule.minLength) &&
+              (rule.maxLength === undefined || value.length <= rule.maxLength) && !pattern.test(value));
+            if (invalid === undefined) throw new Error(`Header ${p.name} needs an invalid-pattern example`);
+            addHeader('invalid-pattern', invalid);
+          }
+          for (const [name, bound] of [['minLength', rule.minLength], ['maxLength', rule.maxLength]]) {
+            if (bound === undefined) continue;
+            for (const delta of [-1, 0, 1]) {
+              const length = bound + delta;
+              if (length < 0) continue;
+              addHeader(`${name}${delta < 0 ? '-1' : delta > 0 ? '+1' : ''}`, sample[0].repeat(length));
+            }
+          }
+        } else if (p.in === 'path') {
           add('known', '$known');
           add('unknown', '$unknown');
           for (const [partition, value] of Object.entries(op['x-path-samples']?.[p.name] || {})) add(partition, value);

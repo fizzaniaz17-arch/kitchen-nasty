@@ -1,6 +1,8 @@
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 import request from 'supertest';
-import { randomBytes, randomUUID } from 'node:crypto';
+import { createHash, randomBytes, randomUUID } from 'node:crypto';
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 import jwt from 'jsonwebtoken';
 
 const url = new URL(process.env.DATABASE_URL || 'postgresql://invalid/invalid');
@@ -36,6 +38,37 @@ afterAll(async () => {
   await db.customer.deleteMany({ where: { id: { in: customers } } });
   await db.$disconnect();
 });
+const generatedHeaderCases = (JSON.parse(readFileSync(resolve(process.cwd(),
+  '../../tests/team/member-2/generated/ep-bva-cases.json'), 'utf8')) as Array<{
+    id: string; method: string; path: string; location?: string; field?: string;
+    value: string | null; valid: boolean; omitted: boolean;
+  }>).filter(c => c.location === 'header' && c.method === 'post' &&
+    c.path === '/reservations' && c.field === 'Idempotency-Key');
+
+describe('generated idempotency header cases against PostgreSQL', () => {
+  it.each(generatedHeaderCases.map(c => [c.id, c] as const))('%s', async (_id, c) => {
+    const response = await create(0, body, c.omitted ? undefined : c.value!);
+    const reservations = await rows(), idempotencyRecords = await keys();
+    console.log(JSON.stringify({ caseId: c.id, headerOmitted: c.omitted,
+      headerLength: c.omitted ? null : c.value!.length, observedStatus: response.status,
+      reservationCount: reservations.length, idempotencyCount: idempotencyRecords.length }));
+    if (c.valid) {
+      expect(response.status).toBe(201);
+      expect(reservations).toHaveLength(1);
+      expect(reservations[0].id).toBe(response.body.data.id);
+      expect(idempotencyRecords).toHaveLength(c.omitted ? 0 : 1);
+      if (!c.omitted) expect(idempotencyRecords[0]).toMatchObject({
+        customerId: customers[0], keyHash: createHash('sha256').update(c.value!).digest('hex'),
+      });
+    } else {
+      expect(response.status).toBe(400);
+      expect(response.body).toMatchObject({ success: false, error: 'Invalid idempotency key' });
+      expect(reservations).toHaveLength(0);
+      expect(idempotencyRecords).toHaveLength(0);
+    }
+  });
+});
+
 describe('customer-scoped reservation idempotency', () => {
   it('replays identical sequential requests without modifying the booking or key', async () => {
     const first = await create(0, body, 'same-request');

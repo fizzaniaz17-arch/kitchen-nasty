@@ -2641,6 +2641,105 @@
     "isolated": true
   },
   {
+    "id": "post:/reservations:header:Idempotency-Key:omitted",
+    "method": "post",
+    "path": "/reservations",
+    "location": "header",
+    "field": "Idempotency-Key",
+    "partition": "omitted",
+    "value": null,
+    "omitted": true,
+    "valid": true
+  },
+  {
+    "id": "post:/reservations:header:Idempotency-Key:ordinary",
+    "method": "post",
+    "path": "/reservations",
+    "location": "header",
+    "field": "Idempotency-Key",
+    "partition": "ordinary",
+    "value": "Test-42._~",
+    "omitted": false,
+    "valid": true
+  },
+  {
+    "id": "post:/reservations:header:Idempotency-Key:invalid-pattern",
+    "method": "post",
+    "path": "/reservations",
+    "location": "header",
+    "field": "Idempotency-Key",
+    "partition": "invalid-pattern",
+    "value": "bad key",
+    "omitted": false,
+    "valid": false
+  },
+  {
+    "id": "post:/reservations:header:Idempotency-Key:minLength-1",
+    "method": "post",
+    "path": "/reservations",
+    "location": "header",
+    "field": "Idempotency-Key",
+    "partition": "minLength-1",
+    "value": "",
+    "omitted": false,
+    "valid": false
+  },
+  {
+    "id": "post:/reservations:header:Idempotency-Key:minLength",
+    "method": "post",
+    "path": "/reservations",
+    "location": "header",
+    "field": "Idempotency-Key",
+    "partition": "minLength",
+    "value": "T",
+    "omitted": false,
+    "valid": true
+  },
+  {
+    "id": "post:/reservations:header:Idempotency-Key:minLength+1",
+    "method": "post",
+    "path": "/reservations",
+    "location": "header",
+    "field": "Idempotency-Key",
+    "partition": "minLength+1",
+    "value": "TT",
+    "omitted": false,
+    "valid": true
+  },
+  {
+    "id": "post:/reservations:header:Idempotency-Key:maxLength-1",
+    "method": "post",
+    "path": "/reservations",
+    "location": "header",
+    "field": "Idempotency-Key",
+    "partition": "maxLength-1",
+    "value": "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT",
+    "omitted": false,
+    "valid": true
+  },
+  {
+    "id": "post:/reservations:header:Idempotency-Key:maxLength",
+    "method": "post",
+    "path": "/reservations",
+    "location": "header",
+    "field": "Idempotency-Key",
+    "partition": "maxLength",
+    "value": "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT",
+    "omitted": false,
+    "valid": true
+  },
+  {
+    "id": "post:/reservations:header:Idempotency-Key:maxLength+1",
+    "method": "post",
+    "path": "/reservations",
+    "location": "header",
+    "field": "Idempotency-Key",
+    "partition": "maxLength+1",
+    "value": "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT",
+    "omitted": false,
+    "valid": false
+  },
+  {
     "id": "get:/reservations/my-reservations:query:page:omitted",
     "method": "get",
     "path": "/reservations/my-reservations",
